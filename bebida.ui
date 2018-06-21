@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>222</width>
-    <height>440</height>
+    <width>460</width>
+    <height>220</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -18,8 +18,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>240</width>
-    <height>440</height>
+    <width>460</width>
+    <height>220</height>
    </size>
   </property>
   <property name="baseSize">
@@ -31,7 +31,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="nome_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -44,17 +44,17 @@
     <string>Nome</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="nome">
+  <widget class="QLineEdit" name="nome_lineEdit">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>40</y>
-     <width>181</width>
+     <width>201</width>
      <height>28</height>
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="volume_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -67,12 +67,12 @@
     <string>Volume</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="volume">
+  <widget class="QSpinBox" name="volume_spinBox">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>100</y>
-     <width>96</width>
+     <width>201</width>
      <height>28</height>
     </rect>
    </property>
@@ -80,11 +80,11 @@
     <number>9999</number>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="quantidade_label">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>150</y>
+     <x>240</x>
+     <y>20</y>
      <width>81</width>
      <height>16</height>
     </rect>
@@ -93,21 +93,21 @@
     <string>Quantidade</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="quantidade">
+  <widget class="QSpinBox" name="quantidade_spinBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>170</y>
-     <width>91</width>
+     <x>240</x>
+     <y>40</y>
+     <width>201</width>
      <height>28</height>
     </rect>
    </property>
   </widget>
-  <widget class="QCheckBox" name="bandeja">
+  <widget class="QCheckBox" name="bandeja_checkBox">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>270</y>
+     <y>140</y>
      <width>71</width>
      <height>28</height>
     </rect>
@@ -116,21 +116,21 @@
     <string>Bandeja</string>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="preco">
+  <widget class="QDoubleSpinBox" name="preco_spinBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>230</y>
-     <width>100</width>
+     <x>240</x>
+     <y>100</y>
+     <width>201</width>
      <height>28</height>
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="label_4">
+  <widget class="QLabel" name="preco_label">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>210</y>
+     <x>240</x>
+     <y>80</y>
      <width>81</width>
      <height>16</height>
     </rect>
@@ -142,8 +142,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>380</y>
+     <x>135</x>
+     <y>170</y>
      <width>190</width>
      <height>34</height>
     </rect>

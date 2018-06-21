@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>240</width>
-    <height>440</height>
+    <width>460</width>
+    <height>270</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>240</width>
-    <height>440</height>
+    <width>460</width>
+    <height>270</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>240</width>
-    <height>440</height>
+    <width>460</width>
+    <height>270</height>
    </size>
   </property>
   <property name="baseSize">
@@ -31,7 +31,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="cpf_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -44,7 +44,7 @@
     <string>CPF</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="cpf">
+  <widget class="QLineEdit" name="cpf_lineEdit">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -63,7 +63,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLineEdit" name="nome">
+  <widget class="QLineEdit" name="nome_lineEdit">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -76,7 +76,7 @@
     <number>75</number>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="nome_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -89,11 +89,11 @@
     <string>Nome</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="tel_fixo">
+  <widget class="QLineEdit" name="telFixo_lineEdit">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>160</y>
+     <x>240</x>
+     <y>40</y>
      <width>201</width>
      <height>28</height>
     </rect>
@@ -108,11 +108,11 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="telFixo_label">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>140</y>
+     <x>240</x>
+     <y>20</y>
      <width>81</width>
      <height>16</height>
     </rect>
@@ -121,11 +121,11 @@
     <string>Telefone Fixo</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_4">
+  <widget class="QLabel" name="telMovel_label">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>200</y>
+     <x>240</x>
+     <y>80</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -134,11 +134,11 @@
     <string>Telefone Móvel</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="tel_mov">
+  <widget class="QLineEdit" name="telMovel_lineEdit">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>220</y>
+     <x>240</x>
+     <y>100</y>
      <width>201</width>
      <height>28</height>
     </rect>
@@ -153,11 +153,11 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_5">
+  <widget class="QLabel" name="comissao_label">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>260</y>
+     <y>140</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -166,11 +166,11 @@
     <string>Comissão</string>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="comissao">
+  <widget class="QDoubleSpinBox" name="comissao_spinBox">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>280</y>
+     <y>160</y>
      <width>201</width>
      <height>28</height>
     </rect>
@@ -179,8 +179,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>25</x>
-     <y>390</y>
+     <x>135</x>
+     <y>220</y>
      <width>190</width>
      <height>34</height>
     </rect>
@@ -189,11 +189,11 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_6">
+  <widget class="QLabel" name="cargo_label">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>320</y>
+     <x>240</x>
+     <y>140</y>
      <width>58</width>
      <height>16</height>
     </rect>
@@ -202,11 +202,11 @@
     <string>Cargo</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="cargo">
+  <widget class="QComboBox" name="cargo_comboBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>340</y>
+     <x>240</x>
+     <y>160</y>
      <width>201</width>
      <height>28</height>
     </rect>

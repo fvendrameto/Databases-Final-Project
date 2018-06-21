@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>845</width>
-    <height>575</height>
+    <height>559</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="cliente_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -26,7 +26,7 @@
     <string>Cliente</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox">
+  <widget class="QComboBox" name="cliente_comboBox">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -36,7 +36,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="cliente_pushButton">
    <property name="geometry">
     <rect>
      <x>310</x>
@@ -49,7 +49,7 @@
     <string>Adicionar</string>
    </property>
   </widget>
-  <widget class="QDateTimeEdit" name="dateTimeEdit">
+  <widget class="QDateTimeEdit" name="data_timeEdit">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -59,7 +59,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="data_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -72,12 +72,12 @@
     <string>Data</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="spinBox">
+  <widget class="QSpinBox" name="convidados_spinBox">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>160</y>
-     <width>81</width>
+     <width>104</width>
      <height>28</height>
     </rect>
    </property>
@@ -85,7 +85,7 @@
     <number>99999</number>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="convidados_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -98,7 +98,7 @@
     <string>Convidados</string>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="doubleSpinBox">
+  <widget class="QDoubleSpinBox" name="preco_spinBox">
    <property name="geometry">
     <rect>
      <x>130</x>
@@ -111,7 +111,7 @@
     <double>999999.989999999990687</double>
    </property>
   </widget>
-  <widget class="QLabel" name="label_4">
+  <widget class="QLabel" name="preco_label">
    <property name="geometry">
     <rect>
      <x>130</x>
@@ -124,7 +124,7 @@
     <string>Preço</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_5">
+  <widget class="QLabel" name="casaDeFesta_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -137,7 +137,7 @@
     <string>Casa de Festa</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="casaDeFesta_pushButton">
    <property name="geometry">
     <rect>
      <x>310</x>
@@ -150,7 +150,7 @@
     <string>Adicionar</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_2">
+  <widget class="QComboBox" name="casaDeFesta_comboBox">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -160,7 +160,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="gerente_pushButton">
    <property name="geometry">
     <rect>
      <x>310</x>
@@ -173,7 +173,7 @@
     <string>Adicionar</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_6">
+  <widget class="QLabel" name="gerente_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -186,7 +186,7 @@
     <string>Gerente</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_3">
+  <widget class="QComboBox" name="gerente_comboBox">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -200,7 +200,7 @@
    <property name="geometry">
     <rect>
      <x>640</x>
-     <y>530</y>
+     <y>510</y>
      <width>190</width>
      <height>34</height>
     </rect>
@@ -209,7 +209,7 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_8">
+  <widget class="QLabel" name="bebida_label">
    <property name="geometry">
     <rect>
      <x>440</x>
@@ -222,7 +222,7 @@
     <string>Bebida</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_4">
+  <widget class="QComboBox" name="bebida_comboBox">
    <property name="geometry">
     <rect>
      <x>440</x>
@@ -232,17 +232,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QTableView" name="tableView">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>80</y>
-     <width>391</width>
-     <height>411</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="quantidade_pushButton">
    <property name="geometry">
     <rect>
      <x>800</x>
@@ -255,7 +245,7 @@
     <string>+</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_9">
+  <widget class="QLabel" name="quantidade_label">
    <property name="geometry">
     <rect>
      <x>690</x>
@@ -268,7 +258,7 @@
     <string>Quantidade</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="spinBox_2">
+  <widget class="QSpinBox" name="quantidade_spinBox">
    <property name="geometry">
     <rect>
      <x>690</x>
@@ -281,7 +271,7 @@
     <number>99999</number>
    </property>
   </widget>
-  <widget class="QSpinBox" name="spinBox_3">
+  <widget class="QSpinBox" name="barracas_spinBox">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -294,7 +284,7 @@
     <number>99999</number>
    </property>
   </widget>
-  <widget class="QLabel" name="label_7">
+  <widget class="QLabel" name="barracas_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -307,7 +297,7 @@
     <string>Barracas de Raspadinha</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_10">
+  <widget class="QLabel" name="aniversariante_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -320,7 +310,7 @@
     <string>Nome do Aniversariante</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="aniversariante_lineEdit">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -330,7 +320,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_2">
+  <widget class="QLineEdit" name="tema_lineEdit">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -340,7 +330,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="label_11">
+  <widget class="QLabel" name="tema_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -353,7 +343,7 @@
     <string>Tema</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_12">
+  <widget class="QLabel" name="faixa_label">
    <property name="geometry">
     <rect>
      <x>190</x>
@@ -366,13 +356,23 @@
     <string>Faixa Etária</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_5">
+  <widget class="QComboBox" name="faixa_comboBox">
    <property name="geometry">
     <rect>
      <x>190</x>
      <y>460</y>
      <width>121</width>
      <height>28</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>80</y>
+     <width>391</width>
+     <height>411</height>
     </rect>
    </property>
   </widget>
