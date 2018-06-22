@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
+    <width>895</width>
     <height>480</height>
    </rect>
   </property>
@@ -19,12 +19,12 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>800</width>
+      <width>911</width>
       <height>401</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="elideMode">
      <enum>Qt::ElideRight</enum>
@@ -39,8 +39,8 @@
      <widget class="QPushButton" name="festa_addButton">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>690</x>
+        <y>330</y>
         <width>92</width>
         <height>34</height>
        </rect>
@@ -53,8 +53,8 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
-        <width>136</width>
+        <y>30</y>
+        <width>141</width>
         <height>28</height>
        </rect>
       </property>
@@ -63,8 +63,8 @@
       <property name="geometry">
        <rect>
         <x>160</x>
-        <y>60</y>
-        <width>291</width>
+        <y>30</y>
+        <width>341</width>
         <height>28</height>
        </rect>
       </property>
@@ -73,7 +73,7 @@
       <property name="geometry">
        <rect>
         <x>160</x>
-        <y>50</y>
+        <y>10</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -85,9 +85,9 @@
      <widget class="QComboBox" name="gerente_comboBox">
       <property name="geometry">
        <rect>
-        <x>470</x>
-        <y>60</y>
-        <width>301</width>
+        <x>510</x>
+        <y>30</y>
+        <width>371</width>
         <height>28</height>
        </rect>
       </property>
@@ -95,8 +95,8 @@
      <widget class="QLabel" name="gerente_label">
       <property name="geometry">
        <rect>
-        <x>470</x>
-        <y>50</y>
+        <x>510</x>
+        <y>10</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -109,7 +109,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>10</y>
         <width>58</width>
         <height>16</height>
        </rect>
@@ -122,9 +122,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>110</y>
-        <width>770</width>
-        <height>250</height>
+        <y>60</y>
+        <width>871</width>
+        <height>261</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -155,13 +155,16 @@
        <bool>false</bool>
       </attribute>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>110</number>
+       <number>120</number>
       </attribute>
       <attribute name="horizontalHeaderMinimumSectionSize">
        <number>50</number>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
       </attribute>
       <attribute name="verticalHeaderDefaultSectionSize">
        <number>30</number>
@@ -193,9 +196,27 @@
       </column>
       <column>
        <property name="text">
-        <string>Número de Funcionários</string>
+        <string>Nº de Funcionários</string>
        </property>
       </column>
+      <column>
+       <property name="text">
+        <string>Casa de Festa</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QPushButton" name="festa_delButton">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>330</y>
+        <width>92</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Remover</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="funcionario">
@@ -205,8 +226,8 @@
      <widget class="QPushButton" name="funcionario_addButton">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>690</x>
+        <y>330</y>
         <width>92</width>
         <height>34</height>
        </rect>
@@ -219,7 +240,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
+        <y>30</y>
         <width>81</width>
         <height>28</height>
        </rect>
@@ -235,7 +256,7 @@
       <property name="geometry">
        <rect>
         <x>100</x>
-        <y>70</y>
+        <y>30</y>
         <width>83</width>
         <height>28</height>
        </rect>
@@ -251,7 +272,7 @@
       <property name="geometry">
        <rect>
         <x>180</x>
-        <y>70</y>
+        <y>30</y>
         <width>83</width>
         <height>28</height>
        </rect>
@@ -267,7 +288,7 @@
       <property name="geometry">
        <rect>
         <x>260</x>
-        <y>70</y>
+        <y>30</y>
         <width>151</width>
         <height>28</height>
        </rect>
@@ -283,7 +304,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>10</y>
         <width>58</width>
         <height>16</height>
        </rect>
@@ -296,8 +317,8 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
-        <width>770</width>
+        <y>60</y>
+        <width>871</width>
         <height>261</height>
        </rect>
       </property>
@@ -313,10 +334,16 @@
       <property name="cornerButtonEnabled">
        <bool>true</bool>
       </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>125</number>
+       <number>120</number>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
        <bool>false</bool>
       </attribute>
       <column>
@@ -346,25 +373,38 @@
       </column>
       <column>
        <property name="text">
-        <string>Local Próxima Festa</string>
+        <string>Local Próx. Festa</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Data Próxima Festa</string>
+        <string>Data Próx. Festa</string>
        </property>
       </column>
+     </widget>
+     <widget class="QPushButton" name="funcionario_delButton">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>330</y>
+        <width>92</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Remover</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="bebidas">
      <attribute name="title">
       <string>Bebidas</string>
      </attribute>
-     <widget class="QPushButton" name="add_bebida">
+     <widget class="QPushButton" name="bebida_addButton">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>690</x>
+        <y>330</y>
         <width>92</width>
         <height>34</height>
        </rect>
@@ -377,7 +417,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>30</y>
         <width>141</width>
         <height>28</height>
        </rect>
@@ -387,7 +427,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>10</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -400,8 +440,8 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
-        <width>770</width>
+        <y>60</y>
+        <width>871</width>
         <height>261</height>
        </rect>
       </property>
@@ -417,8 +457,17 @@
       <property name="cornerButtonEnabled">
        <bool>true</bool>
       </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>150</number>
+       <number>250</number>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
       </attribute>
       <column>
        <property name="text">
@@ -436,31 +485,44 @@
        </property>
       </column>
      </widget>
-    </widget>
-    <widget class="QWidget" name="fornecedores">
-     <attribute name="title">
-      <string>Fornecedores</string>
-     </attribute>
-     <widget class="QPushButton" name="fornecedor_addButton">
+     <widget class="QPushButton" name="bebida_delButton">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>790</x>
+        <y>330</y>
         <width>92</width>
         <height>34</height>
        </rect>
       </property>
       <property name="text">
-       <string>Adicionar</string>
+       <string>Remover</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="fornecedores">
+     <attribute name="title">
+      <string>Fornecedores</string>
+     </attribute>
+     <widget class="QPushButton" name="fornecedor_delButton">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>330</y>
+        <width>92</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Remover</string>
       </property>
      </widget>
      <widget class="QTableWidget" name="fornecedor_tableWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
-        <width>770</width>
-        <height>261</height>
+        <y>10</y>
+        <width>871</width>
+        <height>311</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -475,11 +537,17 @@
       <property name="cornerButtonEnabled">
        <bool>true</bool>
       </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>105</number>
+       <number>120</number>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
       </attribute>
       <column>
        <property name="text">
@@ -517,16 +585,11 @@
        </property>
       </column>
      </widget>
-    </widget>
-    <widget class="QWidget" name="cliente">
-     <attribute name="title">
-      <string>Cliente</string>
-     </attribute>
-     <widget class="QPushButton" name="cliente_addButton">
+     <widget class="QPushButton" name="fornecedor_addButton">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>690</x>
+        <y>330</y>
         <width>92</width>
         <height>34</height>
        </rect>
@@ -535,13 +598,31 @@
        <string>Adicionar</string>
       </property>
      </widget>
+    </widget>
+    <widget class="QWidget" name="cliente">
+     <attribute name="title">
+      <string>Cliente</string>
+     </attribute>
+     <widget class="QPushButton" name="cliente_delButton">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>330</y>
+        <width>92</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Remover</string>
+      </property>
+     </widget>
      <widget class="QTableWidget" name="cliente_tableWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
-        <width>770</width>
-        <height>261</height>
+        <y>10</y>
+        <width>871</width>
+        <height>311</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -550,14 +631,35 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="midLineWidth">
+       <number>0</number>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
       <property name="wordWrap">
        <bool>true</bool>
       </property>
       <property name="cornerButtonEnabled">
        <bool>true</bool>
       </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>115</number>
+       <number>105</number>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderHighlightSections">
+       <bool>true</bool>
       </attribute>
       <column>
        <property name="text">
@@ -586,7 +688,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Número Conta</string>
+        <string>Nº Conta</string>
        </property>
       </column>
       <column>
@@ -596,9 +698,22 @@
       </column>
       <column>
        <property name="text">
-        <string>Número de Festas</string>
+        <string>Nº de Festas</string>
        </property>
       </column>
+     </widget>
+     <widget class="QPushButton" name="cliente_addButton">
+      <property name="geometry">
+       <rect>
+        <x>690</x>
+        <y>330</y>
+        <width>92</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Adicionar</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="casaDeFesta">
@@ -608,8 +723,8 @@
      <widget class="QPushButton" name="casaDeFesta_addButton">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>690</x>
+        <y>330</y>
         <width>92</width>
         <height>34</height>
        </rect>
@@ -622,9 +737,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>90</y>
-        <width>770</width>
-        <height>261</height>
+        <y>10</y>
+        <width>871</width>
+        <height>311</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -639,14 +754,20 @@
       <property name="cornerButtonEnabled">
        <bool>true</bool>
       </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>120</number>
+       <number>140</number>
       </attribute>
       <attribute name="horizontalHeaderHighlightSections">
        <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
       </attribute>
       <column>
        <property name="text">
@@ -679,6 +800,19 @@
        </property>
       </column>
      </widget>
+     <widget class="QPushButton" name="casaDeFesta_delButton">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>330</y>
+        <width>92</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Remove</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="balanco">
      <attribute name="title">
@@ -692,7 +826,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>900</width>
+     <width>895</width>
      <height>30</height>
     </rect>
    </property>

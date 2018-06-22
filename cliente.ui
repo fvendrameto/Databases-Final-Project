@@ -379,7 +379,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="nome_label_2">
+  <widget class="QLabel" name="cep_label">
    <property name="geometry">
     <rect>
      <x>260</x>
@@ -392,7 +392,7 @@
     <string>CEP</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="nome_lineEdit_2">
+  <widget class="QLineEdit" name="cep_lineEdit">
    <property name="geometry">
     <rect>
      <x>260</x>
