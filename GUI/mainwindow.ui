@@ -236,26 +236,10 @@
        <string>Adicionar</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="bartender_check">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>81</width>
-        <height>28</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Bartender</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
      <widget class="QCheckBox" name="gerente_check">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>10</x>
         <y>30</y>
         <width>83</width>
         <height>28</height>
@@ -271,7 +255,7 @@
      <widget class="QCheckBox" name="garcom_check">
       <property name="geometry">
        <rect>
-        <x>180</x>
+        <x>90</x>
         <y>30</y>
         <width>83</width>
         <height>28</height>
@@ -287,7 +271,7 @@
      <widget class="QCheckBox" name="operador_check">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>170</x>
         <y>30</y>
         <width>151</width>
         <height>28</height>
@@ -827,7 +811,7 @@
      <x>0</x>
      <y>0</y>
      <width>895</width>
-     <height>30</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

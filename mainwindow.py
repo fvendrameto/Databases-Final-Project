@@ -91,10 +91,6 @@ class Ui_MainWindow(object):
 		self.festa_delButton.setGeometry(QtCore.QRect(790, 330, 92, 34))
 		self.festa_delButton.setObjectName("festa_delButton")
 		
-		self.festa_addButton.clicked.connect(self.on_festa_add_clicked)
-		self.festa_delButton.clicked.connect(self.on_festa_del_clicked)
-		self.tabWidget.addTab(self.festa, "")
-		
 		# tab funcionario
 		self.funcionario = QtWidgets.QWidget()
 		self.funcionario.setObjectName("funcionario")
@@ -333,17 +329,6 @@ class Ui_MainWindow(object):
 		self.tabWidget.setCurrentIndex(0)
 		QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-	def on_festa_add_clicked(self):
-		festa_add = QtWidgets.QDialog()
-		ui = Festa()
-		ui.setupUi(festa_add)
-		festa_add.exec_()
-	def on_festa_del_clicked(self):
-		pass
-		# bebida_del = QtWidgets.QDialog()
-		# ui = Ui_Bebida()
-		# ui.setupUi(bebida_del)
-		# widget.exec_()
 	
 	def retranslateUi(self, MainWindow):
 		_translate = QtCore.QCoreApplication.translate
