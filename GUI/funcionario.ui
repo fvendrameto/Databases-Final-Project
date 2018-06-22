@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>460</width>
-    <height>270</height>
+    <width>372</width>
+    <height>232</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>460</width>
-    <height>270</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>460</width>
-    <height>270</height>
+    <width>16777215</width>
+    <height>16777215</height>
    </size>
   </property>
   <property name="baseSize">
@@ -31,187 +31,138 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="cpf_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>58</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>CPF</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="cpf_lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>40</y>
-     <width>201</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="inputMask">
-    <string>999.999.999-99</string>
-   </property>
-   <property name="maxLength">
-    <number>14</number>
-   </property>
-   <property name="placeholderText">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="nome_lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>100</y>
-     <width>201</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>75</number>
-   </property>
-  </widget>
-  <widget class="QLabel" name="nome_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>80</y>
-     <width>58</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Nome</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="telFixo_lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>40</y>
-     <width>201</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="inputMask">
-    <string>(99)9999-9999</string>
-   </property>
-   <property name="maxLength">
-    <number>13</number>
-   </property>
-   <property name="placeholderText">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="telFixo_label">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>20</y>
-     <width>81</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Telefone Fixo</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="telMovel_label">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>80</y>
-     <width>101</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Telefone Móvel</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="telMovel_lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>100</y>
-     <width>201</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="inputMask">
-    <string>(99)99999-9999</string>
-   </property>
-   <property name="maxLength">
-    <number>14</number>
-   </property>
-   <property name="placeholderText">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="comissao_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>140</y>
-     <width>101</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Comissão</string>
-   </property>
-  </widget>
-  <widget class="QDoubleSpinBox" name="comissao_spinBox">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>160</y>
-     <width>201</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>135</x>
-     <y>220</y>
-     <width>190</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="cargo_label">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>140</y>
-     <width>58</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Cargo</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="cargo_comboBox">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>160</y>
-     <width>201</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0" colspan="2">
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="nome_label">
+        <property name="text">
+         <string>Nome</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="telFixo_label">
+        <property name="text">
+         <string>Telefone Fixo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLineEdit" name="nome_lineEdit">
+        <property name="maxLength">
+         <number>75</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="telFixo_lineEdit">
+        <property name="inputMask">
+         <string>(99)9999-9999</string>
+        </property>
+        <property name="maxLength">
+         <number>13</number>
+        </property>
+        <property name="placeholderText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="cpf_label">
+        <property name="text">
+         <string>CPF</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="telMovel_label">
+        <property name="text">
+         <string>Telefone Móvel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLineEdit" name="cpf_lineEdit">
+        <property name="inputMask">
+         <string>999.999.999-99</string>
+        </property>
+        <property name="maxLength">
+         <number>14</number>
+        </property>
+        <property name="placeholderText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="telMovel_lineEdit">
+        <property name="inputMask">
+         <string>(99)99999-9999</string>
+        </property>
+        <property name="maxLength">
+         <number>14</number>
+        </property>
+        <property name="placeholderText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="comissao_label">
+        <property name="text">
+         <string>Comissão</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLabel" name="cargo_label">
+        <property name="text">
+         <string>Cargo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QDoubleSpinBox" name="comissao_spinBox">
+        <property name="maximum">
+         <double>99999.990000000005239</double>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QComboBox" name="cargo_comboBox"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>169</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

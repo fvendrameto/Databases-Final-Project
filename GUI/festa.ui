@@ -6,486 +6,276 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>845</width>
-    <height>556</height>
+    <width>669</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="cliente_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>58</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Cliente</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="cliente_comboBox">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>40</y>
-     <width>281</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="cliente_pushButton">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>40</y>
-     <width>92</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Adicionar</string>
-   </property>
-  </widget>
-  <widget class="QDateTimeEdit" name="data_timeEdit">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>100</y>
-     <width>381</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="data_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>80</y>
-     <width>58</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Data</string>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="convidados_spinBox">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>160</y>
-     <width>191</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="maximum">
-    <number>99999</number>
-   </property>
-  </widget>
-  <widget class="QLabel" name="convidados_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>140</y>
-     <width>71</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Convidados</string>
-   </property>
-  </widget>
-  <widget class="QDoubleSpinBox" name="preco_spinBox">
-   <property name="geometry">
-    <rect>
-     <x>221</x>
-     <y>160</y>
-     <width>181</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="maximum">
-    <double>999999.989999999990687</double>
-   </property>
-  </widget>
-  <widget class="QLabel" name="preco_label">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>140</y>
-     <width>71</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Preço</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="casaDeFesta_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>200</y>
-     <width>81</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Casa de Festa</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="casaDeFesta_pushButton">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>220</y>
-     <width>92</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Adicionar</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="casaDeFesta_comboBox">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>220</y>
-     <width>281</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="gerente_pushButton">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>280</y>
-     <width>92</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Adicionar</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="gerente_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>260</y>
-     <width>81</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Gerente</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="gerente_comboBox">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>280</y>
-     <width>281</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>640</x>
-     <y>510</y>
-     <width>190</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="bebida_label">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>10</y>
-     <width>58</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Bebida</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="bebida_comboBox">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>30</y>
-     <width>241</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="quantidade_pushButton">
-   <property name="geometry">
-    <rect>
-     <x>800</x>
-     <y>30</y>
-     <width>31</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>+</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="quantidade_label">
-   <property name="geometry">
-    <rect>
-     <x>690</x>
-     <y>10</y>
-     <width>71</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Quantidade</string>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="quantidade_spinBox">
-   <property name="geometry">
-    <rect>
-     <x>690</x>
-     <y>30</y>
-     <width>104</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="maximum">
-    <number>99999</number>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="barracas_spinBox">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>460</y>
-     <width>191</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="maximum">
-    <number>99999</number>
-   </property>
-  </widget>
-  <widget class="QLabel" name="barracas_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>440</y>
-     <width>141</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Barracas de Raspadinha</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="aniversariante_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>320</y>
-     <width>151</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Nome do Aniversariante</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="aniversariante_lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>340</y>
-     <width>371</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="tema_lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>400</y>
-     <width>371</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="tema_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>380</y>
-     <width>151</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Tema</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="faixa_label">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>440</y>
-     <width>81</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Faixa Etária</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="faixa_comboBox">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>460</y>
-     <width>171</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QTableWidget" name="bebidas_tableWidget">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>60</y>
-     <width>391</width>
-     <height>101</height>
-    </rect>
-   </property>
-   <property name="rowCount">
-    <number>0</number>
-   </property>
-   <property name="columnCount">
-    <number>0</number>
-   </property>
-  </widget>
-  <widget class="QLabel" name="garcons_label">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>170</y>
-     <width>58</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Garçons</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="garcons_comboBox">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>190</y>
-     <width>361</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="garcons_addButton">
-   <property name="geometry">
-    <rect>
-     <x>800</x>
-     <y>190</y>
-     <width>31</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>+</string>
-   </property>
-  </widget>
-  <widget class="QTableWidget" name="garcons_tableWidget">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>220</y>
-     <width>391</width>
-     <height>111</height>
-    </rect>
-   </property>
-   <property name="rowCount">
-    <number>0</number>
-   </property>
-   <property name="columnCount">
-    <number>0</number>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="garcons_addButton_2">
-   <property name="geometry">
-    <rect>
-     <x>800</x>
-     <y>360</y>
-     <width>31</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>+</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="operador_comboBox">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>360</y>
-     <width>361</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="operador_label">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>340</y>
-     <width>151</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Operador de Raspadinha</string>
-   </property>
-  </widget>
-  <widget class="QTableWidget" name="garcons_tableWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>390</y>
-     <width>391</width>
-     <height>111</height>
-    </rect>
-   </property>
-   <property name="rowCount">
-    <number>0</number>
-   </property>
-   <property name="columnCount">
-    <number>0</number>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0" colspan="2">
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="cliente_label">
+        <property name="text">
+         <string>Cliente</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="bebida_label">
+        <property name="text">
+         <string>Bebida</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="quantidade_label">
+        <property name="text">
+         <string>Quantidade</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QComboBox" name="cliente_comboBox"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="cliente_pushButton">
+        <property name="text">
+         <string>Adicionar</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="bebida_comboBox"/>
+      </item>
+      <item row="1" column="4">
+       <widget class="QSpinBox" name="quantidade_spinBox">
+        <property name="maximum">
+         <number>99999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="QPushButton" name="quantidade_pushButton">
+        <property name="text">
+         <string>+</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="data_label">
+        <property name="text">
+         <string>Data</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" rowspan="4" colspan="3">
+       <widget class="QTableWidget" name="bebidas_tableWidget">
+        <property name="rowCount">
+         <number>0</number>
+        </property>
+        <property name="columnCount">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="3">
+       <widget class="QDateTimeEdit" name="data_timeEdit"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="convidados_label">
+        <property name="text">
+         <string>Convidados</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLabel" name="preco_label">
+        <property name="text">
+         <string>Preço</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QSpinBox" name="convidados_spinBox">
+        <property name="maximum">
+         <number>99999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1" colspan="2">
+       <widget class="QDoubleSpinBox" name="preco_spinBox">
+        <property name="maximum">
+         <double>999999.989999999990687</double>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="3">
+       <widget class="QLabel" name="garcons_label">
+        <property name="text">
+         <string>Garçons</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="casaDeFesta_label">
+        <property name="text">
+         <string>Casa de Festa</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="3" colspan="2">
+       <widget class="QComboBox" name="garcons_comboBox"/>
+      </item>
+      <item row="7" column="5">
+       <widget class="QPushButton" name="garcons_addButton">
+        <property name="text">
+         <string>+</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0" colspan="2">
+       <widget class="QComboBox" name="casaDeFesta_comboBox"/>
+      </item>
+      <item row="8" column="2">
+       <widget class="QPushButton" name="casaDeFesta_pushButton">
+        <property name="text">
+         <string>Adicionar</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="gerente_label">
+        <property name="text">
+         <string>Gerente</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLabel" name="aniversariante_label">
+        <property name="text">
+         <string>Nome do Aniversariante</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0" colspan="3">
+       <widget class="QLineEdit" name="aniversariante_lineEdit">
+        <property name="maxLength">
+         <number>75</number>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0">
+       <widget class="QLabel" name="tema_label">
+        <property name="text">
+         <string>Tema</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="0" colspan="3">
+       <widget class="QLineEdit" name="tema_lineEdit">
+        <property name="maxLength">
+         <number>30</number>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="0">
+       <widget class="QLabel" name="barracas_label">
+        <property name="text">
+         <string>Barracas de Raspadinha</string>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="2">
+       <widget class="QLabel" name="faixa_label">
+        <property name="text">
+         <string>Faixa Etária</string>
+        </property>
+       </widget>
+      </item>
+      <item row="16" column="0" colspan="2">
+       <widget class="QSpinBox" name="barracas_spinBox">
+        <property name="maximum">
+         <number>99999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="16" column="2">
+       <widget class="QComboBox" name="faixa_comboBox"/>
+      </item>
+      <item row="10" column="0" colspan="3">
+       <widget class="QComboBox" name="gerente_comboBox"/>
+      </item>
+      <item row="8" column="3" rowspan="4" colspan="3">
+       <widget class="QTableWidget" name="garcons_tableWidget">
+        <property name="rowCount">
+         <number>0</number>
+        </property>
+        <property name="columnCount">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="3">
+       <widget class="QLabel" name="operador_label">
+        <property name="text">
+         <string>Operador de Raspadinha</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="5">
+       <widget class="QPushButton" name="garcons_addButton_2">
+        <property name="text">
+         <string>+</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="3" colspan="2">
+       <widget class="QComboBox" name="operador_comboBox"/>
+      </item>
+      <item row="14" column="3" rowspan="3" colspan="3">
+       <widget class="QTableWidget" name="garcons_tableWidget_2">
+        <property name="rowCount">
+         <number>0</number>
+        </property>
+        <property name="columnCount">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>466</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
