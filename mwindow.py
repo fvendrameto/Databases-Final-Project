@@ -27,7 +27,6 @@ class MainApp(QtWidgets.QMainWindow):
 		self.funcionario = Funcionario()
 
 		self.mainwindow.festa_addButton.clicked.connect(self.on_festa_addBtn_clicked)
-		self.mainwindow.festa_delButton.clicked.connect(self.on_festa_delBtn_clicked)
 
 	def on_festa_addBtn_clicked(self):
 		festa_addDialog = QtWidgets.QDialog()
@@ -55,10 +54,10 @@ class MainApp(QtWidgets.QMainWindow):
 		barracas = self.festa.barracas_spinBox.value()
 
 		# Itens de ComboBox a serem salvos:
-		faixa = self.festa.faixa_comboBox.itemText()
-		cliente = self.festa.cliente_comboBox.itemText()
-		casaDeFesta = self.festa.casaDeFesta_comboBox.itemText()
-		gerente = self.festa.gerente_comboBox.itemText()
+		faixa = self.festa.faixa_comboBox.currentText()
+		cliente = self.festa.cliente_comboBox.currentText()
+		casaDeFesta = self.festa.casaDeFesta_comboBox.currentText()
+		gerente = self.festa.gerente_comboBox.currentText()
 
 		# LineEdits a serem salvos:
 		festa = self.festa.aniversariante_lineEdit.text()
@@ -87,8 +86,8 @@ class MainApp(QtWidgets.QMainWindow):
 		cidade = self.cliente.cidade_lineEdit.text()
 		cep = self.cliente.cep_lineEdit.text()
 
-		banco = self.cliente.banco_comboBox.itemText()
-		estado = self.cliente.estado_comboBox.itemText()
+		banco = self.cliente.banco_comboBox.currentText()
+		estado = self.cliente.estado_comboBox.currentText()
 
 		if(self.cliente.corrente_radioButton.isChecked()):
 			tipoConta = 'CC'
@@ -113,15 +112,28 @@ class MainApp(QtWidgets.QMainWindow):
 		cidade = self.casaDeFesta.cidade_lineEdit.text()
 		cep = self.casaDeFesta.cep_lineEdit.text()
 
-		estado = self.casaDeFesta.estado_comboBox.itemText()
+		estado = self.casaDeFesta.estado_comboBox.currentText()
 
 	def on_bebida_addToTableBtn_clicked(self):
 		numRows = self.festa.bebidas_tableWidget.rowCount()
 		self.festa.bebidas_tableWidget.insertRow(numRows)
-		# self.festa.bebidas_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem())
-		# self.festa.bebidas_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem())
-		self.festa.bebidas_tableWidget.setItem(numRows, 2, QtWidgets.QTableWidgetItem())
+		nome = self.festa.bebida_comboBox.currentText() # AQUI PRECISA VER COMO VEM PRA DAR SPLIT
+		# NOME -> self.festa.bebidas_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem())
+		# VOLUME -> self.festa.bebidas_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem())
+		quantidade = str(self.festa.quantidade_spinBox.value())
+		self.festa.bebidas_tableWidget.setItem(numRows, 2, QtWidgets.QTableWidgetItem(quantidade))
 
+	def on_garcons_addToTableBtn_clicked(self):
+		numRows = self.festa.garcons_tableWidget.rowCount()
+		self.festa.garcons_tableWidget.insertRow(numRows)
+		nome = self.festa.garcons_comboBox.currentText()
+		self.festa.garcons_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(nome))
+
+	def on_operador_addToTableBtn_clicked(self):
+		numRows = self.festa.operador_tableWidget.rowCount()
+		self.festa.operador_tableWidget.insertRow(numRows)
+		nome = self.festa.operador_comboBox.currentText()
+		self.festa.operador_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(nome))
 
 	def close(self):
 		exit()
