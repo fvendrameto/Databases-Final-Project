@@ -235,51 +235,59 @@ class MainApp(QtWidgets.QMainWindow):
 		self.mainwindow.cliente_addButton.clicked.connect(self.on_cliente_addBtn_clicked)
 		self.mainwindow.casaDeFesta_addButton.clicked.connect(self.on_casaDeFesta_addBtn_clicked)
 
-		self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(5, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(6, QtWidgets.QHeaderView.Stretch)
+		for i in range(self.mainwindow.festa_tableWidget.columnCount()):
+			self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+		for i in range(self.mainwindow.funcionario_tableWidget.columnCount()):
+			self.mainwindow.funcionario_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+		for i in range(self.mainwindow.bebida_tableWidget.columnCount()):
+			self.mainwindow.bebida_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+		for i in range(self.mainwindow.fornecedor_tableWidget.columnCount()):
+			self.mainwindow.fornecedor_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+		for i in range(self.mainwindow.cliente_tableWidget.columnCount()):
+			self.mainwindow.cliente_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+		for i in range(self.mainwindow.casaDeFesta_tableWidget.columnCount()):
+			self.mainwindow.casaDeFesta_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
 
-		self.mainwindow.funcionario_tableWidget.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.funcionario_tableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.funcionario_tableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.funcionario_tableWidget.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.funcionario_tableWidget.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.funcionario_tableWidget.horizontalHeader().setSectionResizeMode(5, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.funcionario_tableWidget.horizontalHeader().setSectionResizeMode(6, QtWidgets.QHeaderView.Stretch)
+		allFesta = self.dbHelper.getAllAniversarios()
+		for i, festa in enumerate(allFesta):
+			self.mainwindow.festa_tableWidget.insertRow(i)
+			for j in range(self.mainwindow.festa_tableWidget.columnCount()):
+				self.mainwindow.festa_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(festa[j]))
 
-		self.mainwindow.bebida_tableWidget.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.bebida_tableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.bebida_tableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
+		allFuncionario = self.dbHelper.getAllGerentes()
+		for i, funcionario in enumerate(allFuncionario):
+			self.mainwindow.funcionario_tableWidget.insertRow(i)
+			for j in range(self.mainwindow.funcionario_tableWidget.columnCount()):
+				self.mainwindow.funcionario_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(funcionario[j]))
 
-		self.mainwindow.fornecedor_tableWidget.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.fornecedor_tableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.fornecedor_tableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.fornecedor_tableWidget.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.fornecedor_tableWidget.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.fornecedor_tableWidget.horizontalHeader().setSectionResizeMode(5, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.fornecedor_tableWidget.horizontalHeader().setSectionResizeMode(6, QtWidgets.QHeaderView.Stretch)
+		allBebida = self.dbHelper.getBebidasInInterval()
+		for i, bebida in enumerate(allBebida):
+			self.mainwindow.bebida_tableWidget.insertRow(i)
+			for j in range(self.mainwindow.bebida_tableWidget.columnCount()):
+				self.mainwindow.bebida_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(bebida[j]))
 
-		self.mainwindow.cliente_tableWidget.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.cliente_tableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.cliente_tableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.cliente_tableWidget.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.cliente_tableWidget.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.cliente_tableWidget.horizontalHeader().setSectionResizeMode(5, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.cliente_tableWidget.horizontalHeader().setSectionResizeMode(6, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.cliente_tableWidget.horizontalHeader().setSectionResizeMode(7, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.cliente_tableWidget.horizontalHeader().setSectionResizeMode(8, QtWidgets.QHeaderView.Stretch)
+		allFornecedor = self.dbHelper.getAllFornecedores()
+		for i, fornecedor in enumerate(allFornecedor):
+			self.mainwindow.fornecedor_tableWidget.insertRow(i)
+			for j in range(self.mainwindow.fornecedor_tableWidget.columnCount()):
+				self.mainwindow.fornecedor_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(fornecedor[j]))
 
-		self.mainwindow.casaDeFesta_tableWidget.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.casaDeFesta_tableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.casaDeFesta_tableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.casaDeFesta_tableWidget.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.casaDeFesta_tableWidget.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
-		self.mainwindow.casaDeFesta_tableWidget.horizontalHeader().setSectionResizeMode(5, QtWidgets.QHeaderView.Stretch)
+		allCliente = self.dbHelper.getAllClientes()
+		for i, cliente in enumerate(allCliente):
+			self.mainwindow.cliente_tableWidget.insertRow(i)
+			for j in range(self.mainwindow.cliente_tableWidget.columnCount()):
+				self.mainwindow.cliente_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(cliente[j]))
+
+		allCasaDeFesta = self.dbHelper.getAllCasasFesta()
+		for i, casaDeFesta in enumerate(allCasaDeFesta):
+			self.mainwindow.casaDeFesta_tableWidget.insertRow(i)
+			for j in range(self.mainwindow.casaDeFesta_tableWidget.columnCount()):
+				self.mainwindow.casaDeFesta_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(casaDeFesta[j]))
+
 
 		self.mainwindow.data_edit.setDate(QtCore.QDate.currentDate())
+
+
 
 	def on_festa_addBtn_clicked(self):
 		festa_addDialog = QtWidgets.QDialog()

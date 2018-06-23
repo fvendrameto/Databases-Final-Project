@@ -220,40 +220,17 @@
            <property name="bottomMargin">
             <number>4</number>
            </property>
+           <item row="1" column="1">
+            <widget class="QRadioButton" name="garcom_radioButton">
+             <property name="text">
+              <string>Garçom</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label">
              <property name="text">
               <string>Função</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="gerente_check">
-             <property name="text">
-              <string>Gerente</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QCheckBox" name="garcom_check">
-             <property name="text">
-              <string>Garçom</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QCheckBox" name="operador_check">
-             <property name="text">
-              <string>Operador Raspadinha</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -269,6 +246,23 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="gerente_radioButton">
+             <property name="text">
+              <string>Gerente</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QRadioButton" name="operador_radioButton">
+             <property name="text">
+              <string>Operador de Raspadinha</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -717,9 +711,6 @@
   <tabstop>festa_tableWidget</tabstop>
   <tabstop>festa_addButton</tabstop>
   <tabstop>festa_delButton</tabstop>
-  <tabstop>gerente_check</tabstop>
-  <tabstop>garcom_check</tabstop>
-  <tabstop>operador_check</tabstop>
   <tabstop>funcionario_tableWidget</tabstop>
   <tabstop>funcionario_addButton</tabstop>
   <tabstop>funcionario_delButton</tabstop>
