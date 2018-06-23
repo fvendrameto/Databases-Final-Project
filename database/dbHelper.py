@@ -77,10 +77,13 @@ class dbHelper():
 
 		result = []
 		for elem in cursor:
-			if isinstance(elem, datetime.datetime):
-				result.append("%2d/%02d/%4d" % (elem.day, elem.month, elem.year))
-			else:
-				result.append(elem)
+			vals = []
+			for i, value in enumerate(elem):
+				if isinstance(value, datetime.datetime):
+					vals.append("%2d/%02d/%4d" % (value.day, value.month, value.year))
+				else:
+					vals.append(str(value))
+			result.append(vals)
 
 		cursor.close()
 		return result
