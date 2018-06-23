@@ -147,7 +147,7 @@ class dbHelper():
 		
 		return self._run_select(cmd)
 
-	def getAllCasasFesta(self):
+	def getNomeCasasFesta(self):
 		cmd = "SELECT NOME FROM CASA_FESTA"
 		return self._run_select(cmd)
 
@@ -184,4 +184,12 @@ class dbHelper():
 			FROM CLIENTE C JOIN DADOS_BANCARIOS D ON C.DADOS_BANCARIOS = D.ID\
 			LEFT JOIN FESTA F ON C.CPF = F.CLIENTE\
 			GROUP BY(C.CPF, C.NOME, C.TEL_FIXO, C.TEL_MOVEL, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA)"
+		return self._run_select(cmd)
+
+	def getAllCasaSFesta(self):
+		cmd = "SELECT CF.NOME, E.RUA, E.NUMERO, E.CIDADE, E.CEP, MIN(FE.DATA) AS DATA_PROXIMA_FESTA\
+			FROM CASA_FESTA CF JOIN ENDERECO E ON CF.ENDERECO = E.ID\
+			LEFT JOIN FESTA FE ON FE.CASA_FESTA = CF.NOME\
+			GROUP BY(CF.NOME, E.RUA, E.NUMERO, E.CIDADE, E.CEP)\
+		"
 		return self._run_select(cmd)
