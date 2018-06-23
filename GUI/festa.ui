@@ -272,7 +272,7 @@
        <widget class="QComboBox" name="operador_comboBox"/>
       </item>
       <item row="14" column="3" rowspan="3" colspan="3">
-       <widget class="QTableWidget" name="garcons_tableWidget_2">
+       <widget class="QTableWidget" name="operador_tableWidget">
         <property name="rowCount">
          <number>0</number>
         </property>
