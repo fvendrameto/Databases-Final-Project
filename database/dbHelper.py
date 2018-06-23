@@ -78,7 +78,7 @@ class dbHelper():
 		result = []
 		for elem in cursor:
 			if isinstance(elem, datetime.datetime):
-				elems[i] = "'%2d/%02d/%4d'" % (elem.day, elem.month, elem.year)
+				elem = "'%2d/%02d/%4d'" % (elem.day, elem.month, elem.year)
 			result.append(elem)
 
 		cursor.close()
