@@ -62,7 +62,7 @@ class dbHelper():
 		self._run_command(cmd)
 
 
-	def _run_select(self, cmd, debug = True):
+	def _run_select(self, cmd):
 		cursor = self.connection.cursor()
 		cursor.execute(cmd)
 
@@ -71,11 +71,6 @@ class dbHelper():
 			result.append(elem)
 
 		cursor.close()
-
-		if debug:
-			for r in result:
-				print(r)
-
 		return result
 
 	def getAllAniversarios(self):
@@ -174,4 +169,4 @@ class dbHelper():
 			FROM CLIENTE C JOIN DADOS_BANCARIOS D ON C.DADOS_BANCARIOS = D.ID\
 			LEFT JOIN FESTA F ON C.CPF = F.CLIENTE\
 			GROUP BY(C.CPF, C.NOME, C.TEL_FIXO, C.TEL_MOVEL, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA)"
-		return self._run_select(cmd)
+		return self._run_select(cmd)import cx_Oracle
