@@ -69,10 +69,20 @@ class Ui_Bebida(object):
 
     def retranslateUi(self, Bebida):
         _translate = QtCore.QCoreApplication.translate
-        Bebida.setWindowTitle(_translate("Bebida", "Dialog"))
+        Bebida.setWindowTitle(_translate("Bebida", "Festa"))
         self.nome_label.setText(_translate("Bebida", "Nome"))
         self.quantidade_label.setText(_translate("Bebida", "Quantidade"))
         self.volume_label.setText(_translate("Bebida", "Volume"))
         self.preco_label.setText(_translate("Bebida", "Preço"))
         self.bandeja_checkBox.setText(_translate("Bebida", "Bandeja"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Bebida = QtWidgets.QDialog()
+    ui = Ui_Bebida()
+    ui.setupUi(Bebida)
+    Bebida.show()
+    sys.exit(app.exec_())
 

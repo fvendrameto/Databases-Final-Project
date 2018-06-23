@@ -164,10 +164,31 @@ class Ui_Add_Festa(object):
 
         self.retranslateUi(Add_Festa)
         QtCore.QMetaObject.connectSlotsByName(Add_Festa)
+        Add_Festa.setTabOrder(self.cliente_comboBox, self.cliente_pushButton)
+        Add_Festa.setTabOrder(self.cliente_pushButton, self.data_timeEdit)
+        Add_Festa.setTabOrder(self.data_timeEdit, self.convidados_spinBox)
+        Add_Festa.setTabOrder(self.convidados_spinBox, self.preco_spinBox)
+        Add_Festa.setTabOrder(self.preco_spinBox, self.casaDeFesta_comboBox)
+        Add_Festa.setTabOrder(self.casaDeFesta_comboBox, self.casaDeFesta_pushButton)
+        Add_Festa.setTabOrder(self.casaDeFesta_pushButton, self.gerente_comboBox)
+        Add_Festa.setTabOrder(self.gerente_comboBox, self.aniversariante_lineEdit)
+        Add_Festa.setTabOrder(self.aniversariante_lineEdit, self.tema_lineEdit)
+        Add_Festa.setTabOrder(self.tema_lineEdit, self.barracas_spinBox)
+        Add_Festa.setTabOrder(self.barracas_spinBox, self.faixa_comboBox)
+        Add_Festa.setTabOrder(self.faixa_comboBox, self.bebida_comboBox)
+        Add_Festa.setTabOrder(self.bebida_comboBox, self.quantidade_spinBox)
+        Add_Festa.setTabOrder(self.quantidade_spinBox, self.bebida_addButton)
+        Add_Festa.setTabOrder(self.bebida_addButton, self.bebidas_tableWidget)
+        Add_Festa.setTabOrder(self.bebidas_tableWidget, self.garcons_comboBox)
+        Add_Festa.setTabOrder(self.garcons_comboBox, self.garcons_addButton)
+        Add_Festa.setTabOrder(self.garcons_addButton, self.garcons_tableWidget)
+        Add_Festa.setTabOrder(self.garcons_tableWidget, self.operador_comboBox)
+        Add_Festa.setTabOrder(self.operador_comboBox, self.operador_addButton)
+        Add_Festa.setTabOrder(self.operador_addButton, self.operador_tableWidget)
 
     def retranslateUi(self, Add_Festa):
         _translate = QtCore.QCoreApplication.translate
-        Add_Festa.setWindowTitle(_translate("Add_Festa", "Dialog"))
+        Add_Festa.setWindowTitle(_translate("Add_Festa", "Festa"))
         self.cliente_label.setText(_translate("Add_Festa", "Cliente"))
         self.bebida_label.setText(_translate("Add_Festa", "Bebida"))
         self.quantidade_label.setText(_translate("Add_Festa", "Quantidade"))
@@ -197,4 +218,14 @@ class Ui_Add_Festa(object):
         self.operador_addButton.setText(_translate("Add_Festa", "+"))
         item = self.operador_tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("Add_Festa", "Nome"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Add_Festa = QtWidgets.QDialog()
+    ui = Ui_Add_Festa()
+    ui.setupUi(Add_Festa)
+    Add_Festa.show()
+    sys.exit(app.exec_())
 

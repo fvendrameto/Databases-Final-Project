@@ -173,4 +173,4 @@ class dbHelper():
 			FROM CLIENTE C JOIN DADOS_BANCARIOS D ON C.DADOS_BANCARIOS = D.ID\
 			LEFT JOIN FESTA F ON C.CPF = F.CLIENTE\
 			GROUP BY(C.CPF, C.NOME, C.TEL_FIXO, C.TEL_MOVEL, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA)"
-		return self._run_select(cmd)import cx_Oracle
+		return self._run_select(cmd)

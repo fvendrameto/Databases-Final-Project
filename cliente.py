@@ -102,6 +102,10 @@ class Ui_Dialog(object):
         self.banco_label.setObjectName("banco_label")
         self.gridLayout_2.addWidget(self.banco_label, 0, 0, 1, 1)
         self.banco_comboBox = QtWidgets.QComboBox(self.widget_5)
+        self.banco_comboBox.setMaxVisibleItems(10)
+        self.banco_comboBox.setMaxCount(2147483647)
+        self.banco_comboBox.setInsertPolicy(QtWidgets.QComboBox.InsertAlphabetically)
+        self.banco_comboBox.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContentsOnFirstShow)
         self.banco_comboBox.setObjectName("banco_comboBox")
         self.gridLayout_2.addWidget(self.banco_comboBox, 1, 0, 1, 1)
         self.gridLayout_9.addWidget(self.widget_5, 0, 0, 1, 3)
@@ -188,10 +192,23 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
+        Dialog.setTabOrder(self.nome_lineEdit, self.cpf_lineEdit)
+        Dialog.setTabOrder(self.cpf_lineEdit, self.telFixo_lineEdit)
+        Dialog.setTabOrder(self.telFixo_lineEdit, self.telMovel_lineEdit)
+        Dialog.setTabOrder(self.telMovel_lineEdit, self.banco_comboBox)
+        Dialog.setTabOrder(self.banco_comboBox, self.agencia_lineEdit)
+        Dialog.setTabOrder(self.agencia_lineEdit, self.conta_lineEdit)
+        Dialog.setTabOrder(self.conta_lineEdit, self.corrente_radioButton)
+        Dialog.setTabOrder(self.corrente_radioButton, self.poupanca_radioButton)
+        Dialog.setTabOrder(self.poupanca_radioButton, self.rua_lineEdit)
+        Dialog.setTabOrder(self.rua_lineEdit, self.n_lineEdit)
+        Dialog.setTabOrder(self.n_lineEdit, self.cidade_lineEdit)
+        Dialog.setTabOrder(self.cidade_lineEdit, self.estado_comboBox)
+        Dialog.setTabOrder(self.estado_comboBox, self.cep_lineEdit)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "Cliente"))
         self.label.setText(_translate("Dialog", "Dados Pessoais"))
         self.telFixo_label.setText(_translate("Dialog", "Telefone Fixo"))
         self.telMovel_label.setText(_translate("Dialog", "Telefone Móvel"))
@@ -216,4 +233,14 @@ class Ui_Dialog(object):
         self.estado_label.setText(_translate("Dialog", "Estado"))
         self.cep_label.setText(_translate("Dialog", "CEP"))
         self.cep_lineEdit.setInputMask(_translate("Dialog", "99999-999"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Dialog = QtWidgets.QDialog()
+    ui = Ui_Dialog()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())
 

@@ -260,6 +260,16 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>nome_lineEdit</tabstop>
+  <tabstop>cnpj_lineEdit</tabstop>
+  <tabstop>tel_lineEdit</tabstop>
+  <tabstop>banco_comboBox</tabstop>
+  <tabstop>agencia_lineEdit</tabstop>
+  <tabstop>conta_lineEdit</tabstop>
+  <tabstop>corrente_radioButton</tabstop>
+  <tabstop>poupanca_radioButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

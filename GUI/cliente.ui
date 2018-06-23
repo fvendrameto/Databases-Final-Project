@@ -458,6 +458,22 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>nome_lineEdit</tabstop>
+  <tabstop>cpf_lineEdit</tabstop>
+  <tabstop>telFixo_lineEdit</tabstop>
+  <tabstop>telMovel_lineEdit</tabstop>
+  <tabstop>banco_comboBox</tabstop>
+  <tabstop>agencia_lineEdit</tabstop>
+  <tabstop>conta_lineEdit</tabstop>
+  <tabstop>corrente_radioButton</tabstop>
+  <tabstop>poupanca_radioButton</tabstop>
+  <tabstop>rua_lineEdit</tabstop>
+  <tabstop>n_lineEdit</tabstop>
+  <tabstop>cidade_lineEdit</tabstop>
+  <tabstop>estado_comboBox</tabstop>
+  <tabstop>cep_lineEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

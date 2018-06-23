@@ -351,14 +351,31 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-        self.festa_tableWidget.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-        self.festa_tableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-        self.festa_tableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
-        self.festa_tableWidget.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
-        self.festa_tableWidget.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
-        self.festa_tableWidget.horizontalHeader().setSectionResizeMode(5, QtWidgets.QHeaderView.Stretch)
-        self.festa_tableWidget.horizontalHeader().setSectionResizeMode(6, QtWidgets.QHeaderView.Stretch)
+        MainWindow.setTabOrder(self.tabWidget, self.data_edit)
+        MainWindow.setTabOrder(self.data_edit, self.casaDeFesa_comboBox)
+        MainWindow.setTabOrder(self.casaDeFesa_comboBox, self.gerente_comboBox)
+        MainWindow.setTabOrder(self.gerente_comboBox, self.festa_tableWidget)
+        MainWindow.setTabOrder(self.festa_tableWidget, self.festa_addButton)
+        MainWindow.setTabOrder(self.festa_addButton, self.festa_delButton)
+        MainWindow.setTabOrder(self.festa_delButton, self.gerente_check)
+        MainWindow.setTabOrder(self.gerente_check, self.garcom_check)
+        MainWindow.setTabOrder(self.garcom_check, self.operador_check)
+        MainWindow.setTabOrder(self.operador_check, self.funcionario_tableWidget)
+        MainWindow.setTabOrder(self.funcionario_tableWidget, self.funcionario_addButton)
+        MainWindow.setTabOrder(self.funcionario_addButton, self.funcionario_delButton)
+        MainWindow.setTabOrder(self.funcionario_delButton, self.quantidade_spinBox)
+        MainWindow.setTabOrder(self.quantidade_spinBox, self.bebida_tableWidget)
+        MainWindow.setTabOrder(self.bebida_tableWidget, self.bebida_addButton)
+        MainWindow.setTabOrder(self.bebida_addButton, self.bebida_delButton)
+        MainWindow.setTabOrder(self.bebida_delButton, self.fornecedor_tableWidget)
+        MainWindow.setTabOrder(self.fornecedor_tableWidget, self.fornecedor_addButton)
+        MainWindow.setTabOrder(self.fornecedor_addButton, self.fornecedor_delButton)
+        MainWindow.setTabOrder(self.fornecedor_delButton, self.cliente_tableWidget)
+        MainWindow.setTabOrder(self.cliente_tableWidget, self.cliente_addButton)
+        MainWindow.setTabOrder(self.cliente_addButton, self.cliente_delButton)
+        MainWindow.setTabOrder(self.cliente_delButton, self.casaDeFesta_tableWidget)
+        MainWindow.setTabOrder(self.casaDeFesta_tableWidget, self.casaDeFesta_addButton)
+        MainWindow.setTabOrder(self.casaDeFesta_addButton, self.casaDeFesta_delButton)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -469,4 +486,14 @@ class Ui_MainWindow(object):
         self.casaDeFesta_delButton.setText(_translate("MainWindow", "Remove"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.casaDeFesta), _translate("MainWindow", "Casa de Festa"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.balanco), _translate("MainWindow", "Balanço"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
 

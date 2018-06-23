@@ -80,7 +80,7 @@ class Ui_Funcionario(object):
 
     def retranslateUi(self, Funcionario):
         _translate = QtCore.QCoreApplication.translate
-        Funcionario.setWindowTitle(_translate("Funcionario", "Dialog"))
+        Funcionario.setWindowTitle(_translate("Funcionario", "Funcionario"))
         self.nome_label.setText(_translate("Funcionario", "Nome"))
         self.telFixo_label.setText(_translate("Funcionario", "Telefone Fixo"))
         self.telFixo_lineEdit.setInputMask(_translate("Funcionario", "(99)9999-9999"))
@@ -90,4 +90,14 @@ class Ui_Funcionario(object):
         self.telMovel_lineEdit.setInputMask(_translate("Funcionario", "(99)99999-9999"))
         self.comissao_label.setText(_translate("Funcionario", "Comissão"))
         self.cargo_label.setText(_translate("Funcionario", "Cargo"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Funcionario = QtWidgets.QDialog()
+    ui = Ui_Funcionario()
+    ui.setupUi(Funcionario)
+    Funcionario.show()
+    sys.exit(app.exec_())
 

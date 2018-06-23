@@ -314,6 +314,30 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>cliente_comboBox</tabstop>
+  <tabstop>cliente_pushButton</tabstop>
+  <tabstop>data_timeEdit</tabstop>
+  <tabstop>convidados_spinBox</tabstop>
+  <tabstop>preco_spinBox</tabstop>
+  <tabstop>casaDeFesta_comboBox</tabstop>
+  <tabstop>casaDeFesta_pushButton</tabstop>
+  <tabstop>gerente_comboBox</tabstop>
+  <tabstop>aniversariante_lineEdit</tabstop>
+  <tabstop>tema_lineEdit</tabstop>
+  <tabstop>barracas_spinBox</tabstop>
+  <tabstop>faixa_comboBox</tabstop>
+  <tabstop>bebida_comboBox</tabstop>
+  <tabstop>quantidade_spinBox</tabstop>
+  <tabstop>bebida_addButton</tabstop>
+  <tabstop>bebidas_tableWidget</tabstop>
+  <tabstop>garcons_comboBox</tabstop>
+  <tabstop>garcons_addButton</tabstop>
+  <tabstop>garcons_tableWidget</tabstop>
+  <tabstop>operador_comboBox</tabstop>
+  <tabstop>operador_addButton</tabstop>
+  <tabstop>operador_tableWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

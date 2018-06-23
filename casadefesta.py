@@ -91,7 +91,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "Casa de Festa"))
         self.nome_label.setText(_translate("Dialog", "Nome"))
         self.endereco_label.setText(_translate("Dialog", "Endereço"))
         self.rua_label.setText(_translate("Dialog", "Rua"))
@@ -101,4 +101,14 @@ class Ui_Dialog(object):
         self.estado_label.setText(_translate("Dialog", "Estado"))
         self.cep_label.setText(_translate("Dialog", "CEP"))
         self.cep_lineEdit.setInputMask(_translate("Dialog", "99999-999"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Dialog = QtWidgets.QDialog()
+    ui = Ui_Dialog()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())
 

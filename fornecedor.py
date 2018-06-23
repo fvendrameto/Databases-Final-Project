@@ -109,10 +109,17 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
+        Dialog.setTabOrder(self.nome_lineEdit, self.cnpj_lineEdit)
+        Dialog.setTabOrder(self.cnpj_lineEdit, self.tel_lineEdit)
+        Dialog.setTabOrder(self.tel_lineEdit, self.banco_comboBox)
+        Dialog.setTabOrder(self.banco_comboBox, self.agencia_lineEdit)
+        Dialog.setTabOrder(self.agencia_lineEdit, self.conta_lineEdit)
+        Dialog.setTabOrder(self.conta_lineEdit, self.corrente_radioButton)
+        Dialog.setTabOrder(self.corrente_radioButton, self.poupanca_radioButton)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "Fornecedor"))
         self.label.setText(_translate("Dialog", "Dados Pessoais"))
         self.nome_label.setText(_translate("Dialog", "Nome"))
         self.cnpj_label.setText(_translate("Dialog", "CNPJ"))
@@ -127,4 +134,14 @@ class Ui_Dialog(object):
         self.conta_lineEdit.setInputMask(_translate("Dialog", "9999999999"))
         self.corrente_radioButton.setText(_translate("Dialog", "Corrente"))
         self.poupanca_radioButton.setText(_translate("Dialog", "Poupança"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Dialog = QtWidgets.QDialog()
+    ui = Ui_Dialog()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())
 

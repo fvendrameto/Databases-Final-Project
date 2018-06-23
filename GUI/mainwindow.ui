@@ -709,6 +709,34 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>data_edit</tabstop>
+  <tabstop>casaDeFesa_comboBox</tabstop>
+  <tabstop>gerente_comboBox</tabstop>
+  <tabstop>festa_tableWidget</tabstop>
+  <tabstop>festa_addButton</tabstop>
+  <tabstop>festa_delButton</tabstop>
+  <tabstop>gerente_check</tabstop>
+  <tabstop>garcom_check</tabstop>
+  <tabstop>operador_check</tabstop>
+  <tabstop>funcionario_tableWidget</tabstop>
+  <tabstop>funcionario_addButton</tabstop>
+  <tabstop>funcionario_delButton</tabstop>
+  <tabstop>quantidade_spinBox</tabstop>
+  <tabstop>bebida_tableWidget</tabstop>
+  <tabstop>bebida_addButton</tabstop>
+  <tabstop>bebida_delButton</tabstop>
+  <tabstop>fornecedor_tableWidget</tabstop>
+  <tabstop>fornecedor_addButton</tabstop>
+  <tabstop>fornecedor_delButton</tabstop>
+  <tabstop>cliente_tableWidget</tabstop>
+  <tabstop>cliente_addButton</tabstop>
+  <tabstop>cliente_delButton</tabstop>
+  <tabstop>casaDeFesta_tableWidget</tabstop>
+  <tabstop>casaDeFesta_addButton</tabstop>
+  <tabstop>casaDeFesta_delButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
