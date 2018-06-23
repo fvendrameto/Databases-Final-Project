@@ -28,10 +28,12 @@ class dbHelper():
 				values[i] = "'%2d/%02d/%4d'" % (value.day, value.month, value.year)
 		return values
 
+	def commit(self):
+		self.connection.commit()
+	
 	def _run_command(self, cmd):
 		cursor = self.connection.cursor()
 		cursor.execute(cmd)
-		self.connection.commit()
 		cursor.close()
 
 	def insert(self, table, fields, values):
@@ -39,6 +41,9 @@ class dbHelper():
 		cmd = 'INSERT INTO ' + table + ' (' + ', '.join(fields) + ') VALUES ( ' + ', '.join(values) + ') '
 
 		self._run_command(cmd)
+
+	# def insertIntoEndereco(self, values):
+
 
 	def delete(self, table, fields, values):
 		values = self._preprocess_values(values)				
@@ -72,6 +77,8 @@ class dbHelper():
 
 		result = []
 		for elem in cursor:
+			if isinstance(elem, datetime.datetime):
+				elems[i] = "'%2d/%02d/%4d'" % (elem.day, elem.month, elem.year)
 			result.append(elem)
 
 		cursor.close()
