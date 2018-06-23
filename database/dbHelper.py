@@ -186,7 +186,7 @@ class dbHelper():
 			GROUP BY(C.CPF, C.NOME, C.TEL_FIXO, C.TEL_MOVEL, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA)"
 		return self._run_select(cmd)
 
-	def getAllCasaSFesta(self):
+	def getAllCasasFesta(self):
 		cmd = "SELECT CF.NOME, E.RUA, E.NUMERO, E.CIDADE, E.CEP, MIN(FE.DATA) AS DATA_PROXIMA_FESTA\
 			FROM CASA_FESTA CF JOIN ENDERECO E ON CF.ENDERECO = E.ID\
 			LEFT JOIN FESTA FE ON FE.CASA_FESTA = CF.NOME\
