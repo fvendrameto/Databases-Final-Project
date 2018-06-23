@@ -3,6 +3,8 @@
 import cx_Oracle
 import datetime
 
+from unicodedata import normalize
+
 class dbHelper():
 	def __init__(self, ip, port, sid, user, password):
 		'''
@@ -17,6 +19,8 @@ class dbHelper():
 	def _preprocess_values(self, values):
 		for i, value in enumerate(values):
 			if isinstance(value, str):
+				values[i] = normalize('NFKD', values[i]).encode('ASCII', 'ignore').decode('ASCII')
+				values[i] = values[i].upper()
 				values[i] = "'" + value + "'"
 			elif isinstance(value, int):
 				values[i] = str(value)
