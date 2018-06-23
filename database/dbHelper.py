@@ -42,7 +42,7 @@ class dbHelper():
 
 		self._run_command(cmd)
 
-	# def insertIntoEndereco(self, values):
+	def insertIntoEndereco(self, values):
 
 
 	def delete(self, table, fields, values):
@@ -88,9 +88,22 @@ class dbHelper():
 		cursor.close()
 		return result
 
-	def getAllAniversarios(self):
+	def getAllAniversarios(self, data_inicio, data_fim, gerente, casa_festa):
+		data_inicio, data_fim, gerente, casa_festa = self._preprocess_values([data_inicio, data_fim, gerente, casa_festa])
+		where_constraints = []
+		where_constraints.append("(F.DATA BETWEEN" + data_inicio + " AND " + data_fim + ") ")
+				
+		if(gerente == "Todos"):
+			where_constraints.append("AND F.CASA_FESTA = " + casa_festa + " ")
+		elif(casa_festa == "Todas"):
+			where_constraints.append("AND F.GERENTE = " + gerente + " ")
+		else:
+			where_constraints.append("AND F.GERENTE = " + gerente + " ")
+			where_constraints.append("AND F.CASA_FESTA = " + casa_festa + " ")
+		
 		cmd = "SELECT F.CLIENTE, F.DATA, F.NUMERO_CONVIDADOS, F.PRECO, F.GERENTE, F.CASA_FESTA, A.NOME_ANIVERSARIANTE, A.TEMA, A.FAIXA_ETARIA, COUNT(GF.GARCOM)\
 			FROM FESTA F JOIN ANIVERSARIO A ON A.CLIENTE = F.CLIENTE AND A.DATA = F.DATA\
+			WHERE " + where_constraints + "\
 			LEFT JOIN GARCOM_FESTA GF ON (GF.DATA = A.DATA AND GF.CLIENTE = A.CLIENTE)\
 			GROUP BY(F.CLIENTE, F.DATA, F.NUMERO_CONVIDADOS, F.PRECO, F.GERENTE, F.CASA_FESTA, A.NOME_ANIVERSARIANTE, A.TEMA, A.FAIXA_ETARIA)"
 
