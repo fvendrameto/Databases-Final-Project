@@ -27,6 +27,11 @@ class MainApp(QtWidgets.QMainWindow):
 		self.funcionario = Funcionario()
 
 		self.mainwindow.festa_addButton.clicked.connect(self.on_festa_addBtn_clicked)
+		self.mainwindow.funcionario_addButton.clicked.connect(self.on_funcionario_addBtn_clicked)
+		self.mainwindow.bebida_addButton.clicked.connect(self.on_bebida_addBtn_clicked)
+		self.mainwindow.fornecedor_addButton.clicked.connect(self.on_fornecedor_addBtn_clicked)
+		self.mainwindow.cliente_addButton.clicked.connect(self.on_cliente_addBtn_clicked)
+		self.mainwindow.casaDeFesta_addButton.clicked.connect(self.on_casaDeFesta_addBtn_clicked)
 
 		self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
 		self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
@@ -75,16 +80,16 @@ class MainApp(QtWidgets.QMainWindow):
 	def on_festa_addBtn_clicked(self):
 		festa_addDialog = QtWidgets.QDialog()
 		self.festa.setupUi(festa_addDialog)
+		
 		self.festa.buttonBox.accepted.connect(lambda : self.save_festa_and_close(festa_addDialog))
 		self.festa.buttonBox.rejected.connect(lambda : festa_addDialog.close())
 		
 		self.festa.cliente_pushButton.clicked.connect(self.on_cliente_addBtn_clicked)
 		self.festa.casaDeFesta_pushButton.clicked.connect(self.on_casaDeFesta_addBtn_clicked)
-		self.festa.gerente_pushButton.clicked.connect(self.on_gerente_addBtn_clicked)
 
-		self.festa.bebida_addButton.connect(self.on_bebida_addToTableBtn_clicked)
-		self.festa.garcons_addButton.connect(self.on_bebida_addToTableBtn_clicked)
-		self.festa.operador_addButton.connect(self.on_bebida_addToTableBtn_clicked)
+		self.festa.bebida_addButton.clicked.connect(self.on_bebida_addToTableBtn_clicked)
+		self.festa.garcons_addButton.clicked.connect(self.on_garcons_addToTableBtn_clicked)
+		self.festa.operador_addButton.clicked.connect(self.on_operador_addToTableBtn_clicked)
 
 		festa_addDialog.exec_()
 
@@ -118,7 +123,7 @@ class MainApp(QtWidgets.QMainWindow):
 				
 		cliente_addDialog.exec_()
 
-	def save_cliente_and_close(cliente_addDialog):
+	def save_cliente_and_close(self, cliente_addDialog):
 		cpf = self.cliente.cpf_lineEdit.text()
 		nome = self.cliente.nome_lineEdit.text()
 		telFixo = self.cliente.telFixo_lineEdit.text()
@@ -178,6 +183,65 @@ class MainApp(QtWidgets.QMainWindow):
 		self.festa.operador_tableWidget.insertRow(numRows)
 		nome = self.festa.operador_comboBox.currentText()
 		self.festa.operador_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(nome))
+
+	def on_funcionario_addBtn_clicked(self):
+		funcionario_addDialog = QtWidgets.QDialog()
+		self.funcionario.setupUi(funcionario_addDialog)
+
+		self.funcionario.buttonBox.accepted.connect(lambda : self.save_funcionario_and_close(funcionario_addDialog))
+		self.funcionario.buttonBox.rejected.connect(lambda : funcionario_addDialog.close())
+
+		funcionario_addDialog.exec_()
+
+	def save_funcionario_and_close(self, funcionario_addDialog):
+		nome = self.funcionario.nome_lineEdit.text()
+		cpf = self.funcionario.cpf_lineEdit.text()
+		telFixo = self.funcionario.telFixo_lineEdit.text()
+		telMovel = self.funcionario.telMovel_lineEdit.text()
+
+		comissao = self.funcionario.comissao_spinBox.value()
+
+		cargo = self.funcionario.cargo_comboBox.currentText()
+
+		funcionario_addDialog.close()
+
+	def on_bebida_addBtn_clicked(self):
+		bebida_addDialog = QtWidgets.QDialog()
+		self.bebida.setupUi(bebida_addDialog)
+
+		self.bebida.buttonBox.accepted.connect(lambda : self.save_bebida_and_close(bebida_addDialog))
+		self.bebida.buttonBox.rejected.connect(lambda : bebida_addDialog.close())
+
+		bebida_addDialog.exec_()
+
+	def save_bebida_and_close(self, bebida_addDialog):
+		nome = self.bebida.nome_lineEdit.text()
+
+		volume = self.bebida.volume_spinBox.value()
+		quantidade = self.bebida.quantidade_spinBox.value()
+		preco = self.bebida.preco_spinBox.value()
+
+		bandeja = self.bebida.bandeja_checkBox.isChecked()
+
+		bebida_addDialog.close()
+
+	def on_fornecedor_addBtn_clicked(self):
+		fornecedor_addDialog = QtWidgets.QDialog()
+		self.fornecedor.setupUi(fornecedor_addDialog)
+
+		self.fornecedor.buttonBox.accepted.connect(lambda : self.save_fornecedor_and_close(fornecedor_addDialog))
+		self.fornecedor.buttonBox.rejected.connect(lambda : fornecedor_addDialog.close())
+
+		fornecedor_addDialog.exec_()
+
+	def save_fornecedor_and_close(self, fornecedor_addDialog):
+		nome = self.fornecedor.nome_lineEdit.text()
+		cnpj = self.fornecedor.cnpj_lineEdit.text()
+		tel = self.fornecedor.tel_lineEdit.text()
+		agencia = self.fornecedor.agencia_lineEdit.text()
+		conta = self.fornecedor.conta_lineEdit.text()
+
+		fornecedor_addDialog.close()
 
 	def close(self):
 		exit()
