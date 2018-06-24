@@ -70,6 +70,8 @@ class MainApp(QtWidgets.QMainWindow):
 		self.mainwindow.funcionario_tableWidget.cellDoubleClicked.connect(self.editFuncionario)
 		self.mainwindow.bebida_tableWidget.cellDoubleClicked.connect(self.editBebida)
 		self.mainwindow.fornecedor_tableWidget.cellDoubleClicked.connect(self.editFornecedor)
+		self.mainwindow.cliente_tableWidget.cellDoubleClicked.connect(self.editCliente)
+		self.mainwindow.casaDeFesta_tableWidget.cellDoubleClicked.connect(self.editCasaDeFesta)
 
 		for i in range(self.mainwindow.festa_tableWidget.columnCount()):
 			self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
@@ -551,10 +553,11 @@ class MainApp(QtWidgets.QMainWindow):
 	def editCliente(self):
 		cliente_addDialog = self.setupCliente()
 
+		# TODO edit_cliente_and_close
 		self.cliente.buttonBox.accepted.connect(lambda : print('oi'))
 
 		selectedRow = self.mainwindow.cliente_tableWidget.selectedItems()
-		self.cliente.cnpj_lineEdit.setText(selectedRow[0].text())
+		self.cliente.cpf_lineEdit.setText(selectedRow[0].text())
 		self.cliente.nome_lineEdit.setText(selectedRow[1].text())
 		self.cliente.telFixo_lineEdit.setText(selectedRow[2].text())
 		self.cliente.telMovel_lineEdit.setText(selectedRow[3].text())
@@ -564,19 +567,35 @@ class MainApp(QtWidgets.QMainWindow):
 			if bancos[b] == banco:
 				self.cliente.banco_comboBox.setCurrentIndex(self.cliente.banco_comboBox.findText(b))
 
-		self.cliente.telMovel_lineEdit.setText(selectedRow[5].text())
+		self.cliente.agencia_lineEdit.setText(selectedRow[5].text())
+		self.cliente.conta_lineEdit.setText(selectedRow[6].text())
+
+		conta = selectedRow[7].text()
+
+		if conta == 'CC':
+			self.cliente.corrente_radioButton.setChecked(True)
+		else:
+			self.cliente.poupanca_radioButton.setChecked(True)
+
+		# TODO fill endereço
 
 		cliente_addDialog.exec_()
 
-	def on_casaDeFesta_addBtn_clicked(self):
+	def setupCasaDeFesta(self):
 		casaDeFesta_addDialog = QtWidgets.QDialog()
 		self.casaDeFesta.setupUi(casaDeFesta_addDialog)
 
 		for estado in estados:
 			self.casaDeFesta.estado_comboBox.addItem(estado)
 
-		self.casaDeFesta.buttonBox.accepted.connect(lambda : self.save_casaDeFesta_and_close(casaDeFesta_addDialog))
 		self.casaDeFesta.buttonBox.rejected.connect(lambda : casaDeFesta_addDialog.close())
+
+		return casaDeFesta_addDialog
+
+	def on_casaDeFesta_addBtn_clicked(self):
+		casaDeFesta_addDialog = self.setupCasaDeFesta()
+
+		self.casaDeFesta.buttonBox.accepted.connect(lambda : self.save_casaDeFesta_and_close(casaDeFesta_addDialog))
 		
 		casaDeFesta_addDialog.exec_()
 
@@ -611,6 +630,23 @@ class MainApp(QtWidgets.QMainWindow):
 		self.fillCasasDeFesta()
 
 		casaDeFesta_addDialog.close()
+
+	def editCasaDeFesta(self):
+		casaDeFesta_addDialog = self.setupCasaDeFesta()
+
+		# TODO edit_casaDeFesta_and_close
+		self.casaDeFesta.buttonBox.accepted.connect(lambda : print('oi'))
+		
+		selectedRow = self.mainwindow.casaDeFesta_tableWidget.selectedItems()
+		self.casaDeFesta.nome_lineEdit.setText(selectedRow[0].text())
+		self.casaDeFesta.rua_lineEdit.setText(selectedRow[1].text())
+		self.casaDeFesta.n_lineEdit.setText(selectedRow[2].text())
+		self.casaDeFesta.cidade_lineEdit.setText(selectedRow[3].text())
+		self.casaDeFesta.cep_lineEdit.setText(selectedRow[4].text())
+
+		# TODO estado
+
+		casaDeFesta_addDialog.exec_()
 
 	def on_bebida_addToTableBtn_clicked(self):
 		numRows = self.festa.bebidas_tableWidget.rowCount()
