@@ -364,6 +364,8 @@ class dbHelper():
 		Args: 
 			where_values: Lista de valores usados como condição para cada campo
 			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
 		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
@@ -386,6 +388,8 @@ class dbHelper():
 		Args: 
 			where_values: Lista de valores usados como condição para cada campo
 			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
 		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
@@ -408,6 +412,8 @@ class dbHelper():
 		Args: 
 			where_values: Lista de valores usados como condição para cada campo
 			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
 		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
@@ -425,6 +431,14 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def updateFuncionario(self, where_values, values):
+		'''
+		Atualiza os valores da tabela de funcionarios com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 		
@@ -441,6 +455,14 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def updateCliente(self, where_values, values):
+		'''
+		Atualiza os valores da tabela de clientes com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 		
@@ -457,6 +479,14 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def updateCasaFesta(self, where_values, values):
+		'''
+		Atualiza os valores da tabela de casas de festa com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 		
@@ -473,6 +503,14 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def updateFesta(self, where_values, values):
+		'''
+		Atualiza os valores da tabela de festas com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 		
@@ -489,6 +527,14 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def updateAniversario(self, where_values, values):
+		'''
+		Atualiza os valores da tabela de aniversarios com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 		
@@ -505,6 +551,14 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def updateBarracaRaspadinha(self, where_values, values):
+		'''
+		Atualiza os valores da tabela de barracas de raspadinha com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 		
@@ -521,6 +575,14 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def updateBebida(self, where_values, values):
+		'''
+		Atualiza os valores da tabela de bebidas com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 		
@@ -537,6 +599,14 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def updateBebidaBandejaFesta(self, where_values, values):
+		'''
+		Atualiza os valores da tabela que relaciona bebidas e festas com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		Return:
+			String com mensagem de erro ou codigo de sucesso
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 		
@@ -553,6 +623,13 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def _run_select(self, cmd):
+		'''
+		Executa um comando de select fornecido
+		Args: 
+			cmd: Comando que deve ser executado
+		Return:
+			Lista de listas com o resultado da busca
+		'''
 		cursor = self.connection.cursor()
 		cursor.execute(cmd)
 
@@ -570,6 +647,16 @@ class dbHelper():
 		return result
 
 	def getAllAniversarios(self, data_inicio, data_fim, gerente, casa_festa):
+		'''
+		Seleciona todas as festas seguindo os filtros passados
+		Args: 
+			data_inicio: Data de inicio do filtro
+			data_fim: Data de fim do filtro
+			gerente: Gerente do filtro
+			gerente: Casa de festas do filtro
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		data_inicio, data_fim, processed_gerente, processed_casa_festa = self._preprocess_values([data_inicio, data_fim, gerente, casa_festa])
 		where_constraints = "(F.DATA BETWEEN " + data_inicio + " AND " + data_fim + " "
 
@@ -588,6 +675,14 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getGarconsFesta(self, cliente, data):
+		'''
+		Seleciona garcons de uma determinada festa
+		Args: 
+			clinte: Cliente dono da festa
+			data: Data da festa
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cliente, data = self._preprocess_values([cliente, data])
 		cmd = "SELECT FU.NOME, GF.GARCOM AS CPF, FU.COMISSAO FROM\
 			FESTA F JOIN GARCOM_FESTA GF ON (F.CLIENTE = GF.CLIENTE AND F.DATA = GF.DATA)\
@@ -597,6 +692,14 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getBarracasAniversario(self, cliente, data):
+		'''
+		Seleciona as barracas de raspadinha de uma determinada festa
+		Args: 
+			clinte: Cliente dono da festa
+			data: Data da festa
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cliente, data = self._preprocess_values([cliente, data])
 		cmd = "SELECT B.NUMERO, FU.NOME, B.OPERADOR AS CPF, FU.COMISSAO FROM\
 			FESTA F JOIN BARRACA_RASPADINHA B ON (F.CLIENTE = B.CLIENTE AND F.DATA = B.DATA)\
@@ -606,6 +709,14 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getEnderecoFesta(self, cliente, data):
+		'''
+		Seleciona endereço de uma determinada festa
+		Args: 
+			clinte: Cliente dono da festa
+			data: Data da festa
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cliente, data = self._preprocess_values([cliente, data])
 		cmd = "SELECT E.RUA, E.NUMERO, E.CEP, E.CIDADE, E.ESTADO FROM\
 		FESTA F JOIN CASA_FESTA CF ON (F.CASA_FESTA = CF.NOME)\
@@ -615,6 +726,13 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getGarconsLivres(self, data):
+		'''
+		Seleciona garcons livres em um certo dia
+		Args: 
+			data: Data que a consulta deve ser realizada
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		data = self._preprocess_values([data])[0]
 		cmd = "SELECT F.NOME, F.CPF, F.COMISSAO FROM FUNCIONARIO F WHERE UPPER(F.CARGO) = 'GARÇOM' AND\
 			F.CPF NOT IN(\
@@ -623,6 +741,13 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getOperadoresLivres(self, data):
+		'''
+		Seleciona operadores de raspadinha livres em um certo dia
+		Args: 
+			data: Data que a consulta deve ser realizada
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		data = self._preprocess_values([data])[0]
 		cmd = "SELECT F.NOME, F.CPF, F.COMISSAO FROM FUNCIONARIO F WHERE UPPER(F.CARGO) = 'OPERADOR' AND\
 			F.CPF NOT IN(\
@@ -631,6 +756,13 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getGerentesLivres(self, data):
+		'''
+		Seleciona gerentes livres em um certo dia
+		Args: 
+			data: Data que a consulta deve ser realizada
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		data = self._preprocess_values([data])[0]
 		cmd = "SELECT F.NOME, F.CPF, F.COMISSAO FROM FUNCIONARIO F WHERE UPPER(F.CARGO) = 'GERENTE' AND\
 			F.CPF NOT IN(\
@@ -639,10 +771,20 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getNomeCasasFesta(self):
+		'''
+		Seleciona nome de todas as casas de festa no sistema
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cmd = "SELECT NOME FROM CASA_FESTA"
 		return self._run_select(cmd)
 
 	def getAllGerentes(self):
+		'''
+		Seleciona gerentes no sistema
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cmd = "SELECT F.CPF, F.NOME, F.TEL_MOVEL, F.TEL_FIXO, F.COMISSAO, MIN(FE.DATA) AS DATA_PROXIMA_FESTA\
 			FROM FUNCIONARIO F LEFT JOIN FESTA FE ON FE.GERENTE = F.CPF AND FE.DATA > SYSDATE AND FE.TIPO = 'A'\
 			WHERE UPPER(F.CARGO) = 'GERENTE'\
@@ -650,6 +792,11 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getAllOperadores(self):
+		'''
+		Seleciona operadores de barraca de raspadinha no sistema
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cmd = "SELECT F.CPF, F.NOME, F.TEL_MOVEL, F.TEL_FIXO, F.COMISSAO, MIN(BR.DATA) AS DATA_PROXIMA_FESTA \
 				FROM FUNCIONARIO F LEFT JOIN BARRACA_RASPADINHA BR ON BR.OPERADOR = F.CPF\
 				LEFT JOIN FESTA FE ON BR.CLIENTE = FE.CLIENTE AND BR.DATA = FE.DATA AND FE.DATA > SYSDATE AND FE.TIPO = 'A' \
@@ -658,6 +805,11 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getAllGarcons(self):
+		'''
+		Seleciona garcons no sistema
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cmd = "SELECT F.CPF, F.NOME, F.TEL_MOVEL, F.TEL_FIXO, F.COMISSAO, MIN(GF.DATA) AS DATA_PROXIMA_FESTA\
 			FROM FUNCIONARIO F LEFT JOIN GARCOM_FESTA GF ON GF.GARCOM = F.CPF\
 			LEFT JOIN FESTA FE ON GF.CLIENTE = FE.CLIENTE AND GF.DATA = FE.DATA AND FE.DATA > SYSDATE AND FE.TIPO = 'A' \
@@ -666,32 +818,74 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getBebidasInInterval(self, min_value=0, max_value=99999):
+		'''
+		Seleciona bebidas no sistema com a quantidade em estoque dentro de um intervalo
+		Args:
+			min_value: limite inferior do intervalo
+			max_value: limite superior do intervalo
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cmd = "SELECT B.NOME, B.VOLUME, B.QUANTIDADE, B.PRECO FROM BEBIDA B WHERE B.QUANTIDADE BETWEEN " + str(min_value) + " AND " + str(max_value)
 		return self._run_select(cmd)
 
 	def getBebida(self, nome, volume):
+		'''
+		Seleciona informaçoes de uma determinada bebida
+		Args:
+			nome: Nome da bebida
+			volume: Volume da bebida
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		nome, volume = self._preprocess_values([nome, volume])
 		cmd = """SELECT QUANTIDADE, BANDEJA, PRECO FROM BEBIDA
 		WHERE NOME = """ + nome + " AND VOLUME = " + volume
 		return self._run_select(cmd)
 
 	def getGerente(self, cpf):
+		'''
+		Seleciona informaçoes de um determinado gerente
+		Args:
+			cpf: CPF do gerente que sera realizada a busca
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cpf = self._preprocess_values([cpf])[0]
 		cmd = """SELECT * FROM FUNCIONARIO
 		WHERE CPF = """ + cpf + " AND CARGO = 'GERENTE'"
 		return self._run_select(cmd)
 
 	def getCliente(self, cpf):
+		'''
+		Seleciona informaçoes de um determinado cliente
+		Args:
+			cpf: CPF do cliente que sera realizada a busca
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cpf = self._preprocess_values([cpf])[0]
 		cmd = """SELECT * FROM CLIENTE
 		WHERE CPF = """ + cpf
 		return self._run_select(cmd)
 
 	def getAllFornecedores(self):
+		'''
+		Seleciona fornecedores no sistema
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cmd = "SELECT F.CNPJ, F.NOME, F.TELEFONE, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA FROM FORNECEDOR F JOIN DADOS_BANCARIOS D ON F.DADOS_BANCARIOS = D.ID"
 		return self._run_select(cmd)
 
 	def getDadosBancariosFornecedor(self, cnpj):
+		'''
+		Seleciona dados bancarios de um fornecedor
+		Args:
+			cnpj: CNPJ do fornecedor que a busca deve ser realizada
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cnpj = self._preprocess_values([cnpj])[0]
 		cmd = """SELECT F.DADOS_BANCARIOS, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA
 			FROM FORNECEDOR F JOIN DADOS_BANCARIOS D ON F.DADOS_BANCARIOS = D.ID
@@ -699,6 +893,11 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getAllCasasFesta(self):
+		'''
+		Seleciona informações de todas as casas de festa no sistema
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cmd = "SELECT CF.NOME, E.RUA, E.NUMERO, E.CIDADE, E.CEP, MIN(FE.DATA) AS DATA_PROXIMA_FESTA\
 			FROM CASA_FESTA CF JOIN ENDERECO E ON CF.ENDERECO = E.ID\
 			LEFT JOIN FESTA FE ON FE.CASA_FESTA = CF.NOME AND FE.DATA > SYSDATE AND FE.TIPO = 'A' \
@@ -707,6 +906,13 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getEnderecoCasaFesta(self, nome):
+		'''
+		Seleciona o endereço de uma casa de festa
+		Args:
+			nome: nome da casa de festa que a busca deve ser realizada
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		nome = self._preprocess_values([nome])[0]
 		cmd = """SELECT CF.ENDERECO, E.RUA, E.NUMERO, E.CIDADE, E.ESTADO, E.CEP
 		FROM CASA_FESTA CF JOIN ENDERECO E ON CF.ENDERECO = E.ID
@@ -715,6 +921,11 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getAllClientes(self):
+		'''
+		Seleciona informações de todas os clientes no sistema
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cmd = "SELECT C.CPF, C.NOME, C.TEL_FIXO, C.TEL_MOVEL, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA, COUNT(F.CLIENTE) AS NUMERO_FESTAS\
 			FROM CLIENTE C JOIN DADOS_BANCARIOS D ON C.DADOS_BANCARIOS = D.ID\
 			LEFT JOIN FESTA F ON C.CPF = F.CLIENTE\
@@ -722,6 +933,13 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getEnderecoCliente(self, cpf):
+		'''
+		Seleciona o endereço de um cliente
+		Args:
+			cpf: cpf do cliente que a busca deve ser realizada
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cpf = self._preprocess_values([cpf])[0]
 		cmd = """SELECT C.ENDERECO, E.RUA, E.NUMERO, E.CIDADE, E.ESTADO, E.CEP
 			FROM CLIENTE C JOIN ENDERECO E ON C.ENDERECO = E.ID
@@ -729,6 +947,13 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getDadosBancariosCliente(self, cpf):
+		'''
+		Seleciona dados bancarios de um cliente
+		Args:
+			cpf: cpf do cliente que a busca deve ser realizada
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
 		cpf = self._preprocess_values([cpf])[0]
 		cmd = """SELECT C.DADOS_BANCARIOS, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA
 			FROM CLIENTE C JOIN DADOS_BANCARIOS D ON C.DADOS_BANCARIOS = D.ID
