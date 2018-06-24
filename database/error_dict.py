@@ -12,7 +12,7 @@ errors = {'PK_ENDERECO' : 'ID conflitante',
 	'CK_FORNECEDOR_CNPJ' : 'CNPJ inválido. Deve ser no formato XX.XXX.XXX/XXXX-XX',
 	'CK_FORNECEDOR_TELEFONE' : 'Telefone inválido. Deve ser no formato (XX)XXXX-XXXX',
 	
-	'PK_FUNCIONARIO' : 'CPF de funcionário já cadastrado'
+	'PK_FUNCIONARIO' : 'CPF de funcionário já cadastrado',
 	'CK_FUNCIONARIO_CPF' : 'CPF inválido. Deve ser no formato XXX.XXX.XXX-XX',
 	'CK_FUNCIONARIO_CARGO' : 'Cargo deve ser GARCOM, GERENTE, BARTENDER ou OPERADOR',
 	'CK_FUNCIONARIO_TEL_MOVEL' : 'Telefone móvel inválido. Deve ser no formato (XX)9XXXX-XXXX',
