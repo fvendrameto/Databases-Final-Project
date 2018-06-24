@@ -35,7 +35,7 @@ class dbHelper():
 				values[i] = str(value)
 			elif isinstance(value, float):
 				values[i] = "%.2f" % (value)
-			elif isinstance(value, datetime.datetime):
+			elif (isinstance(value, datetime.datetime) or isinstance(value, datetime.date)):
 				values[i] = "'%2d/%02d/%4d'" % (value.day, value.month, value.year)
 		return values
 
