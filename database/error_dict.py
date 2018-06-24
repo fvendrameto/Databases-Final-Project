@@ -1,4 +1,3 @@
-
 errors = {'PK_ENDERECO' : 'ID conflitante',
 	'UQ_ENDERECO' : 'Endereço já cadastrado',
 	'CK_ENDERECO_CEP' : 'CEP inválido. Deve ser no formato XXXXX-XXX',
