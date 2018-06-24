@@ -61,9 +61,6 @@ class Ui_Add_Festa(object):
         self.bebidas_tableWidget.horizontalHeader().setDefaultSectionSize(115)
         self.bebidas_tableWidget.horizontalHeader().setStretchLastSection(True)
         self.gridLayout.addWidget(self.bebidas_tableWidget, 2, 3, 4, 3)
-        self.data_timeEdit = QtWidgets.QDateTimeEdit(self.frame)
-        self.data_timeEdit.setObjectName("data_timeEdit")
-        self.gridLayout.addWidget(self.data_timeEdit, 3, 0, 1, 3)
         self.convidados_label = QtWidgets.QLabel(self.frame)
         self.convidados_label.setObjectName("convidados_label")
         self.gridLayout.addWidget(self.convidados_label, 4, 0, 1, 1)
@@ -154,6 +151,9 @@ class Ui_Add_Festa(object):
         self.operador_tableWidget.setHorizontalHeaderItem(0, item)
         self.operador_tableWidget.horizontalHeader().setStretchLastSection(True)
         self.gridLayout.addWidget(self.operador_tableWidget, 14, 3, 3, 3)
+        self.data_timeEdit = QtWidgets.QDateTimeEdit(self.frame)
+        self.data_timeEdit.setObjectName("data_timeEdit")
+        self.gridLayout.addWidget(self.data_timeEdit, 3, 0, 1, 1)
         self.gridLayout_2.addWidget(self.frame, 0, 0, 1, 2)
         spacerItem = QtWidgets.QSpacerItem(466, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem, 1, 0, 1, 1)
@@ -218,6 +218,7 @@ class Ui_Add_Festa(object):
         self.operador_addButton.setText(_translate("Add_Festa", "+"))
         item = self.operador_tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("Add_Festa", "Nome"))
+        self.data_timeEdit.setDisplayFormat(_translate("Add_Festa", "dd/MM/yyyy"))
 
 
 if __name__ == "__main__":

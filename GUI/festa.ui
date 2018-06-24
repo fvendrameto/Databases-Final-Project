@@ -109,13 +109,6 @@
         </column>
        </widget>
       </item>
-      <item row="3" column="0" colspan="3">
-       <widget class="QDateTimeEdit" name="data_timeEdit">
-        <property name="displayFormat">
-         <string>dd/MM/yyyy</string>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="0">
        <widget class="QLabel" name="convidados_label">
         <property name="text">
@@ -291,6 +284,13 @@
           <string>Nome</string>
          </property>
         </column>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QDateTimeEdit" name="data_timeEdit">
+        <property name="displayFormat">
+         <string>dd/MM/yyyy</string>
+        </property>
        </widget>
       </item>
      </layout>

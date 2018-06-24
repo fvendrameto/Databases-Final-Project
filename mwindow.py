@@ -246,6 +246,10 @@ class MainApp(QtWidgets.QMainWindow):
 	def editFesta(self):
 		festa_addDialog = self.setupFesta()
 
+		self.festa.cliente_comboBox.setEnabled(False)
+		self.festa.cliente_pushButton.setEnabled(False)
+		self.festa.data_timeEdit.setEnabled(False)
+
 		self.festa.buttonBox.accepted.connect(lambda : edit_festa_and_close(festa_addDialog))
 		self.festa.buttonBox.rejected.connect(lambda : festa_addDialog.close())
 
