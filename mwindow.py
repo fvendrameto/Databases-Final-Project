@@ -285,7 +285,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.mainwindow.funcionario_tableWidget.clearContents()
 		self.mainwindow.funcionario_tableWidget.setRowCount(0)
 		
-		self.fillFestas(self.mainwindow.dataInicial_dateEdit.date().toString(), self.mainwindow.dataFinal_dateEdit.date().toString(), self.mainwindow.gerente_comboBox.currentText(), self.mainwindow.casaDeFesta_comboBox.currentText())
+		self.fillFestas(self.mainwindow.dataInicial_dateEdit.date().toPyDate(), self.mainwindow.dataFinal_dateEdit.date().toPyDate(), self.mainwindow.gerente_comboBox.currentText(), self.mainwindow.casaDeFesta_comboBox.currentText())
 
 	def searchFuncionarios(self):
 		self.mainwindow.funcionario_tableWidget.clearContents()
