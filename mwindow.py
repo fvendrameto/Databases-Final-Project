@@ -495,7 +495,6 @@ class MainApp(QtWidgets.QMainWindow):
 	def editFornecedor(self):
 		fornecedor_addDialog = self.setupFornecedor()
 		
-		# TODO edit_fornecedor_and_close
 		self.fornecedor.buttonBox.accepted.connect(lambda : edit_fornecedor_and_close(fornecedor_addDialog))
 
 		selectedRow = self.mainwindow.fornecedor_tableWidget.selectedItems()
@@ -534,7 +533,7 @@ class MainApp(QtWidgets.QMainWindow):
 		elif(self.fornecedor.poupanca_radioButton.isChecked()):
 			tipoConta = 'CP'
 
-		iddados = 
+		iddados = self.dbHelper.getDadosBancariosFornecedor(cnpj)
 		print(self.dbHelper.updateDadosBancarios([iddados], [banco, agencia, conta, tipoConta]))
 		print(self.dbHelper.updateFornecedor([cnpj], [nome, tel, iddados]))
 
