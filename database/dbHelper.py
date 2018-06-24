@@ -1,16 +1,57 @@
 # -*- coding: utf-8 -*-
 
 import cx_Oracle
+from cx_Oracle import DatabaseError
 import datetime
+import re
 
 from unicodedata import normalize
+
+SUCCESS = 0
+
+errors = {'UQ_ENDERECO' : 1,
+	'UQ_DADOS_BANCARIOS' : 1,
+	'FK_FORNECEDOR' : 1,
+	'CK_FUNCIONARIO_CPF' : 1,
+	'FK1_CLIENTE' : 1,
+	'FK_CASA_FESTA' : 1,
+	'FK1_FESTA' : 1,
+	'FK_ANIVERSARIO' : 1,
+	'UQ_BARRACA_RASPADINHA' : 1,
+	'FK1_GARCOM_FESTA' : 1,
+	'CK_BEBIDA' : 1,
+	'FK1_BEBIDA_BANDEJA_FESTA' : 1,
+	'CK_ENDERECO_CEP' : 2,
+	'CK_TIPO_CONTA' : 2,
+	'CK_FORNECEDOR_CNPJ' : 2,
+	'CK_FUNCIONARIO_CARGO' : 2,
+	'FK2_CLIENTE' : 2,
+	'FK2_FESTA' : 2,
+	'CK_FAIXA_ETARIA' : 2,
+	'FK1_BARRACA_RASPADINHA' : 2,
+	'FK2_GARCOM_FESTA' : 2,
+	'FK2_BEBIDA_BANDEJA_FESTA' : 2,
+	'CK_FORNECEDOR_TELEFONE' : 3,
+	'CK_FUNCIONARIO_TEL_MOVEL' : 3,
+	'CK_CLIENTE_CPF' : 3,
+	'FK3_FESTA' : 3,
+	'FK2_BARRACA_RASPADINHA' : 3,
+	'CK_FUNCIONARIO_TEL_FIXO' : 4,
+	'CK_CLIENTE_TEL_FIXO' : 4,
+	'CK_FESTA_TIPO' : 4,
+	'CK_CLIENTE_TEL_MOVEL' : 5,
+}
+
+def getError(error_msg):
+	regex = re.compile('[^.]*.([^\)]*)')
+	msg = regex.match(error_msg)[1]
+
+	return msg
 
 class dbHelper():
 	def __init__(self, ip, port, sid, user, password):
 		'''
 		Cria um novo objeto dbHelper
-		Args:
-			ip: Endereço IP do 
 		'''
 		self.dns_tns = cx_Oracle.makedsn(ip, port, sid)
 		self.connection = cx_Oracle.connect(user, password, self.dns_tns)
@@ -24,6 +65,8 @@ class dbHelper():
 				values[i] = "'" + value + "'"
 			elif isinstance(value, int):
 				values[i] = str(value)
+			elif isinstance(value, float):
+				values[i] = "%.2f" % (value)
 			elif isinstance(value, datetime.datetime):
 				values[i] = "'%2d/%02d/%4d'" % (value.day, value.month, value.year)
 		return values
@@ -43,7 +86,149 @@ class dbHelper():
 		self._run_command(cmd)
 
 	def insertIntoEndereco(self, values):
+		table = 'ENDERECO'
+		fields = ['ID', 'RUA', 'CIDADE', 'ESTADO', 'NUMERO', 'CEP']
 
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+		
+		return SUCCESS
+
+	def insertIntoDadosBancarios(self, values):
+		table = 'DADOS_BANCARIOS'
+		fields = ['ID', 'BANCO', 'AGENCIA', 'CONTA', 'TIPO_CONTA']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoFornecedor(self, values):
+		table = 'FORNECEDOR'
+		fields = ['CNPJ', 'NOME', 'TELEFONE', 'DADOS_BANCARIOS']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+		
+		return SUCCESS
+
+	def insertIntoFuncionario(self, values):
+		table = 'FUNCIONARIO'
+		fields = ['CPF', 'NOME', 'TEL_FIXO', 'TEL_MOVEL', 'COMISSAO', 'CARGO']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoCliente(self, values):
+		table = 'CLIENTE'
+		fields = ['CPF', 'NOME', 'TEL_FIXO', 'TEL_MOVEL', 'ENDERECO']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoCasaFesta(self, values):
+		table = 'CASA_FESTA'
+		fields = ['NOME', 'ENDERECO']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoFesta(self, values):
+		table = 'FESTA'
+		fields = ['CLIENTE', 'DATA', 'NUMERO_CONVIDADOS', 'TIPO', 'PRECO', 'CASA_FESTA', 'GERENTE']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoAniversario(self, values):
+		table = 'ANIVERSARIO'
+		fields = ['CLIENTE', 'DATA', 'NOME_ANIVERSARIANTE', 'TEMA', 'FAIXA_ETARIA']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+	
+	def insertIntoBarracaRaspadinha(self, values):
+		table = 'BARRACA_RASPADINHA'
+		fields = ['ID', 'CLIENTE', 'DATA', 'NUMERO', 'OPERADOR']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoGarcomFesta(self, values):
+		table = 'GARCOM_FESTA'
+		fields = ['CLIENTE', 'DATA', 'GARCOM']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoBebida(self, values):
+		table = 'BEBIDA'
+		fields = ['NOME', 'VOLUME', 'QUANTIDADE', 'BANDEJA', 'PRECO']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoBebidaBandejaFesta(self, values):
+		table = 'BEBIDA_BANDEJA_FESTA'
+		fields = ['CLIENTE', 'DATA', 'BEBIDA', 'VOLUME', 'QUANTIDADE']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
 
 	def delete(self, table, fields, values):
 		values = self._preprocess_values(values)				
