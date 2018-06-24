@@ -724,8 +724,7 @@ class MainApp(QtWidgets.QMainWindow):
 	def editCasaDeFesta(self):
 		casaDeFesta_addDialog = self.setupCasaDeFesta()
 
-		# TODO edit_casaDeFesta_and_close
-		self.casaDeFesta.buttonBox.accepted.connect(lambda : print('oi'))
+		self.casaDeFesta.buttonBox.accepted.connect(lambda : edit_casaDeFesta_and_close(casaDeFesta_addDialog))
 		
 		selectedRow = self.mainwindow.casaDeFesta_tableWidget.selectedItems()
 		self.casaDeFesta.nome_lineEdit.setText(selectedRow[0].text())
@@ -737,6 +736,25 @@ class MainApp(QtWidgets.QMainWindow):
 		# TODO estado
 
 		casaDeFesta_addDialog.exec_()
+
+	def edit_casaDeFesta_and_close(self, casaDeFesta_addDialog):
+		nome = self.casaDeFesta.nome_lineEdit.text()
+		rua = self.casaDeFesta.rua_lineEdit.text()
+		numero = self.casaDeFesta.n_lineEdit.text()
+		cidade = self.casaDeFesta.cidade_lineEdit.text()
+		cep = self.casaDeFesta.cep_lineEdit.text()
+
+		estado = self.casaDeFesta.estado_comboBox.currentText()
+
+		iddados = self.dbHelper.getEnderecoCasaFesta(nome)
+		print(self.dbHelper.updateEndereco([iddados], [rua, cidade, estado, numero, cep]))
+
+		self.mainwindow.casaDeFesta_tableWidget.clearContents()
+		self.mainwindow.casaDeFesta_tableWidget.setRowCount(0)
+
+		self.fillCasasDeFesta()
+
+		casaDeFesta_addDialog.close()
 
 	def on_bebida_addToTableBtn_clicked(self):
 		numRows = self.festa.bebidas_tableWidget.rowCount()
