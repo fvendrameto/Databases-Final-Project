@@ -335,7 +335,7 @@ class MainApp(QtWidgets.QMainWindow):
 		funcionario_addDialog = self.setupFuncionario()
 
 		# TODO edit_funcionario_and_close
-		self.funcionario.buttonBox.accepted.connect(lambda : print('oi'))
+		self.funcionario.buttonBox.accepted.connect(lambda : edit_funcionario_and_close(funcionario_addDialog))
 
 		selectedRow = self.mainwindow.funcionario_tableWidget.selectedItems()
 		self.funcionario.cpf_lineEdit.setText(selectedRow[0].text())
@@ -351,6 +351,9 @@ class MainApp(QtWidgets.QMainWindow):
 			self.funcionario.cargo_comboBox.setCurrentIndex(2)
 
 		funcionario_addDialog.exec_()
+
+	def edit_funcionario_and_close(self, funcionario_addDialog):
+		pass
 
 	def setupBebida(self):
 		bebida_addDialog = QtWidgets.QDialog()
