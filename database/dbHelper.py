@@ -555,8 +555,8 @@ class dbHelper():
 
 	def getEnderecoCliente(self, cpf):
 		cpf = self._preprocess_values([cpf])[0]
-		cmd = """SELECT C.ENDERECO
-			FROM CLIENTE C
+		cmd = """SELECT C.ENDERECO, E.RUA, E.NUMERO, E.CIDADE, E.ESTADO, E.CEP
+			FROM CLIENTE C JOIN ENDERECO E ON C.ENDERECO = E.ID
 			WHERE C.CPF = """ + cpf
 		return self._run_select(cmd)
 
