@@ -105,7 +105,7 @@ class Ui_Dialog(object):
         self.banco_comboBox.setMaxVisibleItems(10)
         self.banco_comboBox.setMaxCount(2147483647)
         self.banco_comboBox.setInsertPolicy(QtWidgets.QComboBox.InsertAlphabetically)
-        self.banco_comboBox.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContentsOnFirstShow)
+        self.banco_comboBox.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToMinimumContentsLength)
         self.banco_comboBox.setObjectName("banco_comboBox")
         self.gridLayout_2.addWidget(self.banco_comboBox, 1, 0, 1, 1)
         self.gridLayout_9.addWidget(self.widget_5, 0, 0, 1, 3)

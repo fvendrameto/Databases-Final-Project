@@ -246,8 +246,11 @@ class MainApp(QtWidgets.QMainWindow):
 	def editFesta(self):
 		festa_addDialog = self.setupFesta()
 
+		self.festa.cliente_comboBox.setEnabled(False)
+		self.festa.cliente_pushButton.setEnabled(False)
+		self.festa.data_timeEdit.setEnabled(False)
+
 		self.festa.buttonBox.accepted.connect(lambda : edit_festa_and_close(festa_addDialog))
-		self.festa.buttonBox.rejected.connect(lambda : festa_addDialog.close())
 
 		selectedRow = self.mainwindow.festa_tableWidget.selectedItems()
 		self.festa.cliente_comboBox.setCurrentIndex(self.festa.cliente_comboBox.findText(selectedRow[0].text()))
@@ -334,8 +337,9 @@ class MainApp(QtWidgets.QMainWindow):
 	def editFuncionario(self):
 		funcionario_addDialog = self.setupFuncionario()
 
+		self.funcionario.cpf_lineEdit.setEnabled(False)
+
 		self.funcionario.buttonBox.accepted.connect(lambda : edit_funcionario_and_close(funcionario_addDialog))
-		self.funcionario.buttonBox.rejected.connect(lambda : funcionario_addDialog.close())
 
 		selectedRow = self.mainwindow.funcionario_tableWidget.selectedItems()
 		self.funcionario.cpf_lineEdit.setText(selectedRow[0].text())
@@ -407,6 +411,9 @@ class MainApp(QtWidgets.QMainWindow):
 
 	def editBebida(self):
 		bebida_addDialog = self.setupBebida()
+
+		self.bebida.nome_lineEdit.setEnabled(False)
+		self.bebida.volume_lineEdit.setEnabled(False)
 
 		self.bebida.buttonBox.accepted.connect(lambda: edit_bebida_and_close(bebida_addDialog))
 		self.bebida.buttonBox.rejected.connect(lambda: bebida_addDialog.close())
@@ -490,6 +497,8 @@ class MainApp(QtWidgets.QMainWindow):
 
 	def editFornecedor(self):
 		fornecedor_addDialog = self.setupFornecedor()
+
+		self.fornecedor.cnpj_lineEdit.setEnabled(False)
 		
 		self.fornecedor.buttonBox.accepted.connect(lambda : edit_fornecedor_and_close(fornecedor_addDialog))
 
@@ -608,6 +617,8 @@ class MainApp(QtWidgets.QMainWindow):
 	def editCliente(self):
 		cliente_addDialog = self.setupCliente()
 
+		self.cliente.cpf_lineEdit.setEnabled(False)
+
 		self.cliente.buttonBox.accepted.connect(lambda : edit_cliente_and_close(cliente_addDialog))
 
 		selectedRow = self.mainwindow.cliente_tableWidget.selectedItems()
@@ -723,6 +734,8 @@ class MainApp(QtWidgets.QMainWindow):
 
 	def editCasaDeFesta(self):
 		casaDeFesta_addDialog = self.setupCasaDeFesta()
+		
+		self.casaDeFesta.nome_lineEdit.setEnabled(False)
 
 		self.casaDeFesta.buttonBox.accepted.connect(lambda : edit_casaDeFesta_and_close(casaDeFesta_addDialog))
 		
