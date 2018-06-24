@@ -30,8 +30,8 @@ class dbHelper():
 	def _preprocess_values(self, values):
 		for i, value in enumerate(values):
 			if isinstance(value, str):
-				values[i] = "'" + value + "'"
-				# values[i] = normalize('NFKD', values[i]).encode('ASCII', 'ignore').decode('ASCII')
+				values[i] = re.sub(r"'", '', value)
+				values[i] = "'" + values[i] + "'"
 			elif isinstance(value, int):
 				values[i] = str(value)
 			elif isinstance(value, float):
@@ -54,7 +54,7 @@ class dbHelper():
 		cursor.close()
 
 	def insert(self, table, fields, values):
-		values = self._preprocess_values(values)				
+		values = self._preprocess_values(values)
 
 		cmd = 'INSERT INTO ' + table + ' (' + ', '.join(fields) + ') VALUES ( ' + ', '.join(values) + ') '
 
@@ -524,6 +524,18 @@ class dbHelper():
 		nome, volume = self._preprocess_values([nome, volume])
 		cmd = """SELECT QUANTIDADE, BANDEJA, PRECO FROM BEBIDA
 		WHERE NOME = """ + nome + " AND VOLUME = " + volume
+		return self._run_select(cmd)
+
+	def getGerente(self, cpf):
+		cpf = self._preprocess_values([cpf])[0]
+		cmd = """SELECT * FROM FUNCIONARIO
+		WHERE CPF = """ + cpf + " AND CARGO = 'GERENTE'"
+		return self._run_select(cmd)
+
+	def getCliente(self, cpf):
+		cpf = self._preprocess_values([cpf])[0]
+		cmd = """SELECT * FROM CLIENTE
+		WHERE CPF = """ + cpf
 		return self._run_select(cmd)
 
 	def getAllFornecedores(self):

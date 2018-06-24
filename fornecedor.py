@@ -99,6 +99,7 @@ class Ui_Dialog(object):
         self.gridLayout.setColumnStretch(1, 2)
         self.gridLayout_5.addWidget(self.widget, 1, 0, 1, 3)
         self.corrente_radioButton = QtWidgets.QRadioButton(self.frame)
+        self.corrente_radioButton.setChecked(True)
         self.corrente_radioButton.setObjectName("corrente_radioButton")
         self.gridLayout_5.addWidget(self.corrente_radioButton, 2, 0, 1, 1)
         self.poupanca_radioButton = QtWidgets.QRadioButton(self.frame)

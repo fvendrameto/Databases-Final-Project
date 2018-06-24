@@ -130,6 +130,7 @@ class Ui_Dialog(object):
         self.gridLayout.setColumnStretch(1, 2)
         self.gridLayout_9.addWidget(self.widget, 1, 0, 1, 3)
         self.corrente_radioButton = QtWidgets.QRadioButton(self.frame)
+        self.corrente_radioButton.setChecked(True)
         self.corrente_radioButton.setObjectName("corrente_radioButton")
         self.gridLayout_9.addWidget(self.corrente_radioButton, 2, 0, 1, 1)
         self.poupanca_radioButton = QtWidgets.QRadioButton(self.frame)
@@ -186,7 +187,7 @@ class Ui_Dialog(object):
         spacerItem4 = QtWidgets.QSpacerItem(283, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_8.addItem(spacerItem4, 4, 0, 1, 1)
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Save)
         self.buttonBox.setObjectName("buttonBox")
         self.gridLayout_8.addWidget(self.buttonBox, 4, 1, 1, 1)
 

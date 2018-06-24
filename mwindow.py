@@ -200,6 +200,8 @@ class MainApp(QtWidgets.QMainWindow):
 		festa_addDialog = QtWidgets.QDialog()
 		self.festa.setupUi(festa_addDialog)
 
+		self.festa.buttonBox.buttons()[0].setEnabled(False)
+
 		self.festa.data_timeEdit.setDate(QtCore.QDate.currentDate())
 
 		allCliente = self.dbHelper.getAllClientes()
@@ -253,6 +255,7 @@ class MainApp(QtWidgets.QMainWindow):
 	def on_festa_addBtn_clicked(self):
 		festa_addDialog = self.setupFesta()
 
+		self.festa.buttonBox.buttons()[0].setEnabled(True)
 		self.festa.buttonBox.accepted.connect(lambda : self.save_festa_and_close(festa_addDialog))
 
 		festa_addDialog.exec_()
@@ -265,7 +268,6 @@ class MainApp(QtWidgets.QMainWindow):
 		self.dbHelper.commit()
 		self.searchFestas()
 
-	# TODO add festa
 	def save_festa_and_close(self, festa_addDialog):
 		# Data a ser salva:
 		data = self.festa.data_timeEdit.date().toPyDate()
@@ -278,10 +280,12 @@ class MainApp(QtWidgets.QMainWindow):
 		# Itens de ComboBox a serem salvos:
 		faixa = self.festa.faixa_comboBox.currentText()
 		cliente = self.festa.cliente_comboBox.currentText()
-		cliente = preprocess(cliente)[2]
+		if cliente != '':
+			cliente = preprocess(cliente)[2]
 		casaDeFesta = self.festa.casaDeFesta_comboBox.currentText()
 		gerente = self.festa.gerente_comboBox.currentText()
-		gerente = preprocess(gerente)[2]
+		if gerente != '':
+			print(type(gerente))
 
 		# LineEdits a serem salvos:
 		aniversariante = self.festa.aniversariante_lineEdit.text()
@@ -335,14 +339,30 @@ class MainApp(QtWidgets.QMainWindow):
 		self.festa.buttonBox.accepted.connect(lambda : self.edit_festa_and_close(festa_addDialog))
 
 		selectedRow = self.mainwindow.festa_tableWidget.selectedItems()
-		self.festa.cliente_comboBox.setCurrentIndex(self.festa.cliente_comboBox.findText(selectedRow[0].text()))
+
+		cliente = self.dbHelper.getCliente(selectedRow[0].text())[0]
+		self.festa.cliente_comboBox.setCurrentIndex(self.festa.cliente_comboBox.findText(f'{cliente[1]} ({cliente[0]})'))
 		self.festa.data_timeEdit.setDate(datetime.strptime(selectedRow[1].text(), '%d/%m/%Y'))
 		self.festa.convidados_spinBox.setValue(int(selectedRow[2].text()))
 		self.festa.preco_spinBox.setValue(float(selectedRow[3].text()))
-		self.festa.gerente_comboBox.setCurrentIndex(self.festa.gerente_comboBox.findText(selectedRow[4].text()))
+
+		gerente = self.dbHelper.getGerente(selectedRow[4].text())[0]
+		self.festa.gerente_comboBox.setCurrentIndex(self.festa.gerente_comboBox.findText(f'{gerente[1]} ({gerente[0]})'))
 		self.festa.casaDeFesta_comboBox.setCurrentIndex(self.festa.casaDeFesta_comboBox.findText(selectedRow[5].text()))
 		self.festa.aniversariante_lineEdit.setText(selectedRow[6].text())
 		self.festa.tema_lineEdit.setText(selectedRow[7].text())
+
+		self.festa.casaDeFesta_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
+		self.festa.gerente_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
+		self.festa.faixa_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
+		self.festa.convidados_spinBox.valueChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
+		self.festa.preco_spinBox.valueChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
+		self.festa.casaDeFesta_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
+		self.festa.gerente_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
+		self.festa.aniversariante_lineEdit.textChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
+		self.festa.tema_lineEdit.textChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
+		self.festa.barracas_spinBox.valueChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
+		self.festa.faixa_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
 
 		festa_addDialog.exec_()
 
@@ -379,6 +399,8 @@ class MainApp(QtWidgets.QMainWindow):
 		funcionario_addDialog = QtWidgets.QDialog()
 		self.funcionario.setupUi(funcionario_addDialog)
 
+		self.funcionario.buttonBox.buttons()[0].setEnabled(False)
+
 		self.funcionario.cargo_comboBox.addItem('Gerente')
 		self.funcionario.cargo_comboBox.addItem('Garçom')
 		self.funcionario.cargo_comboBox.addItem('Operador')
@@ -390,6 +412,7 @@ class MainApp(QtWidgets.QMainWindow):
 	def on_funcionario_addBtn_clicked(self):
 		funcionario_addDialog = self.setupFuncionario()
 
+		self.funcionario.buttonBox.buttons()[0].setEnabled(True)
 		self.funcionario.buttonBox.accepted.connect(lambda : self.save_funcionario_and_close(funcionario_addDialog))
 
 		funcionario_addDialog.exec_()
@@ -448,6 +471,12 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.funcionario.cargo_comboBox.setCurrentIndex(2)
 
+		self.funcionario.nome_lineEdit.textChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
+		self.funcionario.telFixo_lineEdit.textChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
+		self.funcionario.telMovel_lineEdit.textChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
+		self.funcionario.comissao_spinBox.valueChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
+		self.funcionario.cargo_comboBox.currentIndexChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
+
 		funcionario_addDialog.exec_()
 
 	def edit_funcionario_and_close(self, funcionario_addDialog):
@@ -476,6 +505,8 @@ class MainApp(QtWidgets.QMainWindow):
 		bebida_addDialog = QtWidgets.QDialog()
 		self.bebida.setupUi(bebida_addDialog)
 
+		self.bebida.buttonBox.buttons()[0].setEnabled(False)
+
 		self.bebida.buttonBox.rejected.connect(lambda : bebida_addDialog.close())
 
 		return bebida_addDialog
@@ -483,6 +514,7 @@ class MainApp(QtWidgets.QMainWindow):
 	def on_bebida_addBtn_clicked(self):
 		bebida_addDialog = self.setupBebida()
 
+		self.bebida.buttonBox.buttons()[0].setEnabled(True)
 		self.bebida.buttonBox.accepted.connect(lambda : self.save_bebida_and_close(bebida_addDialog))
 
 		bebida_addDialog.exec_()
@@ -532,6 +564,10 @@ class MainApp(QtWidgets.QMainWindow):
 		if bebida[1] == 'S':
 			self.bebida.bandeja_checkBox.setChecked(True)
 
+		self.bebida.quantidade_spinBox.valueChanged.connect(lambda: self.bebida.buttonBox.buttons()[0].setEnabled(True))
+		self.bebida.preco_spinBox.valueChanged.connect(lambda: self.bebida.buttonBox.buttons()[0].setEnabled(True))
+		self.bebida.bandeja_checkBox.clicked.connect(lambda: self.bebida.buttonBox.buttons()[0].setEnabled(True))
+
 		bebida_addDialog.exec_()
 
 	def edit_bebida_and_close(self, bebida_addDialog):
@@ -556,6 +592,8 @@ class MainApp(QtWidgets.QMainWindow):
 		fornecedor_addDialog = QtWidgets.QDialog()
 		self.fornecedor.setupUi(fornecedor_addDialog)
 
+		self.fornecedor.buttonBox.buttons()[0].setEnabled(False)
+	
 		for banco in bancos:
 			self.fornecedor.banco_comboBox.addItem(banco)
 
@@ -566,6 +604,7 @@ class MainApp(QtWidgets.QMainWindow):
 	def on_fornecedor_addBtn_clicked(self):
 		fornecedor_addDialog = self.setupFornecedor()
 		
+		self.fornecedor.buttonBox.buttons()[0].setEnabled(True)
 		self.fornecedor.buttonBox.accepted.connect(lambda : self.save_fornecedor_and_close(fornecedor_addDialog))
 
 		fornecedor_addDialog.exec_()
@@ -637,6 +676,14 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.fornecedor.poupanca_radioButton.setChecked(True)
 
+		self.fornecedor.nome_lineEdit.textChanged.connect(lambda: self.fornecedor.buttonBox.buttons()[0].setEnabled(True))
+		self.fornecedor.tel_lineEdit.textChanged.connect(lambda: self.fornecedor.buttonBox.buttons()[0].setEnabled(True))
+		self.fornecedor.banco_comboBox.currentIndexChanged.connect(lambda: self.fornecedor.buttonBox.buttons()[0].setEnabled(True))
+		self.fornecedor.agencia_lineEdit.textChanged.connect(lambda: self.fornecedor.buttonBox.buttons()[0].setEnabled(True))
+		self.fornecedor.conta_lineEdit.textChanged.connect(lambda: self.fornecedor.buttonBox.buttons()[0].setEnabled(True))
+		self.fornecedor.corrente_radioButton.clicked.connect(lambda: self.fornecedor.buttonBox.buttons()[0].setEnabled(True))
+		self.fornecedor.poupanca_radioButton.clicked.connect(lambda: self.fornecedor.buttonBox.buttons()[0].setEnabled(True))
+
 		fornecedor_addDialog.exec_()
 
 	def edit_fornecedor_and_close(self, fornecedor_addDialog):
@@ -672,6 +719,8 @@ class MainApp(QtWidgets.QMainWindow):
 		cliente_addDialog = QtWidgets.QDialog()
 		self.cliente.setupUi(cliente_addDialog)
 
+		self.cliente.buttonBox.buttons()[0].setEnabled(False)
+
 		for banco in bancos:
 			self.cliente.banco_comboBox.addItem(banco)
 		for estado in estados:
@@ -684,6 +733,7 @@ class MainApp(QtWidgets.QMainWindow):
 	def on_cliente_addBtn_clicked(self):
 		cliente_addDialog = self.setupCliente()
 
+		self.cliente.buttonBox.buttons()[0].setEnabled(True)
 		self.cliente.buttonBox.accepted.connect(lambda : self.save_cliente_and_close(cliente_addDialog))
 
 		cliente_addDialog.exec_()
@@ -774,6 +824,20 @@ class MainApp(QtWidgets.QMainWindow):
 		self.cliente.estado_comboBox.setCurrentIndex(self.cliente.estado_comboBox.findText(endereco[4]))
 		self.cliente.cep_lineEdit.setText(endereco[5])
 
+		self.cliente.nome_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.telFixo_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.telMovel_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.banco_comboBox.currentIndexChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.agencia_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.conta_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.corrente_radioButton.clicked.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.poupanca_radioButton.clicked.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.rua_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.n_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.cidade_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.estado_comboBox.currentIndexChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+		self.cliente.cep_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
+
 		cliente_addDialog.exec_()
 
 	def edit_cliente_and_close(self, cliente_addDialog):
@@ -821,6 +885,8 @@ class MainApp(QtWidgets.QMainWindow):
 		casaDeFesta_addDialog = QtWidgets.QDialog()
 		self.casaDeFesta.setupUi(casaDeFesta_addDialog)
 
+		self.casaDeFesta.buttonBox.buttons()[0].setEnabled(False)
+
 		for estado in estados:
 			self.casaDeFesta.estado_comboBox.addItem(estado)
 
@@ -831,6 +897,7 @@ class MainApp(QtWidgets.QMainWindow):
 	def on_casaDeFesta_addBtn_clicked(self):
 		casaDeFesta_addDialog = self.setupCasaDeFesta()
 
+		self.casaDeFesta.buttonBox.buttons()[0].setEnabled(True)
 		self.casaDeFesta.buttonBox.accepted.connect(lambda : self.save_casaDeFesta_and_close(casaDeFesta_addDialog))
 		
 		casaDeFesta_addDialog.exec_()
@@ -888,6 +955,12 @@ class MainApp(QtWidgets.QMainWindow):
 
 		endereco = self.dbHelper.getEnderecoCasaFesta(self.casaDeFesta.nome_lineEdit.text())[0]
 		self.casaDeFesta.estado_comboBox.setCurrentIndex(self.casaDeFesta.estado_comboBox.findText(endereco[4]))
+
+		self.casaDeFesta.rua_lineEdit.textChanged.connect(lambda: self.casaDeFesta.buttonBox.buttons()[0].setEnabled(True))
+		self.casaDeFesta.n_lineEdit.textChanged.connect(lambda: self.casaDeFesta.buttonBox.buttons()[0].setEnabled(True))
+		self.casaDeFesta.cidade_lineEdit.textChanged.connect(lambda: self.casaDeFesta.buttonBox.buttons()[0].setEnabled(True))
+		self.casaDeFesta.estado_comboBox.currentIndexChanged.connect(lambda: self.casaDeFesta.buttonBox.buttons()[0].setEnabled(True))
+		self.casaDeFesta.cep_lineEdit.textChanged.connect(lambda: self.casaDeFesta.buttonBox.buttons()[0].setEnabled(True))
 
 		casaDeFesta_addDialog.exec_()
 
@@ -962,6 +1035,7 @@ class MainApp(QtWidgets.QMainWindow):
 			self.festa.casaDeFesta_comboBox.addItem(casaDeFesta[0])
 
 	def on_bebida_addToTableBtn_clicked(self):
+		self.festa.buttonBox.buttons()[0].setEnabled(True)
 		nome = self.festa.bebida_comboBox.currentText() # AQUI PRECISA VER COMO VEM PRA DAR SPLIT
 		# NOME -> self.festa.bebidas_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem())
 		# VOLUME -> self.festa.bebidas_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem())
@@ -981,6 +1055,7 @@ class MainApp(QtWidgets.QMainWindow):
 			self.festa.bebidas_tableWidget.setItem(numRows, 2, QtWidgets.QTableWidgetItem(quantidade))
 
 	def on_garcons_addToTableBtn_clicked(self):
+		self.festa.buttonBox.buttons()[0].setEnabled(True)
 		nome = self.festa.garcons_comboBox.currentText()
 
 		if nome != '':
@@ -994,9 +1069,10 @@ class MainApp(QtWidgets.QMainWindow):
 			self.festa.garcons_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem(match[2]))
 
 	def on_operador_addToTableBtn_clicked(self):
+		self.festa.buttonBox.buttons()[0].setEnabled(True)
 		nome = self.festa.operador_comboBox.currentText()
 		
-		if nome != '':
+		if nome != '' and self.festa.barracas_spinBox.value() > self.festa.operador_tableWidget.rowCount():
 			self.festa.operador_comboBox.removeItem(self.festa.operador_comboBox.currentIndex())
 	
 			match = preprocess(nome)
