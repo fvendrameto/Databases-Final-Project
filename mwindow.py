@@ -251,7 +251,6 @@ class MainApp(QtWidgets.QMainWindow):
 		self.festa.data_timeEdit.setEnabled(False)
 
 		self.festa.buttonBox.accepted.connect(lambda : edit_festa_and_close(festa_addDialog))
-		self.festa.buttonBox.rejected.connect(lambda : festa_addDialog.close())
 
 		selectedRow = self.mainwindow.festa_tableWidget.selectedItems()
 		self.festa.cliente_comboBox.setCurrentIndex(self.festa.cliente_comboBox.findText(selectedRow[0].text()))
@@ -338,8 +337,9 @@ class MainApp(QtWidgets.QMainWindow):
 	def editFuncionario(self):
 		funcionario_addDialog = self.setupFuncionario()
 
+		self.funcionario.cpf_lineEdit.setEnabled(False)
+
 		self.funcionario.buttonBox.accepted.connect(lambda : edit_funcionario_and_close(funcionario_addDialog))
-		self.funcionario.buttonBox.rejected.connect(lambda : funcionario_addDialog.close())
 
 		selectedRow = self.mainwindow.funcionario_tableWidget.selectedItems()
 		self.funcionario.cpf_lineEdit.setText(selectedRow[0].text())

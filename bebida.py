@@ -69,7 +69,7 @@ class Ui_Bebida(object):
 
     def retranslateUi(self, Bebida):
         _translate = QtCore.QCoreApplication.translate
-        Bebida.setWindowTitle(_translate("Bebida", "Festa"))
+        Bebida.setWindowTitle(_translate("Bebida", "Bebida"))
         self.nome_label.setText(_translate("Bebida", "Nome"))
         self.quantidade_label.setText(_translate("Bebida", "Quantidade"))
         self.volume_label.setText(_translate("Bebida", "Volume"))

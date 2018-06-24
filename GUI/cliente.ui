@@ -256,7 +256,7 @@
             <enum>QComboBox::InsertAlphabetically</enum>
            </property>
            <property name="sizeAdjustPolicy">
-            <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+            <enum>QComboBox::AdjustToMinimumContentsLength</enum>
            </property>
           </widget>
          </item>
