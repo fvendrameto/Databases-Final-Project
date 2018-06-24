@@ -525,8 +525,8 @@ class dbHelper():
 
 	def getDadosBancariosFornecedor(self, cnpj):
 		cnpj = self._preprocess_values([cnpj])[0]
-		cmd = """SELECT F.DADOS_BANCARIOS 
-			FROM FORNECEDOR F
+		cmd = """SELECT F.DADOS_BANCARIOS, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO
+			FROM FORNECEDOR F JOIN DADOS_BANCARIOS D ON F.DADOS_BANCARIOS = D.ID
 			WHERE F.CNPJ = """ + cnpj
 		return self._run_select(cmd)
 
@@ -540,8 +540,8 @@ class dbHelper():
 
 	def getEnderecoCasaFesta(self, nome):
 		nome = self._preprocess_values([nome])[0]
-		cmd = """SELECT CF.ENDERECO 
-		FROM CASA_FESTA CF
+		cmd = """SELECT CF.ENDERECO, E.RUA, E.NUMERO, E.CIDADE, E.ESTADO, E.CEP
+		FROM CASA_FESTA CF JOIN ENDERECO E ON CF.ENDERECO = E.ID
 		WHERE CF.NOME = """ + nome
 		
 		return self._run_select(cmd)
@@ -562,7 +562,7 @@ class dbHelper():
 
 	def getDadosBancariosCliente(self, cpf):
 		cpf = self._preprocess_values([cpf])[0]
-		cmd = """SELECT C.DADOS_BANCARIOS
-			FROM CLIENTE C
+		cmd = """SELECT C.DADOS_BANCARIOS, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO
+			FROM CLIENTE C JOIN DADOS_BANCARIOS D ON C.DADOS_BANCARIOS = D.ID
 			WHERE C.CPF = """ + cpf
 		return self._run_select(cmd)
