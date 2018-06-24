@@ -27,15 +27,15 @@ class dbHelper():
 	def _preprocess_values(self, values):
 		for i, value in enumerate(values):
 			if isinstance(value, str):
+				values[i] = "'" + value + "'"
 				values[i] = normalize('NFKD', values[i]).encode('ASCII', 'ignore').decode('ASCII')
 				values[i] = values[i].upper()
-				values[i] = "'" + value + "'"
 			elif isinstance(value, int):
 				values[i] = str(value)
 			elif isinstance(value, float):
 				values[i] = "%.2f" % (value)
 			elif (isinstance(value, datetime.datetime) or isinstance(value, datetime.date)):
-				values[i] = "'%2d/%02d/%4d'" % (value.day, value.month, value.year)
+				values[i] = "TO_DATE('%02d/%02d/%4d', 'DD/MM/YYYY')" % (value.day, value.month, value.year)
 		return values
 
 	def commit(self):
@@ -49,7 +49,7 @@ class dbHelper():
 	def insert(self, table, fields, values):
 		values = self._preprocess_values(values)				
 		cmd = 'INSERT INTO ' + table + ' (' + ', '.join(fields) + ') VALUES ( ' + ', '.join(values) + ') '
-
+		print(cmd)
 		self._run_command(cmd)
 
 	def insertIntoEndereco(self, values):
@@ -103,7 +103,7 @@ class dbHelper():
 
 	def insertIntoCliente(self, values):
 		table = 'CLIENTE'
-		fields = ['CPF', 'NOME', 'TEL_FIXO', 'TEL_MOVEL', 'ENDERECO']
+		fields = ['CPF', 'NOME', 'DADOS_BANCARIOS', 'TEL_FIXO', 'TEL_MOVEL', 'ENDERECO']
 
 		try:
 			self.insert(table, fields, values)
@@ -201,7 +201,7 @@ class dbHelper():
 		values = self._preprocess_values(values)				
 		where_statements = []
 		for i, field in enumerate(fields):
-			where_statements.append(field + ' = ' + values[i])
+			where_statements.append('UPPER(' + field + ') = ' + values[i])
 		cmd = 'DELETE FROM ' + table + ' WHERE (' + ' AND '.join(where_statements) + ')'
 
 		self._run_command(cmd)
@@ -232,7 +232,7 @@ class dbHelper():
 			vals = []
 			for i, value in enumerate(elem):
 				if isinstance(value, datetime.datetime):
-					vals.append("%2d/%02d/%4d" % (value.day, value.month, value.year))
+					vals.append("%02d/%02d/%4d" % (value.day, value.month, value.year))
 				else:
 					vals.append(str(value))
 			result.append(vals)
@@ -241,22 +241,19 @@ class dbHelper():
 		return result
 
 	def getAllAniversarios(self, data_inicio, data_fim, gerente, casa_festa):
-		data_inicio, data_fim, gerente, casa_festa = self._preprocess_values([data_inicio, data_fim, gerente, casa_festa])
-		where_constraints = []
-		where_constraints.append("(F.DATA BETWEEN" + data_inicio + " AND " + data_fim + ") ")
-				
-		if(gerente == "Todos"):
-			where_constraints.append("AND F.CASA_FESTA = " + casa_festa + " ")
-		elif(casa_festa == "Todas"):
-			where_constraints.append("AND F.GERENTE = " + gerente + " ")
-		else:
-			where_constraints.append("AND F.GERENTE = " + gerente + " ")
-			where_constraints.append("AND F.CASA_FESTA = " + casa_festa + " ")
-		
+		data_inicio, data_fim, processed_gerente, processed_casa_festa = self._preprocess_values([data_inicio, data_fim, gerente, casa_festa])
+		where_constraints = "(F.DATA BETWEEN " + data_inicio + " AND " + data_fim + " "
+
+		if(casa_festa != 'Todas'):
+			where_constraints += "AND F.CASA_FESTA = " + processed_casa_festa + " "
+		if(gerente != "Todos"):
+			where_constraints += "AND F.GERENTE = " + processed_gerente + " "
+		where_constraints += ')'
+
 		cmd = "SELECT F.CLIENTE, F.DATA, F.NUMERO_CONVIDADOS, F.PRECO, F.GERENTE, F.CASA_FESTA, A.NOME_ANIVERSARIANTE, A.TEMA, A.FAIXA_ETARIA, COUNT(GF.GARCOM)\
 			FROM FESTA F JOIN ANIVERSARIO A ON A.CLIENTE = F.CLIENTE AND A.DATA = F.DATA\
 			LEFT JOIN GARCOM_FESTA GF ON (GF.DATA = A.DATA AND GF.CLIENTE = A.CLIENTE)\
-			WHERE " + "".join(where_constraints) + "\
+			WHERE " + where_constraints + "\
 			GROUP BY(F.CLIENTE, F.DATA, F.NUMERO_CONVIDADOS, F.PRECO, F.GERENTE, F.CASA_FESTA, A.NOME_ANIVERSARIANTE, A.TEMA, A.FAIXA_ETARIA)"
 
 		return self._run_select(cmd)
@@ -265,7 +262,7 @@ class dbHelper():
 		cliente, data = self._preprocess_values([cliente, data])
 		cmd = "SELECT FU.NOME, GF.GARCOM AS CPF, FU.COMISSAO FROM\
 			FESTA F JOIN GARCOM_FESTA GF ON (F.CLIENTE = GF.CLIENTE AND F.DATA = GF.DATA)\
-			AND (F.CLIENTE = " + cliente + " AND F.DATA = TO_DATE(" + data + ", 'DD/MM/YYYY'))\
+			AND (F.CLIENTE = " + cliente + " AND F.DATA = " + data + ")\
 			JOIN FUNCIONARIO FU ON FU.CPF = GF.GARCOM"
 
 		return self._run_select(cmd)
@@ -274,7 +271,7 @@ class dbHelper():
 		cliente, data = self._preprocess_values([cliente, data])
 		cmd = "SELECT B.NUMERO, FU.NOME, B.OPERADOR AS CPF, FU.COMISSAO FROM\
 			FESTA F JOIN BARRACA_RASPADINHA B ON (F.CLIENTE = B.CLIENTE AND F.DATA = B.DATA)\
-			AND (F.CLIENTE = " + cliente + " AND F.DATA = TO_DATE(" + data + ", 'DD/MM/YYYY'))\
+			AND (F.CLIENTE = " + cliente + " AND F.DATA = " + data + ")\
 			JOIN FUNCIONARIO FU ON FU.CPF = B.OPERADOR"
 
 		return self._run_select(cmd)
@@ -283,7 +280,7 @@ class dbHelper():
 		cliente, data = self._preprocess_values([cliente, data])
 		cmd = "SELECT E.RUA, E.NUMERO, E.CEP, E.CIDADE, E.ESTADO FROM\
 		FESTA F JOIN CASA_FESTA CF ON (F.CASA_FESTA = CF.NOME)\
-		AND (F.CLIENTE = " + cliente + " AND F.DATA = TO_DATE(" + data + ", 'DD/MM/YYYY'))\
+		AND (F.CLIENTE = " + cliente + " AND F.DATA = " + data + ")\
 		JOIN ENDERECO E ON E.ID = CF.ENDERECO"
 
 		return self._run_select(cmd)
@@ -292,7 +289,7 @@ class dbHelper():
 		data = self._preprocess_values([data])[0]
 		cmd = "SELECT F.NOME, F.CPF, F.COMISSAO FROM FUNCIONARIO F WHERE UPPER(F.CARGO) = 'GARCOM' AND\
 			F.CPF NOT IN(\
-			SELECT GF.GARCOM FROM GARCOM_FESTA GF WHERE GF.DATA = TO_DATE(" + data + ", 'DD/MM/YYYY'))"
+			SELECT GF.GARCOM FROM GARCOM_FESTA GF WHERE GF.DATA = " + data + ")"
 
 		return self._run_select(cmd)
 
@@ -300,7 +297,7 @@ class dbHelper():
 		data = self._preprocess_values([data])[0]
 		cmd = "SELECT F.NOME, F.CPF, F.COMISSAO FROM FUNCIONARIO F WHERE UPPER(F.CARGO) = 'OPERADOR' AND\
 			F.CPF NOT IN(\
-			SELECT BR.OPERADOR FROM BARRACA_RASPADINHA BR WHERE BR.DATA = TO_DATE(" + data + ", 'DD/MM/YYYY'))"
+			SELECT BR.OPERADOR FROM BARRACA_RASPADINHA BR WHERE BR.DATA = " + data + ")"
 		
 		return self._run_select(cmd)
 
@@ -308,7 +305,7 @@ class dbHelper():
 		data = self._preprocess_values([data])[0]
 		cmd = "SELECT F.NOME, F.CPF, F.COMISSAO FROM FUNCIONARIO F WHERE UPPER(F.CARGO) = 'GERENTE' AND\
 			F.CPF NOT IN(\
-			SELECT FE.GERENTE FROM FESTA FE WHERE FE.DATA = TO_DATE(" + data + ", 'DD/MM/YYYY'))"
+			SELECT FE.GERENTE FROM FESTA FE WHERE FE.DATA = " + data + ")"
 		
 		return self._run_select(cmd)
 
@@ -324,15 +321,15 @@ class dbHelper():
 
 	def getAllOperadores(self):
 		cmd = "SELECT F.CPF, F.NOME, F.TEL_MOVEL, F.TEL_FIXO, F.COMISSAO, FE.CASA_FESTA, MIN(BR.DATA) AS DATA_PROXIMA_FESTA \
-				FROM FUNCIONARIO F LEFT JOIN BARRACA_RASPADINHA BR ON BR.OPERADOR = F.CPF WHERE UPPER(F.CARGO) = 'OPERADOR'\
-				JOIN FESTA FE ON BR.CLIENTE = FE.CLIENTE AND BR.DATA = FE.DATA\
+				FROM FUNCIONARIO F LEFT JOIN BARRACA_RASPADINHA BR ON BR.OPERADOR = F.CPF\
+				LEFT JOIN FESTA FE ON BR.CLIENTE = FE.CLIENTE AND BR.DATA = FE.DATA WHERE UPPER(F.CARGO) = 'OPERADOR'\
 				GROUP BY(F.CPF, F.NOME, F.TEL_MOVEL,  F.TEL_FIXO, F.COMISSAO, FE.CASA_FESTA)"
 		return self._run_select(cmd)
 
 	def getAllGarcons(self):
 		cmd = "SELECT F.CPF, F.NOME, F.TEL_MOVEL, F.TEL_FIXO, F.COMISSAO, FE.CASA_FESTA, MIN(GF.DATA) AS DATA_PROXIMA_FESTA\
-			FROM FUNCIONARIO F LEFT JOIN GARCOM_FESTA GF ON GF.GARCOM = F.CPF WHERE UPPER(F.CARGO) = 'GARCOM'\
-			JOIN FESTA FE ON GF.CLIENTE = FE.CLIENTE AND GF.DATA = FE.DATA\
+			FROM FUNCIONARIO F LEFT JOIN GARCOM_FESTA GF ON GF.GARCOM = F.CPF\
+			LEFT JOIN FESTA FE ON GF.CLIENTE = FE.CLIENTE AND GF.DATA = FE.DATA WHERE UPPER(F.CARGO) = 'GARCOM'\
 			GROUP BY(F.CPF, F.NOME, F.TEL_MOVEL,  F.TEL_FIXO, F.COMISSAO, FE.CASA_FESTA)"
 		return self._run_select(cmd)
 
