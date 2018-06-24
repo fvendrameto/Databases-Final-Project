@@ -284,8 +284,8 @@ class MainApp(QtWidgets.QMainWindow):
 		aniversariante = self.festa.aniversariante_lineEdit.text()
 		tema = self.festa.tema_lineEdit.text()
 
-		print(self.dbHelper.insertIntoFesta([cliente, data], [convidados, 'A', preco, casaDeFesta, gerente]))
-		print(self.dbHelper.insertIntoAniversatio([cliente, data], [aniversariante, tema, faixa]))
+		print(self.dbHelper.updateFesta([cliente, data], [convidados, 'A', preco, casaDeFesta, gerente]))
+		print(self.dbHelper.updateAniversatio([cliente, data], [aniversariante, tema, faixa]))
 
 		festa_addDialog.close()
 
@@ -338,8 +338,8 @@ class MainApp(QtWidgets.QMainWindow):
 	def editFuncionario(self):
 		funcionario_addDialog = self.setupFuncionario()
 
-		# TODO edit_funcionario_and_close
 		self.funcionario.buttonBox.accepted.connect(lambda : edit_funcionario_and_close(funcionario_addDialog))
+		self.funcionario.buttonBox.rejected.connect(lambda : funcionario_addDialog.close())
 
 		selectedRow = self.mainwindow.funcionario_tableWidget.selectedItems()
 		self.funcionario.cpf_lineEdit.setText(selectedRow[0].text())
@@ -357,7 +357,20 @@ class MainApp(QtWidgets.QMainWindow):
 		funcionario_addDialog.exec_()
 
 	def edit_funcionario_and_close(self, funcionario_addDialog):
-		pass
+		nome = self.funcionario.nome_lineEdit.text()
+		cpf = self.funcionario.cpf_lineEdit.text()
+		telFixo = self.funcionario.telFixo_lineEdit.text()
+		telMovel = self.funcionario.telMovel_lineEdit.text()
+
+		comissao = self.funcionario.comissao_spinBox.value()
+
+		cargo = self.funcionario.cargo_comboBox.currentText()
+
+		print(self.dbHelper.updateFuncionario([cpf], [nome, telFixo, telMovel, comissao, cargo]))
+
+		self.searchFuncionarios()
+
+		funcionario_addDialog.close()
 
 	def setupBebida(self):
 		bebida_addDialog = QtWidgets.QDialog()
@@ -399,8 +412,8 @@ class MainApp(QtWidgets.QMainWindow):
 	def editBebida(self):
 		bebida_addDialog = self.setupBebida()
 
-		# TODO edit_bebida_and_close
-		self.bebida.buttonBox.accepted.connect(lambda: print('oi'))
+		self.bebida.buttonBox.accepted.connect(lambda: edit_bebida_and_close(bebida_addDialog))
+		self.bebida.buttonBox.rejected.connect(lambda: bebida_addDialog.close())
 
 		selectedRow = self.mainwindow.bebida_tableWidget.selectedItems()
 		self.bebida.nome_lineEdit.setText(selectedRow[0].text())
@@ -410,6 +423,21 @@ class MainApp(QtWidgets.QMainWindow):
 		# TODO bandeja e festa fill
 
 		bebida_addDialog.exec_()
+
+	def edit_bebida_and_close(self, bebida_addDialog):
+		nome = self.bebida.nome_lineEdit.text()
+
+		volume = self.bebida.volume_spinBox.value()
+		quantidade = self.bebida.quantidade_spinBox.value()
+		preco = self.bebida.preco_spinBox.value()
+
+		bandeja = 'S' if self.bebida.bandeja_checkBox.isChecked() else 'N'
+
+		print(self.dbHelper.updateBebida([nome, volume], [quantidade, bandeja, preco]))
+
+		self.searchBebidas()
+
+		bebida_addDialog.close()
 
 	def setupFornecedor(self):
 		fornecedor_addDialog = QtWidgets.QDialog()
