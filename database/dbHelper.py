@@ -514,6 +514,7 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getBebida(self, nome, volume):
+		nome, volume = self._preprocess_values([nome, volume])
 		cmd = """SELECT QUANTIDADE, BANDEJA, PRECO FROM BEBIDA
 		WHERE NOME = """ + nome + " AND VOLUME = " + volume
 		return self._run_select(cmd)
@@ -523,6 +524,7 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getDadosBancariosFornecedor(self, cnpj):
+		cnpj = self._preprocess_values([cnpj])[0]
 		cmd = """SELECT F.DADOS_BANCARIOS 
 			FROM FORNECEDOR F
 			WHERE F.CNPJ = """ + cnpj
@@ -537,6 +539,7 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getEnderecoCasaFesta(self, nome):
+		nome = self._preprocess_values([nome])[0]
 		cmd = """SELECT CF.ENDERECO 
 		FROM CASA_FESTA CF
 		WHERE CF.NOME = """ + nome
@@ -551,12 +554,14 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getEnderecoCliente(self, cpf):
+		cpf = self._preprocess_values([cpf])[0]
 		cmd = """SELECT C.ENDERECO
 			FROM CLIENTE C
 			WHERE C.CPF = """ + cpf
 		return self._run_select(cmd)
 
 	def getDadosBancariosCliente(self, cpf):
+		cpf = self._preprocess_values([cpf])[0]
 		cmd = """SELECT C.DADOS_BANCARIOS
 			FROM CLIENTE C
 			WHERE C.CPF = """ + cpf
