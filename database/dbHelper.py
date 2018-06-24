@@ -22,12 +22,25 @@ class dbHelper():
 	def __init__(self, ip, port, sid, user, password):
 		'''
 		Cria um novo objeto dbHelper
+		Args: 
+			ip: IP de acesso ao banco de dados
+			port: porta de acesso ao banco de dados
+			sid: SID do banco de dados
+			user: Usuario do banco de dados
+			password: Senha de acesso do usuario fornecido
 		'''
 		self.dns_tns = cx_Oracle.makedsn(ip, port, sid)
 		self.connection = cx_Oracle.connect(user, password, self.dns_tns)
 		
 
 	def _preprocess_values(self, values):
+		'''
+		Preprocessa os valores que serao inseridos no banco.
+		Args: 
+			values: Os valores que devem ser processados
+		Return:
+			Um vetor contendo os valores já processados
+		'''		
 		for i, value in enumerate(values):
 			if isinstance(value, str):
 				values[i] = re.sub(r"'", '', value)
@@ -43,17 +56,35 @@ class dbHelper():
 		return values
 
 	def commit(self):
+		'''
+		Faz o commit das alteraçoes realizadas no banco
+		'''	
 		self.connection.commit()
 
 	def rollback(self):
+		'''
+		Descarta alteraçoes realizadas no banco desde o ultimo commit
+		'''	
 		self.connection.rollback()
 	
 	def _run_command(self, cmd):
+		'''
+		Executa um comando SQL no banco
+		Args: 
+			cmd: O comando que deve ser executado
+		'''	
 		cursor = self.connection.cursor()
 		cursor.execute(cmd)
 		cursor.close()
 
 	def insert(self, table, fields, values):
+		'''
+		Insere os dados fornecidos nos campos da tabela fornecida
+		Args: 
+			table: A tabela que deve ser realizada a inserção
+			fields: Lista de campos que devem ser realizadas as inserções
+			values: Lista de valores que devem ser inseridos
+		'''	
 		values = self._preprocess_values(values)
 
 		cmd = 'INSERT INTO ' + table + ' (' + ', '.join(fields) + ') VALUES ( ' + ', '.join(values) + ') '
@@ -61,6 +92,13 @@ class dbHelper():
 		self._run_command(cmd)
 
 	def insertIntoEndereco(self, values):
+		'''
+		Insere os dados fornecidos na tabela de enderecos
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'ENDERECO'
 		fields = ['ID', 'RUA', 'CIDADE', 'ESTADO', 'NUMERO', 'CEP']
 
@@ -73,6 +111,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def insertIntoDadosBancarios(self, values):
+		'''
+		Insere os dados fornecidos na tabela de dados bancarios
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'DADOS_BANCARIOS'
 		fields = ['ID', 'BANCO', 'AGENCIA', 'CONTA', 'TIPO_CONTA']
 
@@ -85,6 +130,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def insertIntoFornecedor(self, values):
+		'''
+		Insere os dados fornecidos na tabela de fornecedores
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'FORNECEDOR'
 		fields = ['CNPJ', 'NOME', 'TELEFONE', 'DADOS_BANCARIOS']
 
@@ -97,6 +149,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def insertIntoFuncionario(self, values):
+		'''
+		Insere os dados fornecidos na tabela de funcionarios
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'FUNCIONARIO'
 		fields = ['CPF', 'NOME', 'TEL_FIXO', 'TEL_MOVEL', 'COMISSAO', 'CARGO']
 
@@ -110,6 +169,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def insertIntoCliente(self, values):
+		'''
+		Insere os dados fornecidos na tabela de clientes
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'CLIENTE'
 		fields = ['CPF', 'NOME', 'DADOS_BANCARIOS', 'TEL_FIXO', 'TEL_MOVEL', 'ENDERECO']
 
@@ -122,6 +188,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def insertIntoCasaFesta(self, values):
+		'''
+		Insere os dados fornecidos na tabela de casas de festas
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'CASA_FESTA'
 		fields = ['NOME', 'ENDERECO']
 
@@ -134,6 +207,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def insertIntoFesta(self, values):
+		'''
+		Insere os dados fornecidos na tabela de festas
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'FESTA'
 		fields = ['CLIENTE', 'DATA', 'NUMERO_CONVIDADOS', 'TIPO', 'PRECO', 'CASA_FESTA', 'GERENTE']
 
@@ -146,6 +226,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def insertIntoAniversario(self, values):
+		'''
+		Insere os dados fornecidos na tabela de aniversarios
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'ANIVERSARIO'
 		fields = ['CLIENTE', 'DATA', 'NOME_ANIVERSARIANTE', 'TEMA', 'FAIXA_ETARIA']
 
@@ -158,6 +245,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 	
 	def insertIntoBarracaRaspadinha(self, values):
+		'''
+		Insere os dados fornecidos na tabela de barracas de raspadinha
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'BARRACA_RASPADINHA'
 		fields = ['ID', 'CLIENTE', 'DATA', 'NUMERO', 'OPERADOR']
 
@@ -170,6 +264,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def insertIntoGarcomFesta(self, values):
+		'''
+		Insere os dados fornecidos na tabela que relaciona garcons e as festas em que trabalham
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'GARCOM_FESTA'
 		fields = ['CLIENTE', 'DATA', 'GARCOM']
 
@@ -182,6 +283,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def insertIntoBebida(self, values):
+		'''
+		Insere os dados fornecidos na tabela de bebidas
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'BEBIDA'
 		fields = ['NOME', 'VOLUME', 'QUANTIDADE', 'BANDEJA', 'PRECO']
 
@@ -194,6 +302,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def insertIntoBebidaBandejaFesta(self, values):
+		'''
+		Insere os dados fornecidos na tabela que relaciona festas e as bebidas alocadas as mesmas
+		Args: 
+			values: Lista com os valores que devem ser inseridos
+		Return:
+			String com o a mensagem de erro ou um codigo de sucesso
+		'''	
 		table = 'BEBIDA_BANDEJA_FESTA'
 		fields = ['CLIENTE', 'DATA', 'BEBIDA', 'VOLUME', 'QUANTIDADE']
 
@@ -206,6 +321,13 @@ class dbHelper():
 		return INSERT_SUCCESS
 
 	def delete(self, table, fields, values):
+		'''
+		Remove as tuplas da tabela dada que satisfazem as condições fornecidas
+		Args: 
+			table: A tabela que deve ser realizada a remoção
+			fields: Lista de campos que devem possuir os valores de values
+			values: Lista de valores para cada campo fornecido em fields
+		'''	
 		values = self._preprocess_values(values)				
 		where_statements = []
 		for i, field in enumerate(fields):
@@ -216,6 +338,15 @@ class dbHelper():
 
 
 	def update(self, table, where_fields, where_values, update_fields, update_values):
+		'''
+		Atualiza as tuplas da tabela dada que satisfazem as condições fornecidas com os valores dados
+		Args: 
+			table: A tabela que deve ser realizada a remoção
+			where_fields: Lista de campos que devem possuir os valores de where_values
+			where_values: Lista de valores para cada campo fornecido em where_fields
+			update_fields: Lista de campos que devem ser atualizados
+			update_values: Lista de valores que devem ser atualizados
+		'''
 		where_statements = []
 		for i, field in enumerate(where_fields):
 			where_statements.append(field + ' = ' + where_values[i])
@@ -228,6 +359,12 @@ class dbHelper():
 		self._run_command(cmd)
 
 	def updateEndereco(self, where_values, values):
+		'''
+		Atualiza os valores da tabela de endereços com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 		
@@ -244,6 +381,12 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def updateDadosBancarios(self, where_values, values):
+		'''
+		Atualiza os valores da tabela de dados bancarios com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 
@@ -260,6 +403,12 @@ class dbHelper():
 		return UPDATE_SUCCESS
 
 	def updateFornecedor(self, where_values, values):
+		'''
+		Atualiza os valores da tabela de fornecedores com os valores dados
+		Args: 
+			where_values: Lista de valores usados como condição para cada campo
+			values: Lista de valores para serem atualizados
+		'''
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
 		
@@ -566,7 +715,7 @@ class dbHelper():
 		return self._run_select(cmd)
 
 	def getAllClientes(self):
-		cmd = "SELECT C.CPF, C.NOME, C.TEL_FIXO, C.TEL_MOVEL, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA, COUNT(*) AS NUMERO_FESTAS\
+		cmd = "SELECT C.CPF, C.NOME, C.TEL_FIXO, C.TEL_MOVEL, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA, COUNT(F.CLIENTE) AS NUMERO_FESTAS\
 			FROM CLIENTE C JOIN DADOS_BANCARIOS D ON C.DADOS_BANCARIOS = D.ID\
 			LEFT JOIN FESTA F ON C.CPF = F.CLIENTE\
 			GROUP BY(C.CPF, C.NOME, C.TEL_FIXO, C.TEL_MOVEL, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA)"
