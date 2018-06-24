@@ -7,7 +7,8 @@ import re
 from database.error_dict import errors
 from unicodedata import normalize
 
-SUCCESS = 0
+INSERT_SUCCESS = 'Inserção bem sucedida'
+UPDATE_SUCCESS = 'Atualização bem sucedida'
 
 def getError(error_msg):
 	regex = re.compile(r'[^.]*.([^\)]*)')
@@ -29,7 +30,6 @@ class dbHelper():
 			if isinstance(value, str):
 				values[i] = "'" + value + "'"
 				values[i] = normalize('NFKD', values[i]).encode('ASCII', 'ignore').decode('ASCII')
-				values[i] = values[i].upper()
 			elif isinstance(value, int):
 				values[i] = str(value)
 			elif isinstance(value, float):
@@ -62,7 +62,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 		
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def insertIntoDadosBancarios(self, values):
 		table = 'DADOS_BANCARIOS'
@@ -74,7 +74,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def insertIntoFornecedor(self, values):
 		table = 'FORNECEDOR'
@@ -86,7 +86,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 		
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def insertIntoFuncionario(self, values):
 		table = 'FUNCIONARIO'
@@ -99,7 +99,7 @@ class dbHelper():
 
 			return errors[error]
 
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def insertIntoCliente(self, values):
 		table = 'CLIENTE'
@@ -111,7 +111,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def insertIntoCasaFesta(self, values):
 		table = 'CASA_FESTA'
@@ -123,7 +123,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def insertIntoFesta(self, values):
 		table = 'FESTA'
@@ -135,7 +135,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def insertIntoAniversario(self, values):
 		table = 'ANIVERSARIO'
@@ -147,7 +147,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 
-		return SUCCESS
+		return INSERT_SUCCESS
 	
 	def insertIntoBarracaRaspadinha(self, values):
 		table = 'BARRACA_RASPADINHA'
@@ -159,7 +159,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def insertIntoGarcomFesta(self, values):
 		table = 'GARCOM_FESTA'
@@ -171,7 +171,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def insertIntoBebida(self, values):
 		table = 'BEBIDA'
@@ -183,7 +183,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def insertIntoBebidaBandejaFesta(self, values):
 		table = 'BEBIDA_BANDEJA_FESTA'
@@ -195,7 +195,7 @@ class dbHelper():
 			error = getError(str(e))
 			return errors[error]
 
-		return SUCCESS
+		return INSERT_SUCCESS
 
 	def delete(self, table, fields, values):
 		values = self._preprocess_values(values)				
@@ -205,6 +205,7 @@ class dbHelper():
 		cmd = 'DELETE FROM ' + table + ' WHERE (' + ' AND '.join(where_statements) + ')'
 
 		self._run_command(cmd)
+
 
 	def update(self, table, where_fields, where_values, update_fields, update_values):
 		where_values = self._preprocess_values(where_values)
@@ -222,6 +223,181 @@ class dbHelper():
 
 		self._run_command(cmd)
 
+	def updateEndereco(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'ENDERECO'
+		fields = ['RUA', 'CIDADE', 'ESTADO', 'NUMERO', 'CEP']
+		where_fields = ['ID']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
+
+	def updateDadosBancarios(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'DADOS_BANCARIOS'
+		fields = ['BANCO', 'AGENCIA', 'CONTA', 'TIPO_CONTA']
+		where_fields = ['ID']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
+
+	def updateFornecedor(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'FORNECEDOR'
+		fields = ['NOME', 'TELEFONE', 'DADOS_BANCARIOS']
+		where_fields = ['CNPJ']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
+
+	def updateFuncionario(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'FUNCIONARIO'
+		fields = ['NOME', 'TEL_FIXO', 'TEL_MOVEL', 'COMISSAO', 'CARGO']
+		where_fields = ['CPF']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
+
+	def updateCliente(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'CLIENTE'
+		fields = ['NOME', 'DADOS_BANCARIOS', 'TEL_FIXO', 'TEL_MOVEL', 'ENDERECO']
+		where_fields = ['CPF']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
+
+	def updateCasaFesta(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'CASA_FESTA'
+		fields = ['ENDERECO']
+		where_fields = ['NOME']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
+
+	def updateFesta(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'FESTA'
+		fields = ['NUMERO_CONVIDADOS', 'TIPO', 'PRECO', 'CASA_FESTA', 'GERENTE']
+		where_fields = ['CLIENTE', 'DATA']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
+
+	def updateAniversario(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'ANIVERSARIO'
+		fields = ['NOME_ANIVERSARIANTE', 'TEMA', 'FAIXA_ETARIA']
+		where_fields = ['CLIENTE', 'DATA']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
+
+	def updateBarracaRaspadinha(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'BARRACA_RASPADINHA'
+		fields = ['CLIENTE', 'DATA', 'NUMERO', 'OPERADOR']
+		where_fields = ['ID']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
+
+	def updateBebida(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'BEBIDA'
+		fields = ['QUANTIDADE', 'BANDEJA', 'PRECO']
+		where_fields = ['NOME', 'VOLUME']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
+
+	def updateBebidaBandejaFesta(self, where_values, values):
+		values = self._preprocess_values(values)
+		where_values = self._preprocess_values(where_values)
+		
+		table = 'BEBIDA_BANDEJA_FESTA'
+		fields = ['QUANTIDADE']
+		where_fields = ['CLIENTE', 'DATA', 'BEBIDA', 'VOLUME']
+
+		try:
+			self.update(table, where_fields, where_values, fields, values)		
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return UPDATE_SUCCESS
 
 	def _run_select(self, cmd):
 		cursor = self.connection.cursor()
