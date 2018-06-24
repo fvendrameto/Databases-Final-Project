@@ -412,6 +412,9 @@ class MainApp(QtWidgets.QMainWindow):
 	def editBebida(self):
 		bebida_addDialog = self.setupBebida()
 
+		self.bebida.nome_lineEdit.setEnabled(False)
+		self.bebida.volume_lineEdit.setEnabled(False)
+
 		self.bebida.buttonBox.accepted.connect(lambda: edit_bebida_and_close(bebida_addDialog))
 		self.bebida.buttonBox.rejected.connect(lambda: bebida_addDialog.close())
 
@@ -494,6 +497,8 @@ class MainApp(QtWidgets.QMainWindow):
 
 	def editFornecedor(self):
 		fornecedor_addDialog = self.setupFornecedor()
+
+		self.fornecedor.cnpj_lineEdit.setEnabled(False)
 		
 		self.fornecedor.buttonBox.accepted.connect(lambda : edit_fornecedor_and_close(fornecedor_addDialog))
 
@@ -612,6 +617,8 @@ class MainApp(QtWidgets.QMainWindow):
 	def editCliente(self):
 		cliente_addDialog = self.setupCliente()
 
+		self.cliente.cpf_lineEdit.setEnabled(False)
+
 		# TODO edit_cliente_and_close
 		self.cliente.buttonBox.accepted.connect(lambda : print('oi'))
 
@@ -692,6 +699,8 @@ class MainApp(QtWidgets.QMainWindow):
 
 	def editCasaDeFesta(self):
 		casaDeFesta_addDialog = self.setupCasaDeFesta()
+
+		self.casaDeFesta.nome_lineEdit.setEnabled(False)
 
 		# TODO edit_casaDeFesta_and_close
 		self.casaDeFesta.buttonBox.accepted.connect(lambda : print('oi'))
