@@ -52,12 +52,12 @@
         </sizepolicy>
        </property>
        <attribute name="title">
-        <string>Festa</string>
+        <string>Festas</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_5">
         <item row="0" column="0" colspan="2">
          <widget class="QWidget" name="widget" native="true">
-          <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,3,3">
+          <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,1,3,3">
            <property name="leftMargin">
             <number>4</number>
            </property>
@@ -70,33 +70,47 @@
            <property name="bottomMargin">
             <number>4</number>
            </property>
-           <item row="1" column="2">
-            <widget class="QComboBox" name="gerente_comboBox"/>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="data_label">
-             <property name="text">
-              <string>Data</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QDateEdit" name="data_edit"/>
-           </item>
            <item row="1" column="1">
-            <widget class="QComboBox" name="casaDeFesa_comboBox"/>
+            <widget class="QDateEdit" name="dataFinal_dateEdit"/>
            </item>
-           <item row="0" column="2">
+           <item row="0" column="3">
             <widget class="QLabel" name="gerente_label">
              <property name="text">
               <string>Gerente</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item row="0" column="2">
             <widget class="QLabel" name="casaDeFesta_label">
              <property name="text">
               <string>Casa de Festa</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="data_label">
+             <property name="text">
+              <string>Data Final</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QComboBox" name="gerente_comboBox"/>
+           </item>
+           <item row="1" column="2">
+            <widget class="QComboBox" name="casaDeFesta_comboBox"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Data Inicial</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QDateEdit" name="dataInicial_dateEdit">
+             <property name="calendarPopup">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -113,6 +127,12 @@
           </property>
           <property name="sizeAdjustPolicy">
            <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
           </property>
           <property name="textElideMode">
            <enum>Qt::ElideNone</enum>
@@ -174,12 +194,27 @@
           </column>
           <column>
            <property name="text">
-            <string>Nº de Funcionários</string>
+            <string>Casa de Festa</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Casa de Festa</string>
+            <string>Nome do Aniversariante</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Tema</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Faixa Etária</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Nº de Garçons</string>
            </property>
           </column>
          </widget>
@@ -202,7 +237,7 @@
       </widget>
       <widget class="QWidget" name="funcionario">
        <attribute name="title">
-        <string>Funcionário</string>
+        <string>Funcionários</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_8">
         <item row="0" column="0" colspan="2">
@@ -289,6 +324,15 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
           <property name="wordWrap">
            <bool>true</bool>
           </property>
@@ -309,6 +353,11 @@
           </attribute>
           <column>
            <property name="text">
+            <string>CPF</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
             <string>Nome</string>
            </property>
           </column>
@@ -320,11 +369,6 @@
           <column>
            <property name="text">
             <string>Telefone Móvel</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Cargo</string>
            </property>
           </column>
           <column>
@@ -352,14 +396,32 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_9">
         <item row="0" column="0">
-         <widget class="QLabel" name="quantidade_label">
+         <widget class="QLabel" name="quantidadeMin_label">
           <property name="text">
-           <string>Quantidade</string>
+           <string>Quantidade Mínima</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QSpinBox" name="quantidade_spinBox"/>
+         <widget class="QSpinBox" name="quantidadeMin_spinBox">
+          <property name="maximum">
+           <number>99998</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="quantidadeMax_label">
+          <property name="text">
+           <string>Quantidade Máxima</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QPushButton" name="bebida_addButton">
+          <property name="text">
+           <string>Adicionar</string>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0" colspan="2">
          <widget class="QTableWidget" name="bebida_tableWidget">
@@ -368,6 +430,15 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -404,17 +475,23 @@
           </column>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QPushButton" name="bebida_addButton">
-          <property name="text">
-           <string>Adicionar</string>
-          </property>
-         </widget>
-        </item>
         <item row="3" column="1">
          <widget class="QPushButton" name="bebida_delButton">
           <property name="text">
            <string>Remover</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="quantidadeMax_spinBox">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>99999</number>
+          </property>
+          <property name="value">
+           <number>99999</number>
           </property>
          </widget>
         </item>
@@ -432,6 +509,15 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -453,12 +539,12 @@
           </attribute>
           <column>
            <property name="text">
-            <string>Nome</string>
+            <string>CNPJ</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>CNPJ</string>
+            <string>Nome</string>
            </property>
           </column>
           <column>
@@ -506,7 +592,7 @@
       </widget>
       <widget class="QWidget" name="cliente">
        <attribute name="title">
-        <string>Cliente</string>
+        <string>Clientes</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_11">
         <item row="0" column="0" colspan="2">
@@ -524,7 +610,13 @@
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
           <property name="selectionMode">
-           <enum>QAbstractItemView::ExtendedSelection</enum>
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -549,12 +641,12 @@
           </attribute>
           <column>
            <property name="text">
-            <string>Nome</string>
+            <string>CPF</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>CPF</string>
+            <string>Nome</string>
            </property>
           </column>
           <column>
@@ -612,7 +704,7 @@
       </widget>
       <widget class="QWidget" name="casaDeFesta">
        <attribute name="title">
-        <string>Casa de Festa</string>
+        <string>Casas de Festa</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_12">
         <item row="0" column="0" colspan="2">
@@ -622,6 +714,15 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -704,9 +805,8 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>data_edit</tabstop>
-  <tabstop>casaDeFesa_comboBox</tabstop>
+  <tabstop>dataFinal_dateEdit</tabstop>
+  <tabstop>casaDeFesta_comboBox</tabstop>
   <tabstop>gerente_comboBox</tabstop>
   <tabstop>festa_tableWidget</tabstop>
   <tabstop>festa_addButton</tabstop>
@@ -714,7 +814,7 @@
   <tabstop>funcionario_tableWidget</tabstop>
   <tabstop>funcionario_addButton</tabstop>
   <tabstop>funcionario_delButton</tabstop>
-  <tabstop>quantidade_spinBox</tabstop>
+  <tabstop>quantidadeMin_spinBox</tabstop>
   <tabstop>bebida_tableWidget</tabstop>
   <tabstop>bebida_addButton</tabstop>
   <tabstop>bebida_delButton</tabstop>
