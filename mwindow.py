@@ -608,8 +608,7 @@ class MainApp(QtWidgets.QMainWindow):
 	def editCliente(self):
 		cliente_addDialog = self.setupCliente()
 
-		# TODO edit_cliente_and_close
-		self.cliente.buttonBox.accepted.connect(lambda : print('oi'))
+		self.cliente.buttonBox.accepted.connect(lambda : edit_cliente_and_close(cliente_addDialog))
 
 		selectedRow = self.mainwindow.cliente_tableWidget.selectedItems()
 		self.cliente.cpf_lineEdit.setText(selectedRow[0].text())
@@ -635,6 +634,42 @@ class MainApp(QtWidgets.QMainWindow):
 		# TODO fill endereço
 
 		cliente_addDialog.exec_()
+
+	def edit_cliente_and_close(self, cliente_addDialog):
+		cpf = self.cliente.cpf_lineEdit.text()
+		nome = self.cliente.nome_lineEdit.text()
+		telFixo = self.cliente.telFixo_lineEdit.text()
+		telMovel = self.cliente.telMovel_lineEdit.text()
+		agencia = self.cliente.agencia_lineEdit.text()
+		conta = self.cliente.conta_lineEdit.text()
+		rua = self.cliente.rua_lineEdit.text()
+		numero = self.cliente.n_lineEdit.text()
+		cidade = self.cliente.cidade_lineEdit.text()
+		cep = self.cliente.cep_lineEdit.text()
+
+		banco = bancos[self.cliente.banco_comboBox.currentText()]
+		estado = self.cliente.estado_comboBox.currentText()
+
+		if(self.cliente.corrente_radioButton.isChecked()):
+			tipoConta = 'CC'
+		elif(self.cliente.poupanca_radioButton.isChecked()):
+			tipoConta = 'CP'
+
+		if telFixo == '()-':
+			telFixo = None
+
+		id_dadosBancarios = self.dbHelper.getDadosBancariosCliente(cpf)
+		id_endereco = self.dbHelper.getEnderecoCliente(cpf)
+		print(self.dbHelper.updateDadosBancarios([id_dadosBancarios], [banco, agencia, conta, tipoConta]))
+		print(self.dbHelper.updateEndereco([id_endereco], [rua, cidade, estado, numero, cep]))
+		print(self.dbHelper.updateCliente([cpf], [nome, iddados, telFixo, telMovel, iddados]))
+
+		self.mainwindow.cliente_tableWidget.clearContents()
+		self.mainwindow.cliente_tableWidget.setRowCount(0)
+
+		self.fillClientes()
+
+		cliente_addDialog.close()
 
 	def setupCasaDeFesta(self):
 		casaDeFesta_addDialog = QtWidgets.QDialog()
