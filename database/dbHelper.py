@@ -512,7 +512,7 @@ class dbHelper():
 			GROUP BY(F.CPF, F.NOME, F.TEL_MOVEL,  F.TEL_FIXO, F.COMISSAO, FE.CASA_FESTA)"
 		return self._run_select(cmd)
 
-	def getBebidasInInterval(self, min_value, max_value):
+	def getBebidasInInterval(self, min_value=0, max_value=99999):
 		cmd = "SELECT B.NOME, B.VOLUME, B.QUANTIDADE, B.PRECO FROM BEBIDA B WHERE B.QUANTIDADE BETWEEN " + str(min_value) + " AND " + str(max_value)
 		return self._run_select(cmd)
 
