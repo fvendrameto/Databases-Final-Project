@@ -413,10 +413,9 @@ class MainApp(QtWidgets.QMainWindow):
 		bebida_addDialog = self.setupBebida()
 
 		self.bebida.nome_lineEdit.setEnabled(False)
-		self.bebida.volume_lineEdit.setEnabled(False)
+		self.bebida.volume_spinBox.setEnabled(False)
 
 		self.bebida.buttonBox.accepted.connect(lambda: edit_bebida_and_close(bebida_addDialog))
-		self.bebida.buttonBox.rejected.connect(lambda: bebida_addDialog.close())
 
 		selectedRow = self.mainwindow.bebida_tableWidget.selectedItems()
 		self.bebida.nome_lineEdit.setText(selectedRow[0].text())
