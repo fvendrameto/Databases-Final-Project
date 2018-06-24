@@ -1,6 +1,5 @@
 from PyQt5 import QtGui, QtCore, QtWidgets # Import the PyQt5 module we'll need
 import sys # We need sys so that we can pass argv to QApplication
-import csv
 import os
 import re
 import time
@@ -16,11 +15,13 @@ from funcionario import Ui_Funcionario as Funcionario
 from database.dbHelper import dbHelper
 from static import bancos, estados, faixasEtaria
 
+# Separa nome e CPF no seguinte padrão "NOME (CPF)"
 def preprocess(string):
 	regex = re.compile(r'^([^(]*)\(([^)]*)\)')
 	match = regex.match(string)
 	return match
 
+# Classe da tela principal do programa
 class MainApp(QtWidgets.QMainWindow):
 	def __init__(self):
 		super(self.__class__, self).__init__()
@@ -29,6 +30,7 @@ class MainApp(QtWidgets.QMainWindow):
 		
 		self.dbHelper = dbHelper('grad.icmc.usp.br', 15215, 'orcl', 'G9763193', '9763193')
 
+		# Cria os popups
 		self.bebida = Bebida()
 		self.casaDeFesta = CasaDeFesta()
 		self.cliente = Cliente()
@@ -36,6 +38,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.fornecedor = Fornecedor()
 		self.funcionario = Funcionario()
 
+		# Inicializa valores padrões para pesquisa
 		self.mainwindow.dataInicial_dateEdit.setDate(QtCore.QDate.currentDate())
 		self.mainwindow.dataFinal_dateEdit.setDate(QtCore.QDate.currentDate().addMonths(6))
 
@@ -44,13 +47,14 @@ class MainApp(QtWidgets.QMainWindow):
 		for i, casaDeFesta in enumerate(nomeCasasDeFesta):
 			self.mainwindow.casaDeFesta_comboBox.addItem(casaDeFesta[0])
 
-		self.gerentes = {'Todos': 'Todos'}
+		self.gerentes = {'Todos': 'Todos'} # Dicionário para pegar o nome do gerente a partir de um CPF
 		self.mainwindow.gerente_comboBox.addItem('Todos')
 		allFuncionario = self.dbHelper.getAllGerentes()
 		for i, funcionario in enumerate(allFuncionario):
 			self.gerentes[funcionario[1]] = funcionario[0]
 			self.mainwindow.gerente_comboBox.addItem(funcionario[1])
 
+		# Conecta as funções dos botões
 		self.mainwindow.festa_addButton.clicked.connect(self.on_festa_addBtn_clicked)
 		self.mainwindow.festa_delButton.clicked.connect(self.on_festa_delBtn_clicked)
 		self.mainwindow.funcionario_addButton.clicked.connect(self.on_funcionario_addBtn_clicked)
@@ -79,6 +83,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.mainwindow.cliente_tableWidget.cellDoubleClicked.connect(self.editCliente)
 		self.mainwindow.casaDeFesta_tableWidget.cellDoubleClicked.connect(self.editCasaDeFesta)
 
+		# Coloca o padrão de espaçamento dos cabeçalhos de tabelas para ocupar igualmente o espaço
 		for i in range(self.mainwindow.festa_tableWidget.columnCount()):
 			self.mainwindow.festa_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
 		for i in range(self.mainwindow.funcionario_tableWidget.columnCount()):
@@ -92,6 +97,7 @@ class MainApp(QtWidgets.QMainWindow):
 		for i in range(self.mainwindow.casaDeFesta_tableWidget.columnCount()):
 			self.mainwindow.casaDeFesta_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
 
+		# Preenche as tabelas
 		self.searchFestas()
 		self.searchFuncionarios()
 		self.searchBebidas()
@@ -99,16 +105,19 @@ class MainApp(QtWidgets.QMainWindow):
 		self.fillClientes()
 		self.fillCasasDeFesta()
 
+	# Função para trocar a quantidade de bebida máxima para um a mais do que a mínima
 	def spinBoxLimit(self):
 		self.mainwindow.quantidadeMax_spinBox.setMinimum(self.mainwindow.quantidadeMin_spinBox.value()+1)
 		self.searchBebidas()
 
+	# Deleta o conteúdo da tabela de festas e preenche de novo usando os parâmetros escolhidos
 	def searchFestas(self):
 		self.mainwindow.festa_tableWidget.clearContents()
 		self.mainwindow.festa_tableWidget.setRowCount(0)
 		
 		self.fillFestas(self.mainwindow.dataInicial_dateEdit.date().toPyDate(), self.mainwindow.dataFinal_dateEdit.date().toPyDate(), self.mainwindow.gerente_comboBox.currentText(), self.mainwindow.casaDeFesta_comboBox.currentText())
 
+	# Deleta o conteúdo da tabela de funcionários e preenche de novo usando os parâmetros escolhidos
 	def searchFuncionarios(self):
 		self.mainwindow.funcionario_tableWidget.clearContents()
 		self.mainwindow.funcionario_tableWidget.setRowCount(0)
@@ -120,48 +129,54 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.fillFuncionarioOperadores()
 
+	# Deleta o conteúdo da tabela de bebidas e preenche de novo usando os parâmetros escolhidos
 	def searchBebidas(self):
 		self.mainwindow.bebida_tableWidget.clearContents()
 		self.mainwindow.bebida_tableWidget.setRowCount(0)
 		
 		self.fillBebidas(self.mainwindow.quantidadeMin_spinBox.value(), self.mainwindow.quantidadeMax_spinBox.value())
 
+	# Preenche a tabela de festas
 	def fillFestas(self, dataInicio, dataFinal, gerente, casaDeFesta):
 		allFesta = self.dbHelper.getAllAniversarios(dataInicio, dataFinal, self.gerentes[gerente], casaDeFesta)
 		for i, festa in enumerate(allFesta):
 			self.mainwindow.festa_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.festa_tableWidget.columnCount()):
-				if festa[j] == 'None':
+				if festa[j] == 'None': # Converte valores nulos para um padrão
 					festa[j] = "Não possui"
 				self.mainwindow.festa_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(festa[j]))
 
+	# Preenche a tabela de funcionários com os gerentes
 	def fillFuncionarioGerentes(self):
 		allFuncionario = self.dbHelper.getAllGerentes()
 		for i, funcionario in enumerate(allFuncionario):
 			self.mainwindow.funcionario_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.funcionario_tableWidget.columnCount()):
-				if funcionario[j] == 'None':
+				if funcionario[j] == 'None': # Converte valores nulos para um padrão
 					funcionario[j] = "Não possui"
 				self.mainwindow.funcionario_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(funcionario[j]))
 
+	# Preenche a tabela de funcionários com os garçons
 	def fillFuncionarioGarcons(self):
 		allFuncionario = self.dbHelper.getAllGarcons()
 		for i, funcionario in enumerate(allFuncionario):
 			self.mainwindow.funcionario_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.funcionario_tableWidget.columnCount()):
-				if funcionario[j] == 'None':
+				if funcionario[j] == 'None': # Converte valores nulos para um padrão
 					funcionario[j] = "Não possui"
 				self.mainwindow.funcionario_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(funcionario[j]))
 
+	# Preenche a tabela de funcionários com os operadores
 	def fillFuncionarioOperadores(self):
 		allFuncionario = self.dbHelper.getAllOperadores()
 		for i, funcionario in enumerate(allFuncionario):
 			self.mainwindow.funcionario_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.funcionario_tableWidget.columnCount()):
-				if funcionario[j] == 'None':
+				if funcionario[j] == 'None': # Converte valores nulos para um padrão
 					funcionario[j] = "Não possui"
 				self.mainwindow.funcionario_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(funcionario[j]))
 
+	# Preenche a tabela de bebidas
 	def fillBebidas(self, minimum, maximum):
 		allBebida = self.dbHelper.getBebidasInInterval(minimum, maximum)
 		for i, bebida in enumerate(allBebida):
@@ -169,6 +184,7 @@ class MainApp(QtWidgets.QMainWindow):
 			for j in range(self.mainwindow.bebida_tableWidget.columnCount()):
 				self.mainwindow.bebida_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(bebida[j]))
 
+	# Preenche a tabela de fornecedores
 	def fillFornecedores(self):
 		allFornecedor = self.dbHelper.getAllFornecedores()
 		for i, fornecedor in enumerate(allFornecedor):
@@ -178,6 +194,7 @@ class MainApp(QtWidgets.QMainWindow):
 					fornecedor[j] = "Não possui"
 				self.mainwindow.fornecedor_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(fornecedor[j]))
 
+	# Preenche a tabela de clientes
 	def fillClientes(self):
 		allCliente = self.dbHelper.getAllClientes()
 		for i, cliente in enumerate(allCliente):
@@ -187,6 +204,7 @@ class MainApp(QtWidgets.QMainWindow):
 					cliente[j] = "Não possui"
 				self.mainwindow.cliente_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(cliente[j]))
 
+	# Preenche a tabela de casa de festas
 	def fillCasasDeFesta(self):
 		allCasaDeFesta = self.dbHelper.getAllCasasFesta()
 		for i, casaDeFesta in enumerate(allCasaDeFesta):
@@ -196,14 +214,17 @@ class MainApp(QtWidgets.QMainWindow):
 					casaDeFesta[j] = "Não possui"
 				self.mainwindow.casaDeFesta_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(casaDeFesta[j]))
 
+	# Inicializa o popup de festa com o comun entre o salvar e o editar
 	def setupFesta(self):
 		festa_addDialog = QtWidgets.QDialog()
 		self.festa.setupUi(festa_addDialog)
 
+		# Disabilita o botão de salvar
 		self.festa.buttonBox.buttons()[0].setEnabled(False)
 
 		self.festa.data_timeEdit.setDate(QtCore.QDate.currentDate())
 
+		# Preenche as caixas para selecionar foreign key
 		allCliente = self.dbHelper.getAllClientes()
 		for i, cliente in enumerate(allCliente):
 			self.festa.cliente_comboBox.addItem(f"{cliente[1]} ({cliente[0]})")
@@ -231,6 +252,7 @@ class MainApp(QtWidgets.QMainWindow):
 		for faixaEtaria in faixasEtaria:
 			self.festa.faixa_comboBox.addItem(faixaEtaria)
 
+		# Coloca o padrão de espaçamento dos cabeçalhos de tabelas para ocupar igualmente o espaço
 		for i in range(self.festa.bebidas_tableWidget.columnCount()):
 			self.festa.bebidas_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
 		for i in range(self.festa.garcons_tableWidget.columnCount()):
@@ -238,6 +260,7 @@ class MainApp(QtWidgets.QMainWindow):
 		for i in range(self.festa.operador_tableWidget.columnCount()):
 			self.festa.operador_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
 		
+		# Conecta as funções dos botões
 		self.festa.buttonBox.rejected.connect(lambda : festa_addDialog.close())
 		
 		self.festa.cliente_pushButton.clicked.connect(self.on_festa_addToClienteBtn_clicked)
@@ -252,15 +275,19 @@ class MainApp(QtWidgets.QMainWindow):
 
 		return festa_addDialog
 
+	# Função chamada ao clicar em adicionar
 	def on_festa_addBtn_clicked(self):
 		festa_addDialog = self.setupFesta()
 
+		# Inicializa coisas específicas para o adicionar
 		self.festa.buttonBox.buttons()[0].setEnabled(True)
 		self.festa.buttonBox.accepted.connect(lambda : self.save_festa_and_close(festa_addDialog))
 
 		festa_addDialog.exec_()
 
+	# Função chamada ao clicar em deletar
 	def on_festa_delBtn_clicked(self):
+		# Pega e deleta a linha selecionada
 		selectedRow = self.mainwindow.festa_tableWidget.selectedItems()
 		
 		self.dbHelper.delete('FESTA', ['CLIENTE', 'DATA'], [selectedRow[0].text(), datetime.strptime(selectedRow[1].text(), '%d/%m/%Y')])
@@ -268,16 +295,15 @@ class MainApp(QtWidgets.QMainWindow):
 		self.dbHelper.commit()
 		self.searchFestas()
 
+	# Função chamada ao clicar em salvar no popup de adicionar
 	def save_festa_and_close(self, festa_addDialog):
-		# Data a ser salva:
+		# Informações a serem salvas
 		data = self.festa.data_timeEdit.date().toPyDate()
 
-		# SpinBox a serem salvos:
 		convidados = self.festa.convidados_spinBox.value()
 		preco = self.festa.preco_spinBox.value()
 		barracas = self.festa.barracas_spinBox.value()
 
-		# Itens de ComboBox a serem salvos:
 		faixa = self.festa.faixa_comboBox.currentText()
 		cliente = self.festa.cliente_comboBox.currentText()
 		if cliente != '':
@@ -287,10 +313,10 @@ class MainApp(QtWidgets.QMainWindow):
 		if gerente != '':
 			print(type(gerente))
 
-		# LineEdits a serem salvos:
 		aniversariante = self.festa.aniversariante_lineEdit.text()
 		tema = self.festa.tema_lineEdit.text()
 		
+		# Guarda em listas os dados das tabelas
 		festa = [cliente, data]
 		bebidas = []
 		garcons = []
@@ -304,6 +330,7 @@ class MainApp(QtWidgets.QMainWindow):
 		for i in range(self.festa.operador_tableWidget.rowCount()):
 			operadores.append([i, self.festa.operador_tableWidget.item(i,1).text()])
 
+		# Insere nas tabelas corretas e só continua para a próxima se houve êxito
 		error = self.checkError(self.dbHelper.insertIntoFesta([cliente, data, convidados, 'A', preco, casaDeFesta, gerente]))
 		if not error:
 			error = self.checkError(self.dbHelper.insertIntoAniversario([cliente, data, aniversariante, tema, faixa]))
@@ -322,16 +349,18 @@ class MainApp(QtWidgets.QMainWindow):
 				values += festa
 				values += operador
 				error = self.checkError(self.dbHelper.insertIntoBarracaRaspadinha(values))
-		if not error:
+		if not error: # Se não houve erros dar commit no banco de dados e atualizar a tabela de festas
 			self.dbHelper.commit()
 			self.searchFestas()
 			festa_addDialog.close()
 		else:
 			self.dbHelper.rollback()
 
+	# Funão chamada ao tentar editar um item
 	def editFesta(self):
 		festa_addDialog = self.setupFesta()
 
+		# Desabilita as chaves primárias
 		self.festa.cliente_comboBox.setEnabled(False)
 		self.festa.cliente_pushButton.setEnabled(False)
 		self.festa.data_timeEdit.setEnabled(False)
@@ -340,6 +369,7 @@ class MainApp(QtWidgets.QMainWindow):
 
 		selectedRow = self.mainwindow.festa_tableWidget.selectedItems()
 
+		# Preenche os dados do editar
 		cliente = self.dbHelper.getCliente(selectedRow[0].text())[0]
 		self.festa.cliente_comboBox.setCurrentIndex(self.festa.cliente_comboBox.findText(f'{cliente[1]} ({cliente[0]})'))
 		self.festa.data_timeEdit.setDate(datetime.strptime(selectedRow[1].text(), '%d/%m/%Y'))
@@ -352,6 +382,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.festa.aniversariante_lineEdit.setText(selectedRow[6].text())
 		self.festa.tema_lineEdit.setText(selectedRow[7].text())
 
+		# Adiciona o evento de esperar até algo ser modificado para ativiar o botão de salvar
 		self.festa.casaDeFesta_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
 		self.festa.gerente_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
 		self.festa.faixa_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
@@ -366,25 +397,24 @@ class MainApp(QtWidgets.QMainWindow):
 
 		festa_addDialog.exec_()
 
+	# Função chamada ao clicar em salvar na tela de editar
 	def edit_festa_and_close(self, festa_addDialog):
-		# Data a ser salva:
+		# Informações a serem salvas
 		data = self.festa.data_timeEdit.dateTime().toPyDate()
 
-		# SpinBox a serem salvos:
 		convidados = self.festa.convidados_spinBox.value()
 		preco = self.festa.preco_spinBox.value()
 		barracas = self.festa.barracas_spinBox.value()
 
-		# Itens de ComboBox a serem salvos:
 		faixa = self.festa.faixa_comboBox.currentText()
 		cliente = self.festa.cliente_comboBox.currentText()
 		casaDeFesta = self.festa.casaDeFesta_comboBox.currentText()
 		gerente = self.festa.gerente_comboBox.currentText()
 
-		# LineEdits a serem salvos:
 		aniversariante = self.festa.aniversariante_lineEdit.text()
 		tema = self.festa.tema_lineEdit.text()
 
+		# Atualiza as tabelas
 		error = self.checkError(self.dbHelper.updateFesta([cliente, data], [convidados, 'A', preco, casaDeFesta, gerente]))
 		if not error:
 			error = self.checkError(self.dbHelper.updateAniversatio([cliente, data], [aniversariante, tema, faixa]))
@@ -395,12 +425,15 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Inicializa o popup de funcionario com o comun entre o salvar e o editar
 	def setupFuncionario(self):
 		funcionario_addDialog = QtWidgets.QDialog()
 		self.funcionario.setupUi(funcionario_addDialog)
 
+		# Disabilita o botão de salvar
 		self.funcionario.buttonBox.buttons()[0].setEnabled(False)
 
+		# Preenche os cargos possíveis
 		self.funcionario.cargo_comboBox.addItem('Gerente')
 		self.funcionario.cargo_comboBox.addItem('Garçom')
 		self.funcionario.cargo_comboBox.addItem('Operador')
@@ -409,15 +442,19 @@ class MainApp(QtWidgets.QMainWindow):
 
 		return funcionario_addDialog
 
+	# Função chamada ao clicar em adicionar
 	def on_funcionario_addBtn_clicked(self):
 		funcionario_addDialog = self.setupFuncionario()
 
+		# Inicializa coisas específicas para o adicionar
 		self.funcionario.buttonBox.buttons()[0].setEnabled(True)
 		self.funcionario.buttonBox.accepted.connect(lambda : self.save_funcionario_and_close(funcionario_addDialog))
 
 		funcionario_addDialog.exec_()
 
+	# Função chamada ao clicar em deletar
 	def on_funcionario_delBtn_clicked(self):
+		# Pega e deleta a linha selecionada
 		selectedRow = self.mainwindow.funcionario_tableWidget.selectedItems()
 		
 		self.dbHelper.delete('FUNCIONARIO', ['CPF'], [selectedRow[0].text()])
@@ -425,7 +462,9 @@ class MainApp(QtWidgets.QMainWindow):
 		self.dbHelper.commit()
 		self.searchFuncionarios()
 
+	# Função chamada ao clicar em salvar na tela de adicionar
 	def save_funcionario_and_close(self, funcionario_addDialog):
+		# Informações a serem salvas
 		nome = self.funcionario.nome_lineEdit.text()
 		cpf = self.funcionario.cpf_lineEdit.text()
 		telFixo = self.funcionario.telFixo_lineEdit.text()
@@ -435,13 +474,15 @@ class MainApp(QtWidgets.QMainWindow):
 
 		cargo = self.funcionario.cargo_comboBox.currentText()
 
+		# Se não tiver telefone fixo passar nulo para o banco
 		if telFixo == '()-':
 			telFixo = None
+
 
 		error = self.checkError(self.dbHelper.insertIntoFuncionario([cpf, nome, telFixo, telMovel, comissao, cargo]))
 
 		if not error:
-			if cargo == 'Gerente':
+			if cargo == 'Gerente': # Se o cargo for gerente adicionar na caixa do parâmetro de pesquisa
 				self.gerentes[nome] = cpf
 				self.mainwindow.gerente_comboBox.addItem(nome)
 
@@ -451,13 +492,16 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Função chamada ao tentar editar um item
 	def editFuncionario(self):
 		funcionario_addDialog = self.setupFuncionario()
 
+		# Desabilita a chave primária
 		self.funcionario.cpf_lineEdit.setEnabled(False)
 
 		self.funcionario.buttonBox.accepted.connect(lambda : self.edit_funcionario_and_close(funcionario_addDialog))
 
+		# Preenche os dados do editar
 		selectedRow = self.mainwindow.funcionario_tableWidget.selectedItems()
 		self.funcionario.cpf_lineEdit.setText(selectedRow[0].text())
 		self.funcionario.nome_lineEdit.setText(selectedRow[1].text())
@@ -471,6 +515,7 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.funcionario.cargo_comboBox.setCurrentIndex(2)
 
+		# Adiciona o evento de esperar até algo ser modificado para ativiar o botão de salvar
 		self.funcionario.nome_lineEdit.textChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
 		self.funcionario.telFixo_lineEdit.textChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
 		self.funcionario.telMovel_lineEdit.textChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
@@ -479,7 +524,9 @@ class MainApp(QtWidgets.QMainWindow):
 
 		funcionario_addDialog.exec_()
 
+	# Função chamada ao clicar em salvar na tela de editar
 	def edit_funcionario_and_close(self, funcionario_addDialog):
+		# Informações a serem salvas
 		nome = self.funcionario.nome_lineEdit.text()
 		cpf = self.funcionario.cpf_lineEdit.text()
 		telFixo = self.funcionario.telFixo_lineEdit.text()
@@ -489,6 +536,7 @@ class MainApp(QtWidgets.QMainWindow):
 
 		cargo = self.funcionario.cargo_comboBox.currentText()
 
+		# Se não tiver telefone fixo passar nulo para o banco
 		if telFixo == '()-':
 			telFixo = None
 
@@ -501,25 +549,31 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Inicializa o popup de bebida com o comun entre o salvar e o editar
 	def setupBebida(self):
 		bebida_addDialog = QtWidgets.QDialog()
 		self.bebida.setupUi(bebida_addDialog)
 
+		# Disabilita o botão de salvar
 		self.bebida.buttonBox.buttons()[0].setEnabled(False)
 
 		self.bebida.buttonBox.rejected.connect(lambda : bebida_addDialog.close())
 
 		return bebida_addDialog
 
+	# Função chamada ao clicar em adicionar
 	def on_bebida_addBtn_clicked(self):
 		bebida_addDialog = self.setupBebida()
 
+		# Inicializa coisas específicas para o adicionar
 		self.bebida.buttonBox.buttons()[0].setEnabled(True)
 		self.bebida.buttonBox.accepted.connect(lambda : self.save_bebida_and_close(bebida_addDialog))
 
 		bebida_addDialog.exec_()
 
+	# Função chamada ao clicar em deletar
 	def on_bebida_delBtn_clicked(self):
+		# Pega e deleta a linha selecionada
 		selectedRow = self.mainwindow.bebida_tableWidget.selectedItems()
 		
 		self.dbHelper.delete('BEBIDA', ['NOME', 'VOLUME'], [selectedRow[0].text(), selectedRow[1].text()])
@@ -527,7 +581,9 @@ class MainApp(QtWidgets.QMainWindow):
 		self.dbHelper.commit()
 		self.searchBebidas()
 
+	# Função chamada ao clicar em salvar na tela de adicionar
 	def save_bebida_and_close(self, bebida_addDialog):
+		# Informações a serem salvas
 		nome = self.bebida.nome_lineEdit.text()
 
 		volume = self.bebida.volume_spinBox.value()
@@ -545,14 +601,17 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Função chamada ao tentar editar um item
 	def editBebida(self):
 		bebida_addDialog = self.setupBebida()
 
+		# Desabilita as chaves primárias
 		self.bebida.nome_lineEdit.setEnabled(False)
 		self.bebida.volume_spinBox.setEnabled(False)
 
 		self.bebida.buttonBox.accepted.connect(lambda: self.edit_bebida_and_close(bebida_addDialog))
 
+		# Preenche os dados do editar
 		selectedRow = self.mainwindow.bebida_tableWidget.selectedItems()
 		self.bebida.nome_lineEdit.setText(selectedRow[0].text())
 		self.bebida.volume_spinBox.setValue(int(selectedRow[1].text()))
@@ -564,13 +623,16 @@ class MainApp(QtWidgets.QMainWindow):
 		if bebida[1] == 'S':
 			self.bebida.bandeja_checkBox.setChecked(True)
 
+		# Adiciona o evento de esperar até algo ser modificado para ativiar o botão de salvar
 		self.bebida.quantidade_spinBox.valueChanged.connect(lambda: self.bebida.buttonBox.buttons()[0].setEnabled(True))
 		self.bebida.preco_spinBox.valueChanged.connect(lambda: self.bebida.buttonBox.buttons()[0].setEnabled(True))
 		self.bebida.bandeja_checkBox.clicked.connect(lambda: self.bebida.buttonBox.buttons()[0].setEnabled(True))
 
 		bebida_addDialog.exec_()
 
+	# Função chamada ao clicar em salvar na tela de editar
 	def edit_bebida_and_close(self, bebida_addDialog):
+		# Informações a serem salvas
 		nome = self.bebida.nome_lineEdit.text()
 
 		volume = self.bebida.volume_spinBox.value()
@@ -588,6 +650,7 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Inicializa o popup de fornecedor com o comun entre o salvar e o editar
 	def setupFornecedor(self):
 		fornecedor_addDialog = QtWidgets.QDialog()
 		self.fornecedor.setupUi(fornecedor_addDialog)
@@ -601,6 +664,7 @@ class MainApp(QtWidgets.QMainWindow):
 
 		return fornecedor_addDialog
 
+	# Função chamada ao clicar em adicionar
 	def on_fornecedor_addBtn_clicked(self):
 		fornecedor_addDialog = self.setupFornecedor()
 		
@@ -609,7 +673,9 @@ class MainApp(QtWidgets.QMainWindow):
 
 		fornecedor_addDialog.exec_()
 
+	# Função chamada ao clicar em deletar
 	def on_fornecedor_delBtn_clicked(self):
+		# Pega e deleta a linha selecionada
 		selectedRow = self.mainwindow.fornecedor_tableWidget.selectedItems()
 		
 		self.dbHelper.delete('FORNECEDOR', ['CNPJ'], [selectedRow[0].text()])
@@ -620,7 +686,9 @@ class MainApp(QtWidgets.QMainWindow):
 		self.dbHelper.commit()
 		self.fillFornecedores()
 
+	# Função chamada ao clicar em salvar na tela de adicionar
 	def save_fornecedor_and_close(self, fornecedor_addDialog):
+		# Informações a serem salvas
 		nome = self.fornecedor.nome_lineEdit.text()
 		cnpj = self.fornecedor.cnpj_lineEdit.text()
 		tel = self.fornecedor.tel_lineEdit.text()
@@ -634,6 +702,7 @@ class MainApp(QtWidgets.QMainWindow):
 		elif(self.fornecedor.poupanca_radioButton.isChecked()):
 			tipoConta = 'CP'
 
+		# Chave da tabela dados bancários é baseado no tempo de inserção
 		iddados = int(time.time() % 10000000000)
 		error = self.checkError(self.dbHelper.insertIntoDadosBancarios([iddados, banco, agencia, conta, tipoConta]))
 		if not error:
