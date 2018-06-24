@@ -57,6 +57,7 @@ class dbHelper():
 		values = self._preprocess_values(values)				
 
 		cmd = 'INSERT INTO ' + table + ' (' + ', '.join(fields) + ') VALUES ( ' + ', '.join(values) + ') '
+
 		self._run_command(cmd)
 
 	def insertIntoEndereco(self, values):

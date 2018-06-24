@@ -16,6 +16,11 @@ from funcionario import Ui_Funcionario as Funcionario
 from database.dbHelper import dbHelper
 from static import bancos, estados, faixasEtaria
 
+def preprocess(string):
+	regex = re.compile(r'^([^(]*)\(([^)]*)\)')
+	match = regex.match(string)
+	return match
+
 class MainApp(QtWidgets.QMainWindow):
 	def __init__(self):
 		super(self.__class__, self).__init__()
@@ -263,7 +268,7 @@ class MainApp(QtWidgets.QMainWindow):
 	# TODO add festa
 	def save_festa_and_close(self, festa_addDialog):
 		# Data a ser salva:
-		data = self.festa.data_timeEdit.dateTime().toString()
+		data = self.festa.data_timeEdit.date().toPyDate()
 
 		# SpinBox a serem salvos:
 		convidados = self.festa.convidados_spinBox.value()
@@ -273,17 +278,46 @@ class MainApp(QtWidgets.QMainWindow):
 		# Itens de ComboBox a serem salvos:
 		faixa = self.festa.faixa_comboBox.currentText()
 		cliente = self.festa.cliente_comboBox.currentText()
+		cliente = preprocess(cliente)[2]
 		casaDeFesta = self.festa.casaDeFesta_comboBox.currentText()
 		gerente = self.festa.gerente_comboBox.currentText()
+		gerente = preprocess(gerente)[2]
 
 		# LineEdits a serem salvos:
 		aniversariante = self.festa.aniversariante_lineEdit.text()
 		tema = self.festa.tema_lineEdit.text()
+		
+		festa = [cliente, data]
+		bebidas = []
+		garcons = []
+		operadores = []
+		for i in range(self.festa.bebidas_tableWidget.rowCount()):
+			bebidas.append([self.festa.bebidas_tableWidget.item(i,0).text(), self.festa.bebidas_tableWidget.item(i,1).text(), self.festa.bebidas_tableWidget.item(i,2).text()])
+
+		for i in range(self.festa.garcons_tableWidget.rowCount()):
+			garcons.append([self.festa.garcons_tableWidget.item(i,1).text()])
+
+		for i in range(self.festa.operador_tableWidget.rowCount()):
+			operadores.append([i, self.festa.operador_tableWidget.item(i,1).text()])
 
 		error = self.checkError(self.dbHelper.insertIntoFesta([cliente, data, convidados, 'A', preco, casaDeFesta, gerente]))
 		if not error:
-			error = self.checkError(self.dbHelper.insertIntoAniversatio([cliente, data, aniversariante, tema, faixa]))
-
+			error = self.checkError(self.dbHelper.insertIntoAniversario([cliente, data, aniversariante, tema, faixa]))
+		if not error:
+			for bebida in bebidas:
+				values = festa + bebida
+				error = self.checkError(self.dbHelper.insertIntoBebidaBandejaFesta(values))
+		if not error:
+			for garcom in garcons:
+				values = festa + garcom
+				print(values)
+				error = self.checkError(self.dbHelper.insertIntoGarcomFesta(values))
+		if not error:
+			for i, operador in enumerate(operadores):
+				values = [(time.time() + i*1000000) % 10000000000]
+				values += festa
+				values += operador
+				error = self.checkError(self.dbHelper.insertIntoBarracaRaspadinha(values))
 		if not error:
 			self.dbHelper.commit()
 			self.searchFestas()
@@ -314,7 +348,7 @@ class MainApp(QtWidgets.QMainWindow):
 
 	def edit_festa_and_close(self, festa_addDialog):
 		# Data a ser salva:
-		data = self.festa.data_timeEdit.dateTime().toString()
+		data = self.festa.data_timeEdit.dateTime().toPyDate()
 
 		# SpinBox a serem salvos:
 		convidados = self.festa.convidados_spinBox.value()
@@ -890,9 +924,9 @@ class MainApp(QtWidgets.QMainWindow):
 		self.festa.garcons_tableWidget.removeRow(self.festa.garcons_tableWidget.row(selectedRow[0]))
 
 	def rollbackOperador(self):
-		selectedRow = self.operador.bebidas_tableWidget.selectedItems()
-		self.operador.bebida_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
-		self.operador.bebidas_tableWidget.removeRow(self.operador.bebidas_tableWidget.row(selectedRow[0]))
+		selectedRow = self.festa.operador_tableWidget.selectedItems()
+		self.festa.operador_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
+		self.festa.operador_tableWidget.removeRow(self.festa.operador_tableWidget.row(selectedRow[0]))
 
 	def refreshFuncionariosLivre(self):
 		self.festa.garcons_comboBox.clear()
@@ -952,8 +986,7 @@ class MainApp(QtWidgets.QMainWindow):
 		if nome != '':
 			self.festa.garcons_comboBox.removeItem(self.festa.garcons_comboBox.currentIndex())
 	
-			regex = re.compile(r'^([^(]*)\(([^)]*)\)')
-			match = regex.match(nome)
+			match = preprocess(nome)
 	
 			numRows = self.festa.garcons_tableWidget.rowCount()
 			self.festa.garcons_tableWidget.insertRow(numRows)
@@ -966,8 +999,7 @@ class MainApp(QtWidgets.QMainWindow):
 		if nome != '':
 			self.festa.operador_comboBox.removeItem(self.festa.operador_comboBox.currentIndex())
 	
-			regex = re.compile(r'^([^(]*)\(([^)]*)\)')
-			match = regex.match(nome)
+			match = preprocess(nome)
 	
 			numRows = self.festa.operador_tableWidget.rowCount()
 			self.festa.operador_tableWidget.insertRow(numRows)
