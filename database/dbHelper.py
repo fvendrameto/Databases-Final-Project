@@ -1,16 +1,25 @@
 # -*- coding: utf-8 -*-
 
 import cx_Oracle
+from cx_Oracle import DatabaseError
 import datetime
+import re
+from error_dict import errors
 
 from unicodedata import normalize
+
+SUCCESS = 0
+
+def getError(error_msg):
+	regex = re.compile('[^.]*.([^\)]*)')
+	msg = regex.match(error_msg)[1]
+
+	return msg
 
 class dbHelper():
 	def __init__(self, ip, port, sid, user, password):
 		'''
 		Cria um novo objeto dbHelper
-		Args:
-			ip: Endereço IP do 
 		'''
 		self.dns_tns = cx_Oracle.makedsn(ip, port, sid)
 		self.connection = cx_Oracle.connect(user, password, self.dns_tns)
@@ -24,6 +33,8 @@ class dbHelper():
 				values[i] = "'" + value + "'"
 			elif isinstance(value, int):
 				values[i] = str(value)
+			elif isinstance(value, float):
+				values[i] = "%.2f" % (value)
 			elif isinstance(value, datetime.datetime):
 				values[i] = "'%2d/%02d/%4d'" % (value.day, value.month, value.year)
 		return values
@@ -42,8 +53,150 @@ class dbHelper():
 
 		self._run_command(cmd)
 
-	# def insertIntoEndereco(self, values):
+	def insertIntoEndereco(self, values):
+		table = 'ENDERECO'
+		fields = ['ID', 'RUA', 'CIDADE', 'ESTADO', 'NUMERO', 'CEP']
 
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+		
+		return SUCCESS
+
+	def insertIntoDadosBancarios(self, values):
+		table = 'DADOS_BANCARIOS'
+		fields = ['ID', 'BANCO', 'AGENCIA', 'CONTA', 'TIPO_CONTA']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoFornecedor(self, values):
+		table = 'FORNECEDOR'
+		fields = ['CNPJ', 'NOME', 'TELEFONE', 'DADOS_BANCARIOS']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+		
+		return SUCCESS
+
+	def insertIntoFuncionario(self, values):
+		table = 'FUNCIONARIO'
+		fields = ['CPF', 'NOME', 'TEL_FIXO', 'TEL_MOVEL', 'COMISSAO', 'CARGO']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoCliente(self, values):
+		table = 'CLIENTE'
+		fields = ['CPF', 'NOME', 'TEL_FIXO', 'TEL_MOVEL', 'ENDERECO']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoCasaFesta(self, values):
+		table = 'CASA_FESTA'
+		fields = ['NOME', 'ENDERECO']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoFesta(self, values):
+		table = 'FESTA'
+		fields = ['CLIENTE', 'DATA', 'NUMERO_CONVIDADOS', 'TIPO', 'PRECO', 'CASA_FESTA', 'GERENTE']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoAniversario(self, values):
+		table = 'ANIVERSARIO'
+		fields = ['CLIENTE', 'DATA', 'NOME_ANIVERSARIANTE', 'TEMA', 'FAIXA_ETARIA']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+	
+	def insertIntoBarracaRaspadinha(self, values):
+		table = 'BARRACA_RASPADINHA'
+		fields = ['ID', 'CLIENTE', 'DATA', 'NUMERO', 'OPERADOR']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoGarcomFesta(self, values):
+		table = 'GARCOM_FESTA'
+		fields = ['CLIENTE', 'DATA', 'GARCOM']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoBebida(self, values):
+		table = 'BEBIDA'
+		fields = ['NOME', 'VOLUME', 'QUANTIDADE', 'BANDEJA', 'PRECO']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
+
+	def insertIntoBebidaBandejaFesta(self, values):
+		table = 'BEBIDA_BANDEJA_FESTA'
+		fields = ['CLIENTE', 'DATA', 'BEBIDA', 'VOLUME', 'QUANTIDADE']
+
+		try:
+			self.insert(table, fields, values)
+		except DatabaseError as e:
+			error = getError(str(e))
+			return errors[error]
+
+		return SUCCESS
 
 	def delete(self, table, fields, values):
 		values = self._preprocess_values(values)				
@@ -88,9 +241,22 @@ class dbHelper():
 		cursor.close()
 		return result
 
-	def getAllAniversarios(self):
+	def getAllAniversarios(self, data_inicio, data_fim, gerente, casa_festa):
+		data_inicio, data_fim, gerente, casa_festa = self._preprocess_values([data_inicio, data_fim, gerente, casa_festa])
+		where_constraints = []
+		where_constraints.append("(F.DATA BETWEEN" + data_inicio + " AND " + data_fim + ") ")
+				
+		if(gerente == "Todos"):
+			where_constraints.append("AND F.CASA_FESTA = " + casa_festa + " ")
+		elif(casa_festa == "Todas"):
+			where_constraints.append("AND F.GERENTE = " + gerente + " ")
+		else:
+			where_constraints.append("AND F.GERENTE = " + gerente + " ")
+			where_constraints.append("AND F.CASA_FESTA = " + casa_festa + " ")
+		
 		cmd = "SELECT F.CLIENTE, F.DATA, F.NUMERO_CONVIDADOS, F.PRECO, F.GERENTE, F.CASA_FESTA, A.NOME_ANIVERSARIANTE, A.TEMA, A.FAIXA_ETARIA, COUNT(GF.GARCOM)\
 			FROM FESTA F JOIN ANIVERSARIO A ON A.CLIENTE = F.CLIENTE AND A.DATA = F.DATA\
+			WHERE " + where_constraints + "\
 			LEFT JOIN GARCOM_FESTA GF ON (GF.DATA = A.DATA AND GF.CLIENTE = A.CLIENTE)\
 			GROUP BY(F.CLIENTE, F.DATA, F.NUMERO_CONVIDADOS, F.PRECO, F.GERENTE, F.CASA_FESTA, A.NOME_ANIVERSARIANTE, A.TEMA, A.FAIXA_ETARIA)"
 
