@@ -2,6 +2,7 @@ from PyQt5 import QtGui, QtCore, QtWidgets # Import the PyQt5 module we'll need
 import sys # We need sys so that we can pass argv to QApplication
 import csv
 import os
+import re
 import time
 from datetime import datetime
 
@@ -13,7 +14,7 @@ from festa import Ui_Add_Festa as Festa
 from fornecedor import Ui_Dialog as Fornecedor
 from funcionario import Ui_Funcionario as Funcionario
 from database.dbHelper import dbHelper
-from static import bancos, estados
+from static import bancos, estados, faixasEtaria
 
 class MainApp(QtWidgets.QMainWindow):
 	def __init__(self):
@@ -194,9 +195,11 @@ class MainApp(QtWidgets.QMainWindow):
 		festa_addDialog = QtWidgets.QDialog()
 		self.festa.setupUi(festa_addDialog)
 
+		self.festa.data_timeEdit.setDate(QtCore.QDate.currentDate())
+
 		allCliente = self.dbHelper.getAllClientes()
 		for i, cliente in enumerate(allCliente):
-			self.festa.cliente_comboBox.addItem(cliente[0])
+			self.festa.cliente_comboBox.addItem(f"{cliente[1]} ({cliente[0]})")
 
 		nomeCasasDeFesta = self.dbHelper.getNomeCasasFesta()
 		for i, casaDeFesta in enumerate(nomeCasasDeFesta):
@@ -204,16 +207,41 @@ class MainApp(QtWidgets.QMainWindow):
 
 		allFuncionario = self.dbHelper.getAllGerentes()
 		for i, funcionario in enumerate(allFuncionario):
-			self.festa.gerente_comboBox.addItem(funcionario[0])
+			self.festa.gerente_comboBox.addItem(f"{funcionario[1]} ({funcionario[0]})")
+
+		allFuncionario = self.dbHelper.getGarconsLivres(self.festa.data_timeEdit.date().toPyDate())
+		for i, funcionario in enumerate(allFuncionario):
+			self.festa.garcons_comboBox.addItem(f"{funcionario[0]} ({funcionario[1]})")
+
+		allFuncionario = self.dbHelper.getOperadoresLivres(self.festa.data_timeEdit.date().toPyDate())
+		for i, funcionario in enumerate(allFuncionario):
+			self.festa.operador_comboBox.addItem(f"{funcionario[0]} ({funcionario[1]})")
+
+		allBebidas = self.dbHelper.getBebidasInInterval()
+		for i, bebida in enumerate(allBebidas):
+			self.festa.bebida_comboBox.addItem(f"{bebida[0]} ({bebida[1]}mL)")
+
+		for faixaEtaria in faixasEtaria:
+			self.festa.faixa_comboBox.addItem(faixaEtaria)
+
+		for i in range(self.festa.bebidas_tableWidget.columnCount()):
+			self.festa.bebidas_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+		for i in range(self.festa.garcons_tableWidget.columnCount()):
+			self.festa.garcons_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+		for i in range(self.festa.operador_tableWidget.columnCount()):
+			self.festa.operador_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
 		
 		self.festa.buttonBox.rejected.connect(lambda : festa_addDialog.close())
 		
-		self.festa.cliente_pushButton.clicked.connect(self.on_cliente_addBtn_clicked)
-		self.festa.casaDeFesta_pushButton.clicked.connect(self.on_casaDeFesta_addBtn_clicked)
-
+		self.festa.cliente_pushButton.clicked.connect(self.on_festa_addToClienteBtn_clicked)
+		self.festa.casaDeFesta_pushButton.clicked.connect(self.on_festa_addToCasaDeFestaBtn_clicked)
+		self.festa.data_timeEdit.dateChanged.connect(self.refreshFuncionariosLivre)
 		self.festa.bebida_addButton.clicked.connect(self.on_bebida_addToTableBtn_clicked)
 		self.festa.garcons_addButton.clicked.connect(self.on_garcons_addToTableBtn_clicked)
 		self.festa.operador_addButton.clicked.connect(self.on_operador_addToTableBtn_clicked)
+		self.festa.bebidas_tableWidget.cellDoubleClicked.connect(self.rollbackBebida)
+		self.festa.garcons_tableWidget.cellDoubleClicked.connect(self.rollbackGarcom)
+		self.festa.operador_tableWidget.cellDoubleClicked.connect(self.rollbackOperador)
 
 		return festa_addDialog
 
@@ -232,6 +260,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.dbHelper.commit()
 		self.searchFestas()
 
+	# TODO add festa
 	def save_festa_and_close(self, festa_addDialog):
 		# Data a ser salva:
 		data = self.festa.data_timeEdit.dateTime().toString()
@@ -850,26 +879,85 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	def refreshFuncionariosLivre(self):
+		self.festa.garcons_comboBox.clear()
+		self.festa.operador_comboBox.clear()
+
+		allFuncionario = self.dbHelper.getGarconsLivres(self.festa.data_timeEdit.date().toPyDate())
+		for i, funcionario in enumerate(allFuncionario):
+			self.festa.garcons_comboBox.addItem(f"{funcionario[0]} ({funcionario[1]})")
+
+		allFuncionario = self.dbHelper.getOperadoresLivres(self.festa.data_timeEdit.date().toPyDate())
+		for i, funcionario in enumerate(allFuncionario):
+			self.festa.operador_comboBox.addItem(f"{funcionario[0]} ({funcionario[1]})")
+
+		self.festa.garcons_tableWidget.clearContents()
+		self.festa.operador_tableWidget.clearContents()
+		self.festa.garcons_tableWidget.setRowCount(0)
+		self.festa.operador_tableWidget.setRowCount(0)
+
+	def on_festa_addToClienteBtn_clicked(self):
+		self.on_cliente_addBtn_clicked()
+		
+		self.festa.cliente_comboBox.clear()
+		allCliente = self.dbHelper.getAllClientes()
+		for i, cliente in enumerate(allCliente):
+			self.festa.cliente_comboBox.addItem(f"{cliente[1]} ({cliente[0]})")
+
+	def on_festa_addToCasaDeFestaBtn_clicked(self):
+		self.on_casaDeFesta_addBtn_clicked()
+
+		self.festa.casaDeFesta_comboBox.clear()
+		nomeCasasDeFesta = self.dbHelper.getNomeCasasFesta()
+		for i, casaDeFesta in enumerate(nomeCasasDeFesta):
+			self.festa.casaDeFesta_comboBox.addItem(casaDeFesta[0])
+
 	def on_bebida_addToTableBtn_clicked(self):
-		numRows = self.festa.bebidas_tableWidget.rowCount()
-		self.festa.bebidas_tableWidget.insertRow(numRows)
 		nome = self.festa.bebida_comboBox.currentText() # AQUI PRECISA VER COMO VEM PRA DAR SPLIT
 		# NOME -> self.festa.bebidas_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem())
 		# VOLUME -> self.festa.bebidas_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem())
-		quantidade = str(self.festa.quantidade_spinBox.value())
-		self.festa.bebidas_tableWidget.setItem(numRows, 2, QtWidgets.QTableWidgetItem(quantidade))
+
+		if nome != '':
+			self.festa.bebida_comboBox.removeItem(self.festa.bebida_comboBox.currentIndex())
+	
+			regex = re.compile(r'^([^(]*)\(([^m]*)mL\)')
+			match = regex.match(nome)
+	
+			quantidade = str(self.festa.quantidade_spinBox.value())
+	
+			numRows = self.festa.bebidas_tableWidget.rowCount()
+			self.festa.bebidas_tableWidget.insertRow(numRows)
+			self.festa.bebidas_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(match[1][:-1]))
+			self.festa.bebidas_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem(match[2]))
+			self.festa.bebidas_tableWidget.setItem(numRows, 2, QtWidgets.QTableWidgetItem(quantidade))
 
 	def on_garcons_addToTableBtn_clicked(self):
-		numRows = self.festa.garcons_tableWidget.rowCount()
-		self.festa.garcons_tableWidget.insertRow(numRows)
 		nome = self.festa.garcons_comboBox.currentText()
-		self.festa.garcons_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(nome))
+
+		if nome != '':
+			self.festa.garcons_comboBox.removeItem(self.festa.garcons_comboBox.currentIndex())
+	
+			regex = re.compile(r'^([^(]*)\(([^)]*)\)')
+			match = regex.match(nome)
+	
+			numRows = self.festa.garcons_tableWidget.rowCount()
+			self.festa.garcons_tableWidget.insertRow(numRows)
+			self.festa.garcons_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(match[1][:-1]))
+			self.festa.garcons_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem(match[2]))
 
 	def on_operador_addToTableBtn_clicked(self):
-		numRows = self.festa.operador_tableWidget.rowCount()
-		self.festa.operador_tableWidget.insertRow(numRows)
 		nome = self.festa.operador_comboBox.currentText()
-		self.festa.operador_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(nome))
+		
+		if nome != '':
+			self.festa.operador_comboBox.removeItem(self.festa.operador_comboBox.currentIndex())
+	
+			regex = re.compile(r'^([^(]*)\(([^)]*)\)')
+			match = regex.match(nome)
+	
+			numRows = self.festa.operador_tableWidget.rowCount()
+			self.festa.operador_tableWidget.insertRow(numRows)
+			self.festa.operador_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(match[1][:-1]))
+			self.festa.operador_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem(match[2]))
 
 	def checkError(self, error):
 		if error is not None:

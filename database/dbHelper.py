@@ -466,7 +466,7 @@ class dbHelper():
 
 	def getGarconsLivres(self, data):
 		data = self._preprocess_values([data])[0]
-		cmd = "SELECT F.NOME, F.CPF, F.COMISSAO FROM FUNCIONARIO F WHERE UPPER(F.CARGO) = 'GARCOM' AND\
+		cmd = "SELECT F.NOME, F.CPF, F.COMISSAO FROM FUNCIONARIO F WHERE UPPER(F.CARGO) = 'GARÇOM' AND\
 			F.CPF NOT IN(\
 			SELECT GF.GARCOM FROM GARCOM_FESTA GF WHERE GF.DATA = " + data + ")"
 
