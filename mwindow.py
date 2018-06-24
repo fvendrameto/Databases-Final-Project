@@ -879,6 +879,21 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	def rollbackBebida(self):
+		selectedRow = self.festa.bebidas_tableWidget.selectedItems()
+		self.festa.bebida_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
+		self.festa.bebidas_tableWidget.removeRow(self.festa.bebidas_tableWidget.row(selectedRow[0]))
+
+	def rollbackGarcom(self):
+		selectedRow = self.festa.garcons_tableWidget.selectedItems()
+		self.festa.garcons_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
+		self.festa.garcons_tableWidget.removeRow(self.festa.garcons_tableWidget.row(selectedRow[0]))
+
+	def rollbackOperador(self):
+		selectedRow = self.operador.bebidas_tableWidget.selectedItems()
+		self.operador.bebida_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
+		self.operador.bebidas_tableWidget.removeRow(self.operador.bebidas_tableWidget.row(selectedRow[0]))
+
 	def refreshFuncionariosLivre(self):
 		self.festa.garcons_comboBox.clear()
 		self.festa.operador_comboBox.clear()
