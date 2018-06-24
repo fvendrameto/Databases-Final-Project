@@ -513,15 +513,19 @@ class dbHelper():
 		cmd = "SELECT B.NOME, B.VOLUME, B.QUANTIDADE, B.PRECO FROM BEBIDA B WHERE B.QUANTIDADE BETWEEN " + str(min_value) + " AND " + str(max_value)
 		return self._run_select(cmd)
 
+	def getBebida(self, nome, volume):
+		cmd = """SELECT QUANTIDADE, BANDEJA, PRECO FROM BEBIDA
+		WHERE NOME = """ + nome + " AND VOLUME = " + volume
+		return self._run_select(cmd)
+
 	def getAllFornecedores(self):
 		cmd = "SELECT F.CNPJ, F.NOME, F.TELEFONE, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA FROM FORNECEDOR F JOIN DADOS_BANCARIOS D ON F.DADOS_BANCARIOS = D.ID"
 		return self._run_select(cmd)
 
-	def getAllClientes(self):
-		cmd = "SELECT C.CPF, C.NOME, C.TEL_FIXO, C.TEL_MOVEL, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA, COUNT(*) AS NUMERO_FESTAS\
-			FROM CLIENTE C JOIN DADOS_BANCARIOS D ON C.DADOS_BANCARIOS = D.ID\
-			LEFT JOIN FESTA F ON C.CPF = F.CLIENTE\
-			GROUP BY(C.CPF, C.NOME, C.TEL_FIXO, C.TEL_MOVEL, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA)"
+	def getDadosBancariosFornecedor(self, cnpj):
+		cmd = """SELECT F.DADOS_BANCARIOS 
+			FROM FORNECEDOR F
+			WHERE F.CNPJ = """ + cnpj
 		return self._run_select(cmd)
 
 	def getAllCasasFesta(self):
@@ -530,4 +534,23 @@ class dbHelper():
 			LEFT JOIN FESTA FE ON FE.CASA_FESTA = CF.NOME\
 			GROUP BY(CF.NOME, E.RUA, E.NUMERO, E.CIDADE, E.CEP)\
 		"
+		return self._run_select(cmd)
+
+	def getEnderecoCasaFesta(self, nome):
+		cmd = """SELECT CF.ENDERECO 
+		FROM CASA_FESTA CF
+		WHERE CF.NOME = """ + nome
+		
+		return self._run_select(cmd)
+
+	def getEnderecoCliente(self, cpf):
+		cmd = """SELECT C.ENDERECO
+			FROM CLIENTE C
+			WHERE C.CPF = """ + cpf
+		return self._run_select(cmd)
+
+	def getDadosBancariosCliente(self, cpf):
+		cmd = """SELECT C.DADOS_BANCARIOS
+			FROM CLIENTE C
+			WHERE C.CPF = """ + cpf
 		return self._run_select(cmd)

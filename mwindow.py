@@ -496,7 +496,7 @@ class MainApp(QtWidgets.QMainWindow):
 		fornecedor_addDialog = self.setupFornecedor()
 		
 		# TODO edit_fornecedor_and_close
-		self.fornecedor.buttonBox.accepted.connect(lambda : print('oi'))
+		self.fornecedor.buttonBox.accepted.connect(lambda : edit_fornecedor_and_close(fornecedor_addDialog))
 
 		selectedRow = self.mainwindow.fornecedor_tableWidget.selectedItems()
 		self.fornecedor.cnpj_lineEdit.setText(selectedRow[0].text())
@@ -519,6 +519,31 @@ class MainApp(QtWidgets.QMainWindow):
 			self.fornecedor.poupanca_radioButton.setChecked(True)
 
 		fornecedor_addDialog.exec_()
+
+	def edit_fornecedor_and_close(self, fornecedor_addDialog):
+		nome = self.fornecedor.nome_lineEdit.text()
+		cnpj = self.fornecedor.cnpj_lineEdit.text()
+		tel = self.fornecedor.tel_lineEdit.text()
+		agencia = self.fornecedor.agencia_lineEdit.text()
+		conta = self.fornecedor.conta_lineEdit.text()
+
+		banco = bancos[self.fornecedor.banco_comboBox.currentText()]
+
+		if(self.fornecedor.corrente_radioButton.isChecked()):
+			tipoConta = 'CC'
+		elif(self.fornecedor.poupanca_radioButton.isChecked()):
+			tipoConta = 'CP'
+
+		iddados = 
+		print(self.dbHelper.updateDadosBancarios([iddados], [banco, agencia, conta, tipoConta]))
+		print(self.dbHelper.updateFornecedor([cnpj], [nome, tel, iddados]))
+
+		self.mainwindow.fornecedor_tableWidget.clearContents()
+		self.mainwindow.fornecedor_tableWidget.setRowCount(0)
+
+		self.fillFornecedores()
+
+		fornecedor_addDialog.close()
 
 	def setupCliente(self):
 		cliente_addDialog = QtWidgets.QDialog()
