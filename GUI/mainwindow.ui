@@ -369,12 +369,12 @@
           </column>
           <column>
            <property name="text">
-            <string>Telefone Fixo</string>
+            <string>Telefone Móvel</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Telefone Móvel</string>
+            <string>Telefone Fixo</string>
            </property>
           </column>
           <column>
@@ -807,11 +807,6 @@
          </widget>
         </item>
        </layout>
-      </widget>
-      <widget class="QWidget" name="balanco">
-       <attribute name="title">
-        <string>Balanço</string>
-       </attribute>
       </widget>
      </widget>
     </item>

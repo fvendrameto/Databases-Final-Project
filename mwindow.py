@@ -125,6 +125,8 @@ class MainApp(QtWidgets.QMainWindow):
 		for i, festa in enumerate(allFesta):
 			self.mainwindow.festa_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.festa_tableWidget.columnCount()):
+				if festa[j] == 'None':
+					festa[j] = "Não possui"
 				self.mainwindow.festa_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(festa[j]))
 
 	def fillFuncionarioGerentes(self):
@@ -132,6 +134,8 @@ class MainApp(QtWidgets.QMainWindow):
 		for i, funcionario in enumerate(allFuncionario):
 			self.mainwindow.funcionario_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.funcionario_tableWidget.columnCount()):
+				if funcionario[j] == 'None':
+					funcionario[j] = "Não possui"
 				self.mainwindow.funcionario_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(funcionario[j]))
 
 	def fillFuncionarioGarcons(self):
@@ -139,6 +143,8 @@ class MainApp(QtWidgets.QMainWindow):
 		for i, funcionario in enumerate(allFuncionario):
 			self.mainwindow.funcionario_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.funcionario_tableWidget.columnCount()):
+				if funcionario[j] == 'None':
+					funcionario[j] = "Não possui"
 				self.mainwindow.funcionario_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(funcionario[j]))
 
 	def fillFuncionarioOperadores(self):
@@ -146,6 +152,8 @@ class MainApp(QtWidgets.QMainWindow):
 		for i, funcionario in enumerate(allFuncionario):
 			self.mainwindow.funcionario_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.funcionario_tableWidget.columnCount()):
+				if funcionario[j] == 'None':
+					funcionario[j] = "Não possui"
 				self.mainwindow.funcionario_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(funcionario[j]))
 
 	def fillBebidas(self, minimum, maximum):
@@ -160,6 +168,8 @@ class MainApp(QtWidgets.QMainWindow):
 		for i, fornecedor in enumerate(allFornecedor):
 			self.mainwindow.fornecedor_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.fornecedor_tableWidget.columnCount()):
+				if fornecedor[j] == 'None':
+					fornecedor[j] = "Não possui"
 				self.mainwindow.fornecedor_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(fornecedor[j]))
 
 	def fillClientes(self):
@@ -167,6 +177,8 @@ class MainApp(QtWidgets.QMainWindow):
 		for i, cliente in enumerate(allCliente):
 			self.mainwindow.cliente_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.cliente_tableWidget.columnCount()):
+				if cliente[j] == 'None':
+					cliente[j] = "Não possui"
 				self.mainwindow.cliente_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(cliente[j]))
 
 	def fillCasasDeFesta(self):
@@ -174,6 +186,8 @@ class MainApp(QtWidgets.QMainWindow):
 		for i, casaDeFesta in enumerate(allCasaDeFesta):
 			self.mainwindow.casaDeFesta_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.casaDeFesta_tableWidget.columnCount()):
+				if casaDeFesta[j] == 'None':
+					casaDeFesta[j] = "Não possui"
 				self.mainwindow.casaDeFesta_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(casaDeFesta[j]))
 
 	def setupFesta(self):
@@ -215,6 +229,7 @@ class MainApp(QtWidgets.QMainWindow):
 		
 		self.dbHelper.delete('FESTA', ['CLIENTE', 'DATA'], [selectedRow[0].text(), datetime.strptime(selectedRow[1].text(), '%d/%m/%Y')])
 
+		self.dbHelper.commit()
 		self.searchFestas()
 
 	def save_festa_and_close(self, festa_addDialog):
@@ -236,12 +251,16 @@ class MainApp(QtWidgets.QMainWindow):
 		aniversariante = self.festa.aniversariante_lineEdit.text()
 		tema = self.festa.tema_lineEdit.text()
 
-		print(self.dbHelper.insertIntoFesta([cliente, data, convidados, 'A', preco, casaDeFesta, gerente]))
-		print(self.dbHelper.insertIntoAniversatio([cliente, data, aniversariante, tema, faixa]))
+		error = self.checkError(self.dbHelper.insertIntoFesta([cliente, data, convidados, 'A', preco, casaDeFesta, gerente]))
+		if not error:
+			error = self.checkError(self.dbHelper.insertIntoAniversatio([cliente, data, aniversariante, tema, faixa]))
 
-		self.searchFestas()
-
-		festa_addDialog.close()
+		if not error:
+			self.dbHelper.commit()
+			self.searchFestas()
+			festa_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def editFesta(self):
 		festa_addDialog = self.setupFesta()
@@ -250,7 +269,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.festa.cliente_pushButton.setEnabled(False)
 		self.festa.data_timeEdit.setEnabled(False)
 
-		self.festa.buttonBox.accepted.connect(lambda : edit_festa_and_close(festa_addDialog))
+		self.festa.buttonBox.accepted.connect(lambda : self.edit_festa_and_close(festa_addDialog))
 
 		selectedRow = self.mainwindow.festa_tableWidget.selectedItems()
 		self.festa.cliente_comboBox.setCurrentIndex(self.festa.cliente_comboBox.findText(selectedRow[0].text()))
@@ -283,10 +302,15 @@ class MainApp(QtWidgets.QMainWindow):
 		aniversariante = self.festa.aniversariante_lineEdit.text()
 		tema = self.festa.tema_lineEdit.text()
 
-		print(self.dbHelper.updateFesta([cliente, data], [convidados, 'A', preco, casaDeFesta, gerente]))
-		print(self.dbHelper.updateAniversatio([cliente, data], [aniversariante, tema, faixa]))
+		error = self.checkError(self.dbHelper.updateFesta([cliente, data], [convidados, 'A', preco, casaDeFesta, gerente]))
+		if not error:
+			error = self.checkError(self.dbHelper.updateAniversatio([cliente, data], [aniversariante, tema, faixa]))
 
-		festa_addDialog.close()
+		if not error:
+			self.dbHelper.commit()
+			festa_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def setupFuncionario(self):
 		funcionario_addDialog = QtWidgets.QDialog()
@@ -312,6 +336,7 @@ class MainApp(QtWidgets.QMainWindow):
 		
 		self.dbHelper.delete('FUNCIONARIO', ['CPF'], [selectedRow[0].text()])
 		
+		self.dbHelper.commit()
 		self.searchFuncionarios()
 
 	def save_funcionario_and_close(self, funcionario_addDialog):
@@ -324,28 +349,34 @@ class MainApp(QtWidgets.QMainWindow):
 
 		cargo = self.funcionario.cargo_comboBox.currentText()
 
-		print(self.dbHelper.insertIntoFuncionario([cpf, nome, telFixo, telMovel, comissao, cargo]))
+		if telFixo == '()-':
+			telFixo = None
 
-		if cargo == 'Gerente':
-			self.gerentes[nome] = cpf
-			self.mainwindow.gerente_comboBox.addItem(nome)
+		error = self.checkError(self.dbHelper.insertIntoFuncionario([cpf, nome, telFixo, telMovel, comissao, cargo]))
 
-		self.searchFuncionarios()
+		if not error:
+			if cargo == 'Gerente':
+				self.gerentes[nome] = cpf
+				self.mainwindow.gerente_comboBox.addItem(nome)
 
-		funcionario_addDialog.close()
+			self.dbHelper.commit()
+			self.searchFuncionarios()
+			funcionario_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def editFuncionario(self):
 		funcionario_addDialog = self.setupFuncionario()
 
 		self.funcionario.cpf_lineEdit.setEnabled(False)
 
-		self.funcionario.buttonBox.accepted.connect(lambda : edit_funcionario_and_close(funcionario_addDialog))
+		self.funcionario.buttonBox.accepted.connect(lambda : self.edit_funcionario_and_close(funcionario_addDialog))
 
 		selectedRow = self.mainwindow.funcionario_tableWidget.selectedItems()
 		self.funcionario.cpf_lineEdit.setText(selectedRow[0].text())
 		self.funcionario.nome_lineEdit.setText(selectedRow[1].text())
-		self.funcionario.telFixo_lineEdit.setText(selectedRow[2].text())
-		self.funcionario.telMovel_lineEdit.setText(selectedRow[3].text())
+		self.funcionario.telMovel_lineEdit.setText(selectedRow[2].text())
+		self.funcionario.telFixo_lineEdit.setText(selectedRow[3].text())
 		self.funcionario.comissao_spinBox.setValue(float(selectedRow[4].text()))
 		if self.mainwindow.gerente_radioButton.isChecked():
 			self.funcionario.cargo_comboBox.setCurrentIndex(0)
@@ -366,11 +397,17 @@ class MainApp(QtWidgets.QMainWindow):
 
 		cargo = self.funcionario.cargo_comboBox.currentText()
 
-		print(self.dbHelper.updateFuncionario([cpf], [nome, telFixo, telMovel, comissao, cargo]))
+		if telFixo == '()-':
+			telFixo = None
 
-		self.searchFuncionarios()
+		error = self.checkError(self.dbHelper.updateFuncionario([cpf], [nome, telFixo, telMovel, comissao, cargo]))
 
-		funcionario_addDialog.close()
+		if not error:
+			self.dbHelper.commit()
+			self.searchFuncionarios()
+			funcionario_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def setupBebida(self):
 		bebida_addDialog = QtWidgets.QDialog()
@@ -392,6 +429,7 @@ class MainApp(QtWidgets.QMainWindow):
 		
 		self.dbHelper.delete('BEBIDA', ['NOME', 'VOLUME'], [selectedRow[0].text(), selectedRow[1].text()])
 
+		self.dbHelper.commit()
 		self.searchBebidas()
 
 	def save_bebida_and_close(self, bebida_addDialog):
@@ -403,11 +441,14 @@ class MainApp(QtWidgets.QMainWindow):
 
 		bandeja = 'S' if self.bebida.bandeja_checkBox.isChecked() else 'N'
 
-		print(self.dbHelper.insertIntoBebida([nome, volume, quantidade, bandeja, preco]))
+		error = self.checkError(self.dbHelper.insertIntoBebida([nome, volume, quantidade, bandeja, preco]))
 
-		self.searchBebidas()
-
-		bebida_addDialog.close()
+		if not error:
+			self.dbHelper.commit()
+			self.searchBebidas()
+			bebida_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def editBebida(self):
 		bebida_addDialog = self.setupBebida()
@@ -415,14 +456,18 @@ class MainApp(QtWidgets.QMainWindow):
 		self.bebida.nome_lineEdit.setEnabled(False)
 		self.bebida.volume_spinBox.setEnabled(False)
 
-		self.bebida.buttonBox.accepted.connect(lambda: edit_bebida_and_close(bebida_addDialog))
+		self.bebida.buttonBox.accepted.connect(lambda: self.edit_bebida_and_close(bebida_addDialog))
 
 		selectedRow = self.mainwindow.bebida_tableWidget.selectedItems()
 		self.bebida.nome_lineEdit.setText(selectedRow[0].text())
 		self.bebida.volume_spinBox.setValue(int(selectedRow[1].text()))
 		self.bebida.quantidade_spinBox.setValue(int(selectedRow[2].text()))
 
-		# TODO bandeja e festa fill
+		bebida = self.dbHelper.getBebida(self.bebida.nome_lineEdit.text(), str(self.bebida.volume_spinBox.value()))[0]
+		self.bebida.preco_spinBox.setValue(float(bebida[2]))
+
+		if bebida[1] == 'S':
+			self.bebida.bandeja_checkBox.setChecked(True)
 
 		bebida_addDialog.exec_()
 
@@ -435,11 +480,14 @@ class MainApp(QtWidgets.QMainWindow):
 
 		bandeja = 'S' if self.bebida.bandeja_checkBox.isChecked() else 'N'
 
-		print(self.dbHelper.updateBebida([nome, volume], [quantidade, bandeja, preco]))
+		error = self.checkError(self.dbHelper.updateBebida([nome, volume], [quantidade, bandeja, preco]))
 
-		self.searchBebidas()
-
-		bebida_addDialog.close()
+		if not error:
+			self.dbHelper.commit()
+			self.searchBebidas()
+			bebida_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def setupFornecedor(self):
 		fornecedor_addDialog = QtWidgets.QDialog()
@@ -467,6 +515,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.mainwindow.fornecedor_tableWidget.clearContents()
 		self.mainwindow.fornecedor_tableWidget.setRowCount(0)
 
+		self.dbHelper.commit()
 		self.fillFornecedores()
 
 	def save_fornecedor_and_close(self, fornecedor_addDialog):
@@ -484,22 +533,26 @@ class MainApp(QtWidgets.QMainWindow):
 			tipoConta = 'CP'
 
 		iddados = int(time.time() % 10000000000)
-		print(self.dbHelper.insertIntoDadosBancarios([iddados, banco, agencia, conta, tipoConta]))
-		print(self.dbHelper.insertIntoFornecedor([cnpj, nome, tel, iddados]))
+		error = self.checkError(self.dbHelper.insertIntoDadosBancarios([iddados, banco, agencia, conta, tipoConta]))
+		if not error:
+			error = self.checkError(self.dbHelper.insertIntoFornecedor([cnpj, nome, tel, iddados]))
 
-		self.mainwindow.fornecedor_tableWidget.clearContents()
-		self.mainwindow.fornecedor_tableWidget.setRowCount(0)
+		if not error:
+			self.mainwindow.fornecedor_tableWidget.clearContents()
+			self.mainwindow.fornecedor_tableWidget.setRowCount(0)
 
-		self.fillFornecedores()
-
-		fornecedor_addDialog.close()
+			self.dbHelper.commit()
+			self.fillFornecedores()
+			fornecedor_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def editFornecedor(self):
 		fornecedor_addDialog = self.setupFornecedor()
 
 		self.fornecedor.cnpj_lineEdit.setEnabled(False)
 		
-		self.fornecedor.buttonBox.accepted.connect(lambda : edit_fornecedor_and_close(fornecedor_addDialog))
+		self.fornecedor.buttonBox.accepted.connect(lambda : self.edit_fornecedor_and_close(fornecedor_addDialog))
 
 		selectedRow = self.mainwindow.fornecedor_tableWidget.selectedItems()
 		self.fornecedor.cnpj_lineEdit.setText(selectedRow[0].text())
@@ -537,16 +590,20 @@ class MainApp(QtWidgets.QMainWindow):
 		elif(self.fornecedor.poupanca_radioButton.isChecked()):
 			tipoConta = 'CP'
 
-		iddados = self.dbHelper.getDadosBancariosFornecedor(cnpj)
-		print(self.dbHelper.updateDadosBancarios([iddados], [banco, agencia, conta, tipoConta]))
-		print(self.dbHelper.updateFornecedor([cnpj], [nome, tel, iddados]))
+		iddados = self.dbHelper.getDadosBancariosFornecedor(cnpj)[0][0]
+		error = self.checkError(self.dbHelper.updateDadosBancarios([iddados], [banco, agencia, conta, tipoConta]))
+		if not error:
+			error = self.checkError(self.dbHelper.updateFornecedor([cnpj], [nome, tel, iddados]))
 
-		self.mainwindow.fornecedor_tableWidget.clearContents()
-		self.mainwindow.fornecedor_tableWidget.setRowCount(0)
+		if not error:
+			self.mainwindow.fornecedor_tableWidget.clearContents()
+			self.mainwindow.fornecedor_tableWidget.setRowCount(0)
 
-		self.fillFornecedores()
-
-		fornecedor_addDialog.close()
+			self.dbHelper.commit()
+			self.fillFornecedores()
+			fornecedor_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def setupCliente(self):
 		cliente_addDialog = QtWidgets.QDialog()
@@ -576,6 +633,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.mainwindow.cliente_tableWidget.clearContents()
 		self.mainwindow.cliente_tableWidget.setRowCount(0)
 
+		self.dbHelper.commit()
 		self.fillClientes()
 
 	def save_cliente_and_close(self, cliente_addDialog):
@@ -602,23 +660,28 @@ class MainApp(QtWidgets.QMainWindow):
 			telFixo = None
 
 		iddados = int(time.time() % 10000000000)
-		print(self.dbHelper.insertIntoDadosBancarios([iddados, banco, agencia, conta, tipoConta]))
-		print(self.dbHelper.insertIntoEndereco([iddados, rua, cidade, estado, numero, cep]))
-		print(self.dbHelper.insertIntoCliente([cpf, nome, iddados, telFixo, telMovel, iddados]))
+		error = self.checkError(self.dbHelper.insertIntoDadosBancarios([iddados, banco, agencia, conta, tipoConta]))
+		if not error:
+			error = self.checkError(self.dbHelper.insertIntoEndereco([iddados, rua, cidade, estado, numero, cep]))
+		if not error:
+			error = self.checkError(self.dbHelper.insertIntoCliente([cpf, nome, iddados, telFixo, telMovel, iddados]))
 
-		self.mainwindow.cliente_tableWidget.clearContents()
-		self.mainwindow.cliente_tableWidget.setRowCount(0)
+		if not error:
+			self.mainwindow.cliente_tableWidget.clearContents()
+			self.mainwindow.cliente_tableWidget.setRowCount(0)
 
-		self.fillClientes()
-
-		cliente_addDialog.close()
+			self.dbHelper.commit()
+			self.fillClientes()
+			cliente_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def editCliente(self):
 		cliente_addDialog = self.setupCliente()
 
 		self.cliente.cpf_lineEdit.setEnabled(False)
 
-		self.cliente.buttonBox.accepted.connect(lambda : edit_cliente_and_close(cliente_addDialog))
+		self.cliente.buttonBox.accepted.connect(lambda : self.edit_cliente_and_close(cliente_addDialog))
 
 		selectedRow = self.mainwindow.cliente_tableWidget.selectedItems()
 		self.cliente.cpf_lineEdit.setText(selectedRow[0].text())
@@ -641,7 +704,12 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.cliente.poupanca_radioButton.setChecked(True)
 
-		# TODO fill endereço
+		endereco = self.dbHelper.getEnderecoCliente(self.cliente.cpf_lineEdit.text())[0]
+		self.cliente.rua_lineEdit.setText(endereco[1])
+		self.cliente.n_lineEdit.setText(endereco[2])
+		self.cliente.cidade_lineEdit.setText(endereco[3])
+		self.cliente.estado_comboBox.setCurrentIndex(self.cliente.estado_comboBox.findText(endereco[4]))
+		self.cliente.cep_lineEdit.setText(endereco[5])
 
 		cliente_addDialog.exec_()
 
@@ -668,18 +736,23 @@ class MainApp(QtWidgets.QMainWindow):
 		if telFixo == '()-':
 			telFixo = None
 
-		id_dadosBancarios = self.dbHelper.getDadosBancariosCliente(cpf)
-		id_endereco = self.dbHelper.getEnderecoCliente(cpf)
-		print(self.dbHelper.updateDadosBancarios([id_dadosBancarios], [banco, agencia, conta, tipoConta]))
-		print(self.dbHelper.updateEndereco([id_endereco], [rua, cidade, estado, numero, cep]))
-		print(self.dbHelper.updateCliente([cpf], [nome, iddados, telFixo, telMovel, iddados]))
+		id_dadosBancarios = self.dbHelper.getDadosBancariosCliente(cpf)[0][0]
+		id_endereco = self.dbHelper.getEnderecoCliente(cpf)[0][0]
+		error = self.checkError(self.dbHelper.updateDadosBancarios([id_dadosBancarios], [banco, agencia, conta, tipoConta]))
+		if not error:
+			error = self.checkError(self.dbHelper.updateEndereco([id_endereco], [rua, cidade, estado, numero, cep]))
+		if not error:
+			error = self.checkError(self.dbHelper.updateCliente([cpf], [nome, id_dadosBancarios, telFixo, telMovel, id_dadosBancarios]))
 
-		self.mainwindow.cliente_tableWidget.clearContents()
-		self.mainwindow.cliente_tableWidget.setRowCount(0)
+		if not error:
+			self.mainwindow.cliente_tableWidget.clearContents()
+			self.mainwindow.cliente_tableWidget.setRowCount(0)
 
-		self.fillClientes()
-
-		cliente_addDialog.close()
+			self.dbHelper.commit()
+			self.fillClientes()
+			cliente_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def setupCasaDeFesta(self):
 		casaDeFesta_addDialog = QtWidgets.QDialog()
@@ -707,6 +780,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.mainwindow.casaDeFesta_tableWidget.clearContents()
 		self.mainwindow.casaDeFesta_tableWidget.setRowCount(0)
 
+		self.dbHelper.commit()
 		self.fillCasasDeFesta()
 
 	def save_casaDeFesta_and_close(self, casaDeFesta_addDialog):
@@ -719,24 +793,28 @@ class MainApp(QtWidgets.QMainWindow):
 		estado = self.casaDeFesta.estado_comboBox.currentText()
 
 		iddados = int(time.time() % 10000000000)
-		print(self.dbHelper.insertIntoEndereco([iddados, rua, cidade, estado, numero, cep]))
-		print(self.dbHelper.insertIntoCasaFesta([nome, iddados]))
+		error = self.checkError(self.dbHelper.insertIntoEndereco([iddados, rua, cidade, estado, numero, cep]))
+		if not error:
+			error = self.checkError(self.dbHelper.insertIntoCasaFesta([nome, iddados]))
 
-		self.mainwindow.casaDeFesta_comboBox.addItem(nome)
+		if not error:
+			self.mainwindow.casaDeFesta_comboBox.addItem(nome)
+	
+			self.mainwindow.casaDeFesta_tableWidget.clearContents()
+			self.mainwindow.casaDeFesta_tableWidget.setRowCount(0)
 
-		self.mainwindow.casaDeFesta_tableWidget.clearContents()
-		self.mainwindow.casaDeFesta_tableWidget.setRowCount(0)
-
-		self.fillCasasDeFesta()
-
-		casaDeFesta_addDialog.close()
+			self.dbHelper.commit()
+			self.fillCasasDeFesta()
+			casaDeFesta_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def editCasaDeFesta(self):
 		casaDeFesta_addDialog = self.setupCasaDeFesta()
 		
 		self.casaDeFesta.nome_lineEdit.setEnabled(False)
 
-		self.casaDeFesta.buttonBox.accepted.connect(lambda : edit_casaDeFesta_and_close(casaDeFesta_addDialog))
+		self.casaDeFesta.buttonBox.accepted.connect(lambda : self.edit_casaDeFesta_and_close(casaDeFesta_addDialog))
 		
 		selectedRow = self.mainwindow.casaDeFesta_tableWidget.selectedItems()
 		self.casaDeFesta.nome_lineEdit.setText(selectedRow[0].text())
@@ -745,7 +823,8 @@ class MainApp(QtWidgets.QMainWindow):
 		self.casaDeFesta.cidade_lineEdit.setText(selectedRow[3].text())
 		self.casaDeFesta.cep_lineEdit.setText(selectedRow[4].text())
 
-		# TODO estado
+		endereco = self.dbHelper.getEnderecoCasaFesta(self.casaDeFesta.nome_lineEdit.text())[0]
+		self.casaDeFesta.estado_comboBox.setCurrentIndex(self.casaDeFesta.estado_comboBox.findText(endereco[4]))
 
 		casaDeFesta_addDialog.exec_()
 
@@ -758,15 +837,18 @@ class MainApp(QtWidgets.QMainWindow):
 
 		estado = self.casaDeFesta.estado_comboBox.currentText()
 
-		iddados = self.dbHelper.getEnderecoCasaFesta(nome)
-		print(self.dbHelper.updateEndereco([iddados], [rua, cidade, estado, numero, cep]))
+		iddados = self.dbHelper.getEnderecoCasaFesta(nome)[0][0]
+		error = self.checkError(self.dbHelper.updateEndereco([iddados], [rua, cidade, estado, numero, cep]))
 
-		self.mainwindow.casaDeFesta_tableWidget.clearContents()
-		self.mainwindow.casaDeFesta_tableWidget.setRowCount(0)
+		if not error:
+			self.mainwindow.casaDeFesta_tableWidget.clearContents()
+			self.mainwindow.casaDeFesta_tableWidget.setRowCount(0)
 
-		self.fillCasasDeFesta()
-
-		casaDeFesta_addDialog.close()
+			self.dbHelper.commit()
+			self.fillCasasDeFesta()
+			casaDeFesta_addDialog.close()
+		else:
+			self.dbHelper.rollback()
 
 	def on_bebida_addToTableBtn_clicked(self):
 		numRows = self.festa.bebidas_tableWidget.rowCount()
@@ -788,6 +870,19 @@ class MainApp(QtWidgets.QMainWindow):
 		self.festa.operador_tableWidget.insertRow(numRows)
 		nome = self.festa.operador_comboBox.currentText()
 		self.festa.operador_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(nome))
+
+	def checkError(self, error):
+		if error is not None:
+			msg = QtWidgets.QMessageBox()
+			msg.setIcon(QtWidgets.QMessageBox.Critical)
+			msg.setText(error)
+			msg.setWindowTitle("Error")
+			msg.setStandardButtons(QtWidgets.QMessageBox.Cancel)
+			msg.exec_()
+
+			return True
+		else:
+			return False
 
 	def close(self):
 		exit()

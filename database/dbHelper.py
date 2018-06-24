@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+os.environ["NLS_LANG"] = '.AL32UTF8'
 
 import cx_Oracle
 from cx_Oracle import DatabaseError
@@ -7,8 +9,8 @@ import re
 from database.error_dict import errors
 from unicodedata import normalize
 
-INSERT_SUCCESS = 'Inserção bem sucedida'
-UPDATE_SUCCESS = 'Atualização bem sucedida'
+INSERT_SUCCESS = None
+UPDATE_SUCCESS = None
 
 def getError(error_msg):
 	regex = re.compile(r'[^.]*.([^\)]*)')
@@ -29,17 +31,22 @@ class dbHelper():
 		for i, value in enumerate(values):
 			if isinstance(value, str):
 				values[i] = "'" + value + "'"
-				values[i] = normalize('NFKD', values[i]).encode('ASCII', 'ignore').decode('ASCII')
+				# values[i] = normalize('NFKD', values[i]).encode('ASCII', 'ignore').decode('ASCII')
 			elif isinstance(value, int):
 				values[i] = str(value)
 			elif isinstance(value, float):
 				values[i] = "%.2f" % (value)
-			elif (isinstance(value, datetime.datetime) or isinstance(value, datetime.date)):
+			elif isinstance(value, datetime.datetime) or isinstance(value, datetime.date):
 				values[i] = "TO_DATE('%02d/%02d/%4d', 'DD/MM/YYYY')" % (value.day, value.month, value.year)
+			elif value is None:
+				values[i] = "NULL"
 		return values
 
 	def commit(self):
 		self.connection.commit()
+
+	def rollback(self):
+		self.connection.rollback()
 	
 	def _run_command(self, cmd):
 		cursor = self.connection.cursor()
@@ -48,8 +55,8 @@ class dbHelper():
 
 	def insert(self, table, fields, values):
 		values = self._preprocess_values(values)				
+
 		cmd = 'INSERT INTO ' + table + ' (' + ', '.join(fields) + ') VALUES ( ' + ', '.join(values) + ') '
-		print(cmd)
 		self._run_command(cmd)
 
 	def insertIntoEndereco(self, values):
@@ -201,16 +208,13 @@ class dbHelper():
 		values = self._preprocess_values(values)				
 		where_statements = []
 		for i, field in enumerate(fields):
-			where_statements.append('UPPER(' + field + ') = ' + values[i])
-		cmd = 'DELETE FROM ' + table + ' WHERE (' + ' AND '.join(where_statements) + ')'
+			where_statements.append('UPPER(' + field + ') = UPPER(' + values[i] + ')')
 
+		cmd = 'DELETE FROM ' + table + ' WHERE (' + ' AND '.join(where_statements) + ')'
 		self._run_command(cmd)
 
 
 	def update(self, table, where_fields, where_values, update_fields, update_values):
-		where_values = self._preprocess_values(where_values)
-		update_values = self._preprocess_values(update_values)
-
 		where_statements = []
 		for i, field in enumerate(where_fields):
 			where_statements.append(field + ' = ' + where_values[i])
@@ -220,7 +224,6 @@ class dbHelper():
 			set_statements.append(field + ' = ' + update_values[i])
 
 		cmd = 'UPDATE '  + table  + ' SET ' + ', '.join(set_statements) + ' WHERE (' + ' AND '.join(where_statements) + ')'
-
 		self._run_command(cmd)
 
 	def updateEndereco(self, where_values, values):
@@ -242,7 +245,7 @@ class dbHelper():
 	def updateDadosBancarios(self, where_values, values):
 		values = self._preprocess_values(values)
 		where_values = self._preprocess_values(where_values)
-		
+
 		table = 'DADOS_BANCARIOS'
 		fields = ['BANCO', 'AGENCIA', 'CONTA', 'TIPO_CONTA']
 		where_fields = ['ID']
@@ -505,7 +508,7 @@ class dbHelper():
 	def getAllGarcons(self):
 		cmd = "SELECT F.CPF, F.NOME, F.TEL_MOVEL, F.TEL_FIXO, F.COMISSAO, FE.CASA_FESTA, MIN(GF.DATA) AS DATA_PROXIMA_FESTA\
 			FROM FUNCIONARIO F LEFT JOIN GARCOM_FESTA GF ON GF.GARCOM = F.CPF\
-			LEFT JOIN FESTA FE ON GF.CLIENTE = FE.CLIENTE AND GF.DATA = FE.DATA WHERE UPPER(F.CARGO) = 'GARCOM'\
+			LEFT JOIN FESTA FE ON GF.CLIENTE = FE.CLIENTE AND GF.DATA = FE.DATA WHERE UPPER(F.CARGO) = 'GARÇOM'\
 			GROUP BY(F.CPF, F.NOME, F.TEL_MOVEL,  F.TEL_FIXO, F.COMISSAO, FE.CASA_FESTA)"
 		return self._run_select(cmd)
 
@@ -525,7 +528,7 @@ class dbHelper():
 
 	def getDadosBancariosFornecedor(self, cnpj):
 		cnpj = self._preprocess_values([cnpj])[0]
-		cmd = """SELECT F.DADOS_BANCARIOS, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO
+		cmd = """SELECT F.DADOS_BANCARIOS, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA
 			FROM FORNECEDOR F JOIN DADOS_BANCARIOS D ON F.DADOS_BANCARIOS = D.ID
 			WHERE F.CNPJ = """ + cnpj
 		return self._run_select(cmd)
@@ -562,7 +565,7 @@ class dbHelper():
 
 	def getDadosBancariosCliente(self, cpf):
 		cpf = self._preprocess_values([cpf])[0]
-		cmd = """SELECT C.DADOS_BANCARIOS, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO
+		cmd = """SELECT C.DADOS_BANCARIOS, D.BANCO, D.AGENCIA, D.CONTA, D.TIPO_CONTA
 			FROM CLIENTE C JOIN DADOS_BANCARIOS D ON C.DADOS_BANCARIOS = D.ID
 			WHERE C.CPF = """ + cpf
 		return self._run_select(cmd)

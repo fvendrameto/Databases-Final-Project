@@ -380,9 +380,6 @@ class Ui_MainWindow(object):
         self.casaDeFesta_delButton.setObjectName("casaDeFesta_delButton")
         self.gridLayout_12.addWidget(self.casaDeFesta_delButton, 1, 1, 1, 1)
         self.tabWidget.addTab(self.casaDeFesta, "")
-        self.balanco = QtWidgets.QWidget()
-        self.balanco.setObjectName("balanco")
-        self.tabWidget.addTab(self.balanco, "")
         self.gridLayout_7.addWidget(self.tabWidget, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralWidget)
 
@@ -454,9 +451,9 @@ class Ui_MainWindow(object):
         item = self.funcionario_tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Nome"))
         item = self.funcionario_tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "Telefone Fixo"))
-        item = self.funcionario_tableWidget.horizontalHeaderItem(3)
         item.setText(_translate("MainWindow", "Telefone Móvel"))
+        item = self.funcionario_tableWidget.horizontalHeaderItem(3)
+        item.setText(_translate("MainWindow", "Telefone Fixo"))
         item = self.funcionario_tableWidget.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "Comissão"))
         item = self.funcionario_tableWidget.horizontalHeaderItem(5)
@@ -532,7 +529,6 @@ class Ui_MainWindow(object):
         self.casaDeFesta_addButton.setText(_translate("MainWindow", "Adicionar"))
         self.casaDeFesta_delButton.setText(_translate("MainWindow", "Remove"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.casaDeFesta), _translate("MainWindow", "Casas de Festa"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.balanco), _translate("MainWindow", "Balanço"))
 
 
 if __name__ == "__main__":
