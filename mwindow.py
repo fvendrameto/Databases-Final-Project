@@ -718,11 +718,13 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Configura, preenche e exibe a caixa de diálogo de edição de um Fornecedor
 	def editFornecedor(self):
 		fornecedor_addDialog = self.setupFornecedor()
 
 		self.fornecedor.cnpj_lineEdit.setEnabled(False)
 		
+		# Habilita o botão de confirmação como botão para edição
 		self.fornecedor.buttonBox.accepted.connect(lambda : self.edit_fornecedor_and_close(fornecedor_addDialog))
 
 		selectedRow = self.mainwindow.fornecedor_tableWidget.selectedItems()
@@ -745,6 +747,7 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.fornecedor.poupanca_radioButton.setChecked(True)
 
+		# Conecta com os sinais que verificam alterações nos campos
 		self.fornecedor.nome_lineEdit.textChanged.connect(lambda: self.fornecedor.buttonBox.buttons()[0].setEnabled(True))
 		self.fornecedor.tel_lineEdit.textChanged.connect(lambda: self.fornecedor.buttonBox.buttons()[0].setEnabled(True))
 		self.fornecedor.banco_comboBox.currentIndexChanged.connect(lambda: self.fornecedor.buttonBox.buttons()[0].setEnabled(True))
@@ -755,7 +758,10 @@ class MainApp(QtWidgets.QMainWindow):
 
 		fornecedor_addDialog.exec_()
 
+	# Armazena os dados durante a edição de um Fornecedor dado e efetua a atualização no banco de dados,
+	# caso não haja erros
 	def edit_fornecedor_and_close(self, fornecedor_addDialog):
+		# Armazena os novos valores
 		nome = self.fornecedor.nome_lineEdit.text()
 		cnpj = self.fornecedor.cnpj_lineEdit.text()
 		tel = self.fornecedor.tel_lineEdit.text()
@@ -769,7 +775,10 @@ class MainApp(QtWidgets.QMainWindow):
 		elif(self.fornecedor.poupanca_radioButton.isChecked()):
 			tipoConta = 'CP'
 
+		# Armazena o ID dos Dados Bancários do Cliente
 		iddados = self.dbHelper.getDadosBancariosFornecedor(cnpj)[0][0]
+
+		# Efetua as atualizações em Dados Bancários e Cliente
 		error = self.checkError(self.dbHelper.updateDadosBancarios([iddados], [banco, agencia, conta, tipoConta]))
 		if not error:
 			error = self.checkError(self.dbHelper.updateFornecedor([cnpj], [nome, tel, iddados]))
@@ -784,6 +793,7 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Inicializa a caixa de diálogo de Cliente
 	def setupCliente(self):
 		cliente_addDialog = QtWidgets.QDialog()
 		self.cliente.setupUi(cliente_addDialog)
@@ -795,10 +805,12 @@ class MainApp(QtWidgets.QMainWindow):
 		for estado in estados:
 			self.cliente.estado_comboBox.addItem(estado)
 
+		# Habilita o botão que cancela a operação na caixa de diálogo
 		self.cliente.buttonBox.rejected.connect(lambda : cliente_addDialog.close())
 
 		return cliente_addDialog
 
+	# Abre a caixa de diálogo de adição de um Cliente
 	def on_cliente_addBtn_clicked(self):
 		cliente_addDialog = self.setupCliente()
 
@@ -807,6 +819,7 @@ class MainApp(QtWidgets.QMainWindow):
 
 		cliente_addDialog.exec_()
 
+	# Remove o Cliente selecionado
 	def on_cliente_delBtn_clicked(self):
 		selectedRow = self.mainwindow.cliente_tableWidget.selectedItems()
 		
@@ -817,8 +830,11 @@ class MainApp(QtWidgets.QMainWindow):
 
 		self.dbHelper.commit()
 		self.fillClientes()
-
+	
+	# Salva os dados da caixa de diálogo de adição de um Cliente e, caso não haja erros,
+	# insere esta no banco de dados
 	def save_cliente_and_close(self, cliente_addDialog):
+		# Armazena os valores
 		cpf = self.cliente.cpf_lineEdit.text()
 		nome = self.cliente.nome_lineEdit.text()
 		telFixo = self.cliente.telFixo_lineEdit.text()
@@ -841,7 +857,10 @@ class MainApp(QtWidgets.QMainWindow):
 		if telFixo == '()-':
 			telFixo = None
 
+		# Cria um ID para os Dados Bancários e Endereço do Cliente
 		iddados = int(time.time() % 10000000000)
+		
+		# Insere em Dados Bancários, Endereço e Cliente
 		error = self.checkError(self.dbHelper.insertIntoDadosBancarios([iddados, banco, agencia, conta, tipoConta]))
 		if not error:
 			error = self.checkError(self.dbHelper.insertIntoEndereco([iddados, rua, cidade, estado, numero, cep]))
@@ -858,13 +877,17 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Configura, preenche e exibe a caixa de diálogo de edição de um Cliente
 	def editCliente(self):
 		cliente_addDialog = self.setupCliente()
 
+		# Desabilita a edição da chave primária
 		self.cliente.cpf_lineEdit.setEnabled(False)
 
+		# Configura o botão de confirmação como botão de edição
 		self.cliente.buttonBox.accepted.connect(lambda : self.edit_cliente_and_close(cliente_addDialog))
 
+		# Preenche os campos da caixa de diálogo
 		selectedRow = self.mainwindow.cliente_tableWidget.selectedItems()
 		self.cliente.cpf_lineEdit.setText(selectedRow[0].text())
 		self.cliente.nome_lineEdit.setText(selectedRow[1].text())
@@ -893,6 +916,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.cliente.estado_comboBox.setCurrentIndex(self.cliente.estado_comboBox.findText(endereco[4]))
 		self.cliente.cep_lineEdit.setText(endereco[5])
 
+		# Conecta com os sinais que verificam alterações nos campos
 		self.cliente.nome_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
 		self.cliente.telFixo_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
 		self.cliente.telMovel_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
@@ -908,7 +932,9 @@ class MainApp(QtWidgets.QMainWindow):
 		self.cliente.cep_lineEdit.textChanged.connect(lambda: self.cliente.buttonBox.buttons()[0].setEnabled(True))
 
 		cliente_addDialog.exec_()
-
+	
+	# Armazena os dados durante a edição de um Cliente dado e efetua a atualização no banco de dados,
+	# caso não haja erros
 	def edit_cliente_and_close(self, cliente_addDialog):
 		cpf = self.cliente.cpf_lineEdit.text()
 		nome = self.cliente.nome_lineEdit.text()
@@ -932,13 +958,16 @@ class MainApp(QtWidgets.QMainWindow):
 		if telFixo == '()-':
 			telFixo = None
 
+		# Armazena o ID das tabelas de Endereço e Dados Bancários do Cliente
 		id_dadosBancarios = self.dbHelper.getDadosBancariosCliente(cpf)[0][0]
 		id_endereco = self.dbHelper.getEnderecoCliente(cpf)[0][0]
+		
+		# Atualiza as tabelas de Endereço, Dados Bancários e Cliente
 		error = self.checkError(self.dbHelper.updateDadosBancarios([id_dadosBancarios], [banco, agencia, conta, tipoConta]))
 		if not error:
 			error = self.checkError(self.dbHelper.updateEndereco([id_endereco], [rua, cidade, estado, numero, cep]))
 		if not error:
-			error = self.checkError(self.dbHelper.updateCliente([cpf], [nome, id_dadosBancarios, telFixo, telMovel, id_dadosBancarios]))
+			error = self.checkError(self.dbHelper.updateCliente([cpf], [nome, id_dadosBancarios, telFixo, telMovel, id_endereco]))
 
 		if not error:
 			self.mainwindow.cliente_tableWidget.clearContents()
@@ -950,27 +979,33 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Inicializa a caixa de diálogo de Casa de Festa
 	def setupCasaDeFesta(self):
 		casaDeFesta_addDialog = QtWidgets.QDialog()
 		self.casaDeFesta.setupUi(casaDeFesta_addDialog)
 
 		self.casaDeFesta.buttonBox.buttons()[0].setEnabled(False)
 
+		# Adiciona os estados do Brasil na lista de estados do endereço da Casa de Festa
 		for estado in estados:
 			self.casaDeFesta.estado_comboBox.addItem(estado)
 
+		# Habilita o botão que cancela a operação na caixa de diálogo
 		self.casaDeFesta.buttonBox.rejected.connect(lambda : casaDeFesta_addDialog.close())
 
 		return casaDeFesta_addDialog
 
+	# Configura e exibe a caixa de diálogo de adição de uma Casa de Festa
 	def on_casaDeFesta_addBtn_clicked(self):
 		casaDeFesta_addDialog = self.setupCasaDeFesta()
 
+		# Habilita o botão de confirmação da caixa com botão de adição
 		self.casaDeFesta.buttonBox.buttons()[0].setEnabled(True)
 		self.casaDeFesta.buttonBox.accepted.connect(lambda : self.save_casaDeFesta_and_close(casaDeFesta_addDialog))
 		
 		casaDeFesta_addDialog.exec_()
 
+	# Deleta a Casa de festa selecionada
 	def on_casaDeFesta_delBtn_clicked(self):
 		selectedRow = self.mainwindow.casaDeFesta_tableWidget.selectedItems()
 		
@@ -982,6 +1017,8 @@ class MainApp(QtWidgets.QMainWindow):
 		self.dbHelper.commit()
 		self.fillCasasDeFesta()
 
+	# Salva os dados da caixa de diálogo de adição de uma Casa de Festa e, caso não haja erros,
+	# insere esta no banco de dados
 	def save_casaDeFesta_and_close(self, casaDeFesta_addDialog):
 		nome = self.casaDeFesta.nome_lineEdit.text()
 		rua = self.casaDeFesta.rua_lineEdit.text()
@@ -991,7 +1028,9 @@ class MainApp(QtWidgets.QMainWindow):
 
 		estado = self.casaDeFesta.estado_comboBox.currentText()
 
+		# cria um ID para Endereço
 		iddados = int(time.time() % 10000000000)
+
 		error = self.checkError(self.dbHelper.insertIntoEndereco([iddados, rua, cidade, estado, numero, cep]))
 		if not error:
 			error = self.checkError(self.dbHelper.insertIntoCasaFesta([nome, iddados]))
@@ -1008,13 +1047,17 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Configura, preenche e exibe a caixa de diálogo de edição de uma Casa de Festa
 	def editCasaDeFesta(self):
 		casaDeFesta_addDialog = self.setupCasaDeFesta()
 		
+		# Desabilita a edição da chave primária
 		self.casaDeFesta.nome_lineEdit.setEnabled(False)
 
+		# Habilita o botão de confirmação da caixa de diálogo como botão de edição
 		self.casaDeFesta.buttonBox.accepted.connect(lambda : self.edit_casaDeFesta_and_close(casaDeFesta_addDialog))
 		
+		# Preenche a caixa de diálogo com os dados da festa dada
 		selectedRow = self.mainwindow.casaDeFesta_tableWidget.selectedItems()
 		self.casaDeFesta.nome_lineEdit.setText(selectedRow[0].text())
 		self.casaDeFesta.rua_lineEdit.setText(selectedRow[1].text())
@@ -1025,6 +1068,7 @@ class MainApp(QtWidgets.QMainWindow):
 		endereco = self.dbHelper.getEnderecoCasaFesta(self.casaDeFesta.nome_lineEdit.text())[0]
 		self.casaDeFesta.estado_comboBox.setCurrentIndex(self.casaDeFesta.estado_comboBox.findText(endereco[4]))
 
+		# Conecta com os sinais que verificam alterações nos campos
 		self.casaDeFesta.rua_lineEdit.textChanged.connect(lambda: self.casaDeFesta.buttonBox.buttons()[0].setEnabled(True))
 		self.casaDeFesta.n_lineEdit.textChanged.connect(lambda: self.casaDeFesta.buttonBox.buttons()[0].setEnabled(True))
 		self.casaDeFesta.cidade_lineEdit.textChanged.connect(lambda: self.casaDeFesta.buttonBox.buttons()[0].setEnabled(True))
@@ -1033,6 +1077,8 @@ class MainApp(QtWidgets.QMainWindow):
 
 		casaDeFesta_addDialog.exec_()
 
+	# Armazena os dados durante a edição de uma Casa de Festa dada e efetua a atualização no banco de dados,
+	# caso não haja erros
 	def edit_casaDeFesta_and_close(self, casaDeFesta_addDialog):
 		nome = self.casaDeFesta.nome_lineEdit.text()
 		rua = self.casaDeFesta.rua_lineEdit.text()
@@ -1043,8 +1089,9 @@ class MainApp(QtWidgets.QMainWindow):
 		estado = self.casaDeFesta.estado_comboBox.currentText()
 
 		iddados = self.dbHelper.getEnderecoCasaFesta(nome)[0][0]
-		error = self.checkError(self.dbHelper.updateEndereco([iddados], [rua, cidade, estado, numero, cep]))
 
+		# Atualiza a tabela de Endereços
+		error = self.checkError(self.dbHelper.updateEndereco([iddados], [rua, cidade, estado, numero, cep]))
 		if not error:
 			self.mainwindow.casaDeFesta_tableWidget.clearContents()
 			self.mainwindow.casaDeFesta_tableWidget.setRowCount(0)
@@ -1055,21 +1102,25 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			self.dbHelper.rollback()
 
+	# Remove uma Bebidade de uma Festa e retorna ela para a lista de disponíveis para a festa
 	def rollbackBebida(self):
 		selectedRow = self.festa.bebidas_tableWidget.selectedItems()
 		self.festa.bebida_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
 		self.festa.bebidas_tableWidget.removeRow(self.festa.bebidas_tableWidget.row(selectedRow[0]))
 
+	# Remove um Garcom de uma Festa e retorna ele para a lista de disponíveis no dia
 	def rollbackGarcom(self):
 		selectedRow = self.festa.garcons_tableWidget.selectedItems()
 		self.festa.garcons_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
 		self.festa.garcons_tableWidget.removeRow(self.festa.garcons_tableWidget.row(selectedRow[0]))
 
+	# Remove um Operador de Raspadinha de uma Festa e retorna ele para a lista de disponíveis no dia
 	def rollbackOperador(self):
 		selectedRow = self.festa.operador_tableWidget.selectedItems()
 		self.festa.operador_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
 		self.festa.operador_tableWidget.removeRow(self.festa.operador_tableWidget.row(selectedRow[0]))
 
+	# Atualiza a lista de funcionários disponíveis para uma Festa na tela de adição/edição desta
 	def refreshFuncionariosLivre(self):
 		self.festa.garcons_comboBox.clear()
 		self.festa.operador_comboBox.clear()
@@ -1087,6 +1138,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.festa.garcons_tableWidget.setRowCount(0)
 		self.festa.operador_tableWidget.setRowCount(0)
 
+	# Ativa a caixa de diálogo para adição de um Cliente na tela de adição/edição de Festa
 	def on_festa_addToClienteBtn_clicked(self):
 		self.on_cliente_addBtn_clicked()
 		
@@ -1095,6 +1147,7 @@ class MainApp(QtWidgets.QMainWindow):
 		for i, cliente in enumerate(allCliente):
 			self.festa.cliente_comboBox.addItem(f"{cliente[1]} ({cliente[0]})")
 
+	# Ativa a caixa de diálogo para adição de uma Casa de Festa na tela de adição/edição de Festa
 	def on_festa_addToCasaDeFestaBtn_clicked(self):
 		self.on_casaDeFesta_addBtn_clicked()
 
@@ -1103,11 +1156,10 @@ class MainApp(QtWidgets.QMainWindow):
 		for i, casaDeFesta in enumerate(nomeCasasDeFesta):
 			self.festa.casaDeFesta_comboBox.addItem(casaDeFesta[0])
 
+	# Adiciona a Bebida escolhida e a quantidade da mesma a uma Festa, durante adição/edição desta
 	def on_bebida_addToTableBtn_clicked(self):
 		self.festa.buttonBox.buttons()[0].setEnabled(True)
-		nome = self.festa.bebida_comboBox.currentText() # AQUI PRECISA VER COMO VEM PRA DAR SPLIT
-		# NOME -> self.festa.bebidas_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem())
-		# VOLUME -> self.festa.bebidas_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem())
+		nome = self.festa.bebida_comboBox.currentText()
 
 		if nome != '':
 			self.festa.bebida_comboBox.removeItem(self.festa.bebida_comboBox.currentIndex())
@@ -1123,6 +1175,7 @@ class MainApp(QtWidgets.QMainWindow):
 			self.festa.bebidas_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem(match[2]))
 			self.festa.bebidas_tableWidget.setItem(numRows, 2, QtWidgets.QTableWidgetItem(quantidade))
 
+	# Adiciona o Garçom escolhido a uma Festa, durante adição/edição desta
 	def on_garcons_addToTableBtn_clicked(self):
 		self.festa.buttonBox.buttons()[0].setEnabled(True)
 		nome = self.festa.garcons_comboBox.currentText()
@@ -1137,6 +1190,7 @@ class MainApp(QtWidgets.QMainWindow):
 			self.festa.garcons_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(match[1][:-1]))
 			self.festa.garcons_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem(match[2]))
 
+	# Adiciona o Operador de Raspadinha escolhido a uma Festa, durante a adição/edição desta
 	def on_operador_addToTableBtn_clicked(self):
 		self.festa.buttonBox.buttons()[0].setEnabled(True)
 		nome = self.festa.operador_comboBox.currentText()
@@ -1151,6 +1205,7 @@ class MainApp(QtWidgets.QMainWindow):
 			self.festa.operador_tableWidget.setItem(numRows, 0, QtWidgets.QTableWidgetItem(match[1][:-1]))
 			self.festa.operador_tableWidget.setItem(numRows, 1, QtWidgets.QTableWidgetItem(match[2]))
 
+	# Confere se há um erro e exibe a caixa de diálogo desse erro, caso exista
 	def checkError(self, error):
 		if error is not None:
 			msg = QtWidgets.QMessageBox()
@@ -1164,10 +1219,11 @@ class MainApp(QtWidgets.QMainWindow):
 		else:
 			return False
 
+	# Encerra a execução do programa
 	def close(self):
 		exit()
-		#self.destroy()
 
+# Enicializa a interface quando o programa é executado a partir desse arquivo
 if __name__ == '__main__':
 	app = QtWidgets.QApplication(sys.argv)
 	form = MainApp()
