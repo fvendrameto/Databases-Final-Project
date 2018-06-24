@@ -384,11 +384,6 @@
           </column>
           <column>
            <property name="text">
-            <string>Local Próx. Festa</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
             <string>Data Próx. Festa</string>
            </property>
           </column>
