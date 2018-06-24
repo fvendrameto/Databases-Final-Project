@@ -4,14 +4,13 @@ import cx_Oracle
 from cx_Oracle import DatabaseError
 import datetime
 import re
-from error_dict import errors
-
+from database.error_dict import errors
 from unicodedata import normalize
 
 SUCCESS = 0
 
 def getError(error_msg):
-	regex = re.compile('[^.]*.([^\)]*)')
+	regex = re.compile(r'[^.]*.([^\)]*)')
 	msg = regex.match(error_msg)[1]
 
 	return msg

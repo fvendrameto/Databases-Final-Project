@@ -259,13 +259,6 @@ class MainApp(QtWidgets.QMainWindow):
 		for i in range(self.mainwindow.casaDeFesta_tableWidget.columnCount()):
 			self.mainwindow.casaDeFesta_tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
 
-		self.fillFestas()
-		self.fillFuncionarioGerentes()
-		self.fillBebidas()
-		self.fillFornecedores()
-		self.fillClientes()
-		self.fillCasasDeFesta()
-
 		nomeCasasDeFesta = self.dbHelper.getNomeCasasFesta()
 		for i, casaDeFesta in enumerate(nomeCasasDeFesta):
 			self.mainwindow.casaDeFesta_comboBox.addItem(casaDeFesta[0])
@@ -277,12 +270,23 @@ class MainApp(QtWidgets.QMainWindow):
 		self.mainwindow.dataInicial_dateEdit.setDate(QtCore.QDate.currentDate())
 		self.mainwindow.dataFinal_dateEdit.setDate(QtCore.QDate.currentDate())
 
+		self.searchFestas()
+		self.searchFuncionarios()
+		self.searchBebidas()
+		self.fillFornecedores()
+		self.fillClientes()
+		self.fillCasasDeFesta()
+
 	def spinBoxLimit(self):
 		self.mainwindow.quantidadeMax_spinBox.setMinimum(self.mainwindow.quantidadeMin_spinBox.value()+1)
 		self.searchBebidas()
 
 	def searchFestas(self):
-		pass
+		self.mainwindow.funcionario_tableWidget.clearContents()
+		self.mainwindow.funcionario_tableWidget.setRowCount(0)
+		
+		self.fillFestas(self.mainwindow.dataInicial_dateEdit.date().toString(), self.mainwindow.dataFinal_dateEdit.date().toString(), self.mainwindow.gerente_comboBox.currentText(), self.mainwindow.casaDeFesta_comboBox.currentText())
+
 	def searchFuncionarios(self):
 		self.mainwindow.funcionario_tableWidget.clearContents()
 		self.mainwindow.funcionario_tableWidget.setRowCount(0)
@@ -300,8 +304,9 @@ class MainApp(QtWidgets.QMainWindow):
 		
 		self.fillBebidas(self.mainwindow.quantidadeMin_spinBox.value(), self.mainwindow.quantidadeMax_spinBox.value())
 
-	def fillFestas(self):
-		allFesta = self.dbHelper.getAllAniversarios()
+	def fillFestas(self, dataInicio, dataFinal, gerente, casaDeFesta):
+		print(dataInicio)
+		allFesta = self.dbHelper.getAllAniversarios(dataInicio, dataFinal, gerente, casaDeFesta)
 		for i, festa in enumerate(allFesta):
 			self.mainwindow.festa_tableWidget.insertRow(i)
 			for j in range(self.mainwindow.festa_tableWidget.columnCount()):
@@ -328,7 +333,7 @@ class MainApp(QtWidgets.QMainWindow):
 			for j in range(self.mainwindow.funcionario_tableWidget.columnCount()):
 				self.mainwindow.funcionario_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(funcionario[j]))
 
-	def fillBebidas(self, minimum=0, maximum=99999):
+	def fillBebidas(self, minimum, maximum):
 		allBebida = self.dbHelper.getBebidasInInterval(minimum, maximum)
 		for i, bebida in enumerate(allBebida):
 			self.mainwindow.bebida_tableWidget.insertRow(i)
