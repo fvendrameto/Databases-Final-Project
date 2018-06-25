@@ -349,7 +349,14 @@ class MainApp(QtWidgets.QMainWindow):
 				values += operador
 				error = self.checkError(self.dbHelper.insertIntoBarracaRaspadinha(values))
 		if not error: # Se não houve erros dar commit no banco de dados e atualizar a tabela de festas
+			self.mainwindow.casaDeFesta_tableWidget.clearContents()
+			self.mainwindow.casaDeFesta_tableWidget.setRowCount(0)
+			self.mainwindow.cliente_tableWidget.clearContents()
+			self.mainwindow.cliente_tableWidget.setRowCount(0)
+
 			self.dbHelper.commit()
+			self.fillClientes()
+			self.fillCasasDeFesta()
 			self.searchFestas()
 			festa_addDialog.close()
 		else:
@@ -477,7 +484,14 @@ class MainApp(QtWidgets.QMainWindow):
 				values += operador
 				error = self.checkError(self.dbHelper.insertIntoBarracaRaspadinha(values))
 		if not error:
+			self.mainwindow.casaDeFesta_tableWidget.clearContents()
+			self.mainwindow.casaDeFesta_tableWidget.setRowCount(0)
+			self.mainwindow.cliente_tableWidget.clearContents()
+			self.mainwindow.cliente_tableWidget.setRowCount(0)
+
 			self.dbHelper.commit()
+			self.fillClientes()
+			self.fillCasasDeFesta()
 			self.searchFestas()
 			festa_addDialog.close()
 		else:
