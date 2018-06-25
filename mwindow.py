@@ -380,10 +380,12 @@ class MainApp(QtWidgets.QMainWindow):
 		self.festa.casaDeFesta_comboBox.setCurrentIndex(self.festa.casaDeFesta_comboBox.findText(selectedRow[5].text()))
 		self.festa.aniversariante_lineEdit.setText(selectedRow[6].text())
 		self.festa.tema_lineEdit.setText(selectedRow[7].text())
+		self.festa.faixa_comboBox.setCurrentIndex(self.festa.faixa_comboBox.findText(selectedRow[8].text()))
 
 		bebidas = self.dbHelper.getBebidaBandejaFesta(cliente[0], datetime.strptime(selectedRow[1].text(), '%d/%m/%Y'))
 		garcons = self.dbHelper.getGarconsFesta(cliente[0], datetime.strptime(selectedRow[1].text(), '%d/%m/%Y'))
 		barracas = self.dbHelper.getBarracasAniversario(cliente[0], datetime.strptime(selectedRow[1].text(), '%d/%m/%Y'))
+		self.festa.barracas_spinBox.setValue(len(barracas))
 
 		if bebidas is not None:
 			for i, bebida in enumerate(bebidas):
