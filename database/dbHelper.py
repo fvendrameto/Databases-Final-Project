@@ -959,3 +959,18 @@ class dbHelper():
 			FROM CLIENTE C JOIN DADOS_BANCARIOS D ON C.DADOS_BANCARIOS = D.ID
 			WHERE C.CPF = """ + cpf
 		return self._run_select(cmd)
+
+	def getBebidaBandejaFesta(self, cliente, data):
+		'''
+		Seleciona bebidas de bandeja de uma determinada festa
+		Args: 
+			clinte: Cliente dono da festa
+			data: Data da festa
+		Return:
+			Lista de listas com o resultado da seleção
+		'''
+		cliente, data = self._preprocess_values([cliente, data])
+		cmd = "SELECT BF.BEBIDA, BF.VOLUME, BF.QUANTIDADE FROM\
+			FESTA F JOIN BEBIDA_BANDEJA_FESTA BF ON (F.CLIENTE = BF.CLIENTE AND F.DATA = BF.DATA)\
+			WHERE (F.CLIENTE = " + cliente + " AND F.DATA = " + data + ")"
+		return self._run_select(cmd)

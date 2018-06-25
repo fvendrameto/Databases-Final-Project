@@ -28,7 +28,7 @@ class MainApp(QtWidgets.QMainWindow):
 		self.mainwindow = MainWindow()
 		self.mainwindow.setupUi(self)
 		
-		self.dbHelper = dbHelper('grad.icmc.usp.br', 15215, 'orcl', 'G9763193', '9763193')
+		self.dbHelper = dbHelper('grad.icmc.usp.br', 15215, 'orcl', 'F9875973', 'kdq6xvsm')
 
 		# Cria os popups
 		self.bebida = Bebida()
@@ -311,7 +311,7 @@ class MainApp(QtWidgets.QMainWindow):
 		casaDeFesta = self.festa.casaDeFesta_comboBox.currentText()
 		gerente = self.festa.gerente_comboBox.currentText()
 		if gerente != '':
-			print(type(gerente))
+			gerente = preprocess(gerente)[2]
 
 		aniversariante = self.festa.aniversariante_lineEdit.text()
 		tema = self.festa.tema_lineEdit.text()
@@ -341,7 +341,6 @@ class MainApp(QtWidgets.QMainWindow):
 		if not error:
 			for garcom in garcons:
 				values = festa + garcom
-				print(values)
 				error = self.checkError(self.dbHelper.insertIntoGarcomFesta(values))
 		if not error:
 			for i, operador in enumerate(operadores):
@@ -382,6 +381,30 @@ class MainApp(QtWidgets.QMainWindow):
 		self.festa.aniversariante_lineEdit.setText(selectedRow[6].text())
 		self.festa.tema_lineEdit.setText(selectedRow[7].text())
 
+		bebidas = self.dbHelper.getBebidaBandejaFesta(cliente[0], datetime.strptime(selectedRow[1].text(), '%d/%m/%Y'))
+		garcons = self.dbHelper.getGarconsFesta(cliente[0], datetime.strptime(selectedRow[1].text(), '%d/%m/%Y'))
+		barracas = self.dbHelper.getBarracasAniversario(cliente[0], datetime.strptime(selectedRow[1].text(), '%d/%m/%Y'))
+
+		if bebidas is not None:
+			for i, bebida in enumerate(bebidas):
+				bebida[1] = bebida[1][:-2]
+				self.festa.bebidas_tableWidget.insertRow(i)
+				self.festa.bebida_comboBox.removeItem(self.festa.bebida_comboBox.findText(f'{bebida[0]} ({bebida[1]}mL)'))
+				for j in range(self.festa.bebidas_tableWidget.columnCount()):
+					self.festa.bebidas_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(bebida[j]))
+
+		if garcons is not None:
+			for i, garcom in enumerate(garcons):
+				self.festa.garcons_tableWidget.insertRow(i)
+				for j in range(self.festa.garcons_tableWidget.columnCount()):
+					self.festa.garcons_tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(garcom[j]))
+
+		if barracas is not None:
+			for i, operador in enumerate(barracas):
+				self.festa.operador_tableWidget.insertRow(i)
+				self.festa.operador_tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(operador[1]))
+				self.festa.operador_tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(operador[2]))
+
 		# Adiciona o evento de esperar até algo ser modificado para ativiar o botão de salvar
 		self.festa.casaDeFesta_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
 		self.festa.gerente_comboBox.currentIndexChanged.connect(lambda: self.festa.buttonBox.buttons()[0].setEnabled(True))
@@ -400,27 +423,60 @@ class MainApp(QtWidgets.QMainWindow):
 	# Função chamada ao clicar em salvar na tela de editar
 	def edit_festa_and_close(self, festa_addDialog):
 		# Informações a serem salvas
-		data = self.festa.data_timeEdit.dateTime().toPyDate()
+		data = self.festa.data_timeEdit.date().toPyDate()
 
 		convidados = self.festa.convidados_spinBox.value()
 		preco = self.festa.preco_spinBox.value()
 		barracas = self.festa.barracas_spinBox.value()
 
 		faixa = self.festa.faixa_comboBox.currentText()
-		cliente = self.festa.cliente_comboBox.currentText()
 		casaDeFesta = self.festa.casaDeFesta_comboBox.currentText()
-		gerente = self.festa.gerente_comboBox.currentText()
 
 		aniversariante = self.festa.aniversariante_lineEdit.text()
 		tema = self.festa.tema_lineEdit.text()
 
-		# Atualiza as tabelas
-		error = self.checkError(self.dbHelper.updateFesta([cliente, data], [convidados, 'A', preco, casaDeFesta, gerente]))
-		if not error:
-			error = self.checkError(self.dbHelper.updateAniversatio([cliente, data], [aniversariante, tema, faixa]))
+		selectedRow = self.mainwindow.festa_tableWidget.selectedItems()
+		cliente = self.dbHelper.getCliente(selectedRow[0].text())[0]
+		gerente = selectedRow[4].text()
+		self.dbHelper.delete('BEBIDA_BANDEJA_FESTA', ['CLIENTE', 'DATA'], [cliente[0], datetime.strptime(selectedRow[1].text(), '%d/%m/%Y')])
+		self.dbHelper.delete('GARCOM_FESTA', ['CLIENTE', 'DATA'], [cliente[0], datetime.strptime(selectedRow[1].text(), '%d/%m/%Y')])
+		self.dbHelper.delete('BARRACA_RASPADINHA', ['CLIENTE', 'DATA'], [cliente[0], datetime.strptime(selectedRow[1].text(), '%d/%m/%Y')])
 
+		# Guarda em listas os dados das tabelas
+		festa = [cliente[0], data]
+		bebidas = []
+		garcons = []
+		operadores = []
+		for i in range(self.festa.bebidas_tableWidget.rowCount()):
+			bebidas.append([self.festa.bebidas_tableWidget.item(i,0).text(), self.festa.bebidas_tableWidget.item(i,1).text(), self.festa.bebidas_tableWidget.item(i,2).text()])
+
+		for i in range(self.festa.garcons_tableWidget.rowCount()):
+			garcons.append([self.festa.garcons_tableWidget.item(i,1).text()])
+
+		for i in range(self.festa.operador_tableWidget.rowCount()):
+			operadores.append([i, self.festa.operador_tableWidget.item(i,1).text()])
+
+		# Atualiza as tabelas
+		error = self.checkError(self.dbHelper.updateFesta([cliente[0], data], [convidados, 'A', preco, casaDeFesta, gerente]))
+		if not error:
+			error = self.checkError(self.dbHelper.updateAniversario([cliente[0], data], [aniversariante, tema, faixa]))
+		if not error:
+			for bebida in bebidas:
+				values = festa + bebida
+				error = self.checkError(self.dbHelper.insertIntoBebidaBandejaFesta(values))
+		if not error:
+			for garcom in garcons:
+				values = festa + garcom
+				error = self.checkError(self.dbHelper.insertIntoGarcomFesta(values))
+		if not error:
+			for i, operador in enumerate(operadores):
+				values = [(time.time() + i*1000000) % 10000000000]
+				values += festa
+				values += operador
+				error = self.checkError(self.dbHelper.insertIntoBarracaRaspadinha(values))
 		if not error:
 			self.dbHelper.commit()
+			self.searchFestas()
 			festa_addDialog.close()
 		else:
 			self.dbHelper.rollback()
@@ -478,7 +534,6 @@ class MainApp(QtWidgets.QMainWindow):
 		if telFixo == '()-':
 			telFixo = None
 
-
 		error = self.checkError(self.dbHelper.insertIntoFuncionario([cpf, nome, telFixo, telMovel, comissao, cargo]))
 
 		if not error:
@@ -498,6 +553,7 @@ class MainApp(QtWidgets.QMainWindow):
 
 		# Desabilita a chave primária
 		self.funcionario.cpf_lineEdit.setEnabled(False)
+		self.funcionario.cargo_comboBox.setEnabled(False)
 
 		self.funcionario.buttonBox.accepted.connect(lambda : self.edit_funcionario_and_close(funcionario_addDialog))
 
@@ -520,7 +576,6 @@ class MainApp(QtWidgets.QMainWindow):
 		self.funcionario.telFixo_lineEdit.textChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
 		self.funcionario.telMovel_lineEdit.textChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
 		self.funcionario.comissao_spinBox.valueChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
-		self.funcionario.cargo_comboBox.currentIndexChanged.connect(lambda: self.funcionario.buttonBox.buttons()[0].setEnabled(True))
 
 		funcionario_addDialog.exec_()
 
@@ -1104,18 +1159,24 @@ class MainApp(QtWidgets.QMainWindow):
 
 	# Remove uma Bebidade de uma Festa e retorna ela para a lista de disponíveis para a festa
 	def rollbackBebida(self):
+		self.festa.buttonBox.buttons()[0].setEnabled(True)
+
 		selectedRow = self.festa.bebidas_tableWidget.selectedItems()
 		self.festa.bebida_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
 		self.festa.bebidas_tableWidget.removeRow(self.festa.bebidas_tableWidget.row(selectedRow[0]))
 
 	# Remove um Garcom de uma Festa e retorna ele para a lista de disponíveis no dia
 	def rollbackGarcom(self):
+		self.festa.buttonBox.buttons()[0].setEnabled(True)
+
 		selectedRow = self.festa.garcons_tableWidget.selectedItems()
 		self.festa.garcons_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
 		self.festa.garcons_tableWidget.removeRow(self.festa.garcons_tableWidget.row(selectedRow[0]))
 
 	# Remove um Operador de Raspadinha de uma Festa e retorna ele para a lista de disponíveis no dia
 	def rollbackOperador(self):
+		self.festa.buttonBox.buttons()[0].setEnabled(True)
+
 		selectedRow = self.festa.operador_tableWidget.selectedItems()
 		self.festa.operador_comboBox.addItem(f"{selectedRow[0].text()} ({selectedRow[1].text()}mL)")
 		self.festa.operador_tableWidget.removeRow(self.festa.operador_tableWidget.row(selectedRow[0]))
