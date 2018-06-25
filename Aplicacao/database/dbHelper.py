@@ -853,7 +853,7 @@ class dbHelper():
 		'''
 		cpf = self._preprocess_values([cpf])[0]
 		cmd = """SELECT * FROM FUNCIONARIO
-		WHERE CPF = """ + cpf + " AND CARGO = 'GERENTE'"
+		WHERE CPF = """ + cpf + " AND UPPER(CARGO) = 'GERENTE'"
 		return self._run_select(cmd)
 
 	def getCliente(self, cpf):
